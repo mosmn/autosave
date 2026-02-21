@@ -1,6 +1,7 @@
 ---
 import type { Language } from '../../lib/i18n';
 import { getLocalizedPath } from '../../lib/i18n';
+import ComingSoonLink from '../ComingSoonLink.astro';
 
 interface Props {
   content: {
@@ -30,20 +31,22 @@ const { content, lang } = Astro.props;
       {content.description}
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center" data-animate="fade-in-up" data-animate-delay="200">
-      <a
+      <ComingSoonLink
         href={getLocalizedPath('/contact', lang)}
+        lang={lang}
         class="inline-flex items-center justify-center rounded-lg gold-gradient gold-shimmer px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/20 transition hover:shadow-xl"
       >
         {content.primary}
-      </a>
-      <a
+      </ComingSoonLink>
+      <ComingSoonLink
         href="https://wa.me/966500000000"
+        lang={lang}
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex items-center justify-center rounded-lg border border-[#f0ebe0]/15 px-7 py-3.5 text-base font-semibold text-[#f0ebe0] transition hover:bg-[#f0ebe0]/5 hover:border-[#f0ebe0]/25"
       >
         {content.secondary}
-      </a>
+      </ComingSoonLink>
     </div>
   </div>
 </section>

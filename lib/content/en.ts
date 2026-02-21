@@ -131,7 +131,7 @@ export const enContent = {
           step: "03",
           title: "Choose Your Service",
           description:
-            "Pick your preferred service option: we pick up your car (200 SAR) or you drop it off at the center (49 SAR service assistance fee).",
+            "Pick your preferred service option: we pick up your car (???) or you drop it off at the center (؟؟ service assistance fee).",
         },
         {
           step: "04",
@@ -209,7 +209,7 @@ export const enContent = {
         {
           name: "Omar R.",
           car: "Nissan Patrol 2026",
-          text: "Used the drop-off service for just 49 SAR. The certified technician diagnosed and fixed it the same day.",
+          text: "Used the drop-off service for just ؟؟. The certified technician diagnosed and fixed it the same day.",
           rating: 5,
         },
       ],
@@ -234,12 +234,12 @@ export const enContent = {
             "We search across our network of certified suppliers and service maintenance centers to find the best price for your car AC repair parts. If you find a lower price for the same quality part from a reputable supplier, we'll match it.",
         },
         {
-          question: "What's included in the 49 SAR drop-off service?",
+          question: "What's included in the ؟؟ drop-off service?",
           answer:
             "Matching you with the nearest certified center, negotiating spare part prices, quality verification, and WhatsApp support.",
         },
         {
-          question: "What's included in the 200 SAR pickup service?",
+          question: "What's included in the ??? pickup service?",
           answer:
             "Everything in drop-off plus door-to-door pickup and return after repair and quality check.",
         },
@@ -375,7 +375,7 @@ export const enContent = {
       {
         title: "3. Pricing and Payment",
         body:
-          "Diagnostic fees are 49 SAR for drop-off and 200 SAR for pickup. Parts and labor are quoted after diagnosis and require approval.",
+          "Diagnostic fees are ؟؟ for drop-off and ??? for pickup. Parts and labor are quoted after diagnosis and require approval.",
       },
       {
         title: "4. Service Warranty",

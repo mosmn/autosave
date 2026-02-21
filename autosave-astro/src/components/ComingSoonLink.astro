@@ -1,0 +1,34 @@
+---
+import type { Language } from '../lib/i18n';
+
+interface Props {
+  href: string;
+  lang: Language;
+  class?: string;
+  target?: string;
+  rel?: string;
+  ariaLabel?: string;
+  style?: string;
+  id?: string;
+}
+
+const { href, lang, class: className, target, rel, ariaLabel, style, id } = Astro.props;
+
+const comingSoonMessage =
+  lang === 'ar'
+    ? 'قريباً سنخدمك بطريقة احترافية.'
+    : 'Soon we will serve you in a professional way.';
+---
+
+<a
+  href={href}
+  class={className}
+  target={target}
+  rel={rel}
+  aria-label={ariaLabel}
+  style={style}
+  id={id}
+  onclick={`event.preventDefault(); alert(${JSON.stringify(comingSoonMessage)});`}
+>
+  <slot />
+</a>

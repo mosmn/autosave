@@ -27,7 +27,7 @@ export function LocalBusinessSchema() {
       "Condenser Repair",
       "Evaporator Service",
     ],
-    priceRange: "49-200 SAR diagnostic fee",
+    priceRange: "49-??? diagnostic fee",
     openingHours: "Sa-Th 08:00-20:00",
     sameAs: [],
     aggregateRating: {
@@ -84,7 +84,7 @@ export function FAQSchema() {
         name: "How much does a car AC repair cost?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Car AC repair costs vary depending on the issue. Our diagnostic fee starts at 49 SAR for drop-off or 200 SAR for pickup service. Simple freon refills cost $100-$300, while compressor replacement ranges from $500-$1,500. We guarantee the best price on spare parts.",
+          text: "Car AC repair costs vary depending on the issue. Our diagnostic fee starts at ؟؟ for drop-off or ??? for pickup service. Simple freon refills cost $100-$300, while compressor replacement ranges from $500-$1,500. We guarantee the best price on spare parts.",
         },
       },
       {
@@ -116,7 +116,7 @@ export function FAQSchema() {
         name: "Can you pick up my car for AC repair?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, we offer a pickup service for 200 SAR where our team collects your vehicle from your location, takes it to the nearest certified service maintenance center, and returns it after repair. Alternatively, you can drop off your car at a service maintenance center for a 49 SAR diagnostic fee.",
+          text: "Yes, we offer a pickup service for ??? where our team collects your vehicle from your location, takes it to the nearest certified service maintenance center, and returns it after repair. Alternatively, you can drop off your car at a service maintenance center for a ؟؟ diagnostic fee.",
         },
       },
     ],

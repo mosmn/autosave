@@ -1,6 +1,7 @@
 ---
 import type { Language } from '../../lib/i18n';
 import { getLocalizedPath } from '../../lib/i18n';
+import ComingSoonLink from '../ComingSoonLink.astro';
 
 interface Props {
   content: {
@@ -62,8 +63,9 @@ const { content, lang } = Astro.props;
               </li>
             ))}
           </ul>
-          <a
+          <ComingSoonLink
             href={getLocalizedPath('/contact', lang)}
+            lang={lang}
             class:list={[
               'block w-full rounded-lg py-3.5 text-center text-sm font-semibold transition-all',
               i === 1
@@ -72,7 +74,7 @@ const { content, lang } = Astro.props;
             ]}
           >
             {plan.cta}
-          </a>
+          </ComingSoonLink>
         </div>
       ))}
     </div>

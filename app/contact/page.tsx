@@ -125,7 +125,7 @@ export default async function ContactPage() {
                   <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <h3 className="text-base font-semibold text-foreground">{contact.dropOff}</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">49 SAR</p>
+                      <p className="mt-1 text-sm text-muted-foreground">؟؟</p>
                     </div>
                     <ComingSoonLink
                       href={`https://wa.me/?text=${encodeURIComponent(dropOffBookMessage)}`}
@@ -143,7 +143,7 @@ export default async function ContactPage() {
                   <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <h3 className="text-base font-semibold text-foreground">{contact.pickup}</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">200 SAR</p>
+                      <p className="mt-1 text-sm text-muted-foreground">???</p>
                     </div>
                     <ComingSoonLink
                       href={`https://wa.me/?text=${encodeURIComponent(pickupBookMessage)}`}
@@ -229,11 +229,11 @@ export default async function ContactPage() {
                 <div className="mt-4 space-y-3">
                   <div className="flex items-center justify-between rounded-lg bg-secondary p-3">
                     <span className="text-sm text-secondary-foreground">{contact.dropOff}</span>
-                    <Badge className="bg-primary text-primary-foreground">49 SAR</Badge>
+                    <Badge className="bg-primary text-primary-foreground">؟؟</Badge>
                   </div>
                   <div className="flex items-center justify-between rounded-lg bg-secondary p-3">
                     <span className="text-sm text-secondary-foreground">{contact.pickup}</span>
-                    <Badge className="bg-primary text-primary-foreground">200 SAR</Badge>
+                    <Badge className="bg-primary text-primary-foreground">???</Badge>
                   </div>
                 </div>
                 <p className="mt-3 text-xs text-muted-foreground">

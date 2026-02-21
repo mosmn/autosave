@@ -2,6 +2,7 @@
 import type { Language } from '../lib/i18n';
 import { getContentByLanguage } from '../lib/content';
 import { getLocalizedPath, getAlternateLang } from '../lib/i18n';
+import ComingSoonLink from './ComingSoonLink.astro';
 
 interface Props {
   lang: Language;
@@ -58,12 +59,13 @@ const toggleLabel = altLang === 'ar' ? 'العربية' : 'English';
       </a>
 
       {/* CTA Button */}
-      <a
+      <ComingSoonLink
         href={getLocalizedPath('/contact', lang)}
+        lang={lang}
         class="hidden sm:inline-flex items-center justify-center rounded-lg gold-gradient gold-shimmer px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:shadow-lg hover:shadow-primary/20"
       >
         {content.header.quoteButton}
-      </a>
+      </ComingSoonLink>
 
       {/* Mobile menu button */}
       <button
@@ -91,12 +93,13 @@ const toggleLabel = altLang === 'ar' ? 'العربية' : 'English';
             {item.name}
           </a>
         ))}
-        <a
+        <ComingSoonLink
           href={getLocalizedPath('/contact', lang)}
+          lang={lang}
           class="inline-flex items-center justify-center rounded-lg gold-gradient gold-shimmer px-4 py-2.5 text-sm font-semibold text-white shadow-md mt-3"
         >
           {content.header.quoteButton}
-        </a>
+        </ComingSoonLink>
       </nav>
     </div>
   </div>

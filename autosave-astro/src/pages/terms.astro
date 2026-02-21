@@ -2,6 +2,7 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import { getContentByLanguage } from '../lib/content';
 import { getLocalizedPath } from '../lib/i18n';
+import ComingSoonLink from '../components/ComingSoonLink.astro';
 
 const lang = 'ar' as const;
 const content = getContentByLanguage(lang);
@@ -36,9 +37,9 @@ const terms = content.terms;
             {section.bodyPrefix && (
               <p class="text-muted-foreground leading-relaxed">
                 {section.bodyPrefix}{' '}
-                <a href={getLocalizedPath('/contact', lang)} class="text-primary font-semibold hover:underline">
+                <ComingSoonLink href={getLocalizedPath('/contact', lang)} lang={lang} class="text-primary font-semibold hover:underline">
                   {section.bodyLink}
-                </a>{' '}
+                </ComingSoonLink>{' '}
                 {section.bodySuffix}
               </p>
             )}
