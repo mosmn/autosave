@@ -350,7 +350,7 @@ These pages require unique, in-depth content and cannot be templated.
      Action: WhatsApp CTA with pre-filled message
      Add: Location map, business hours, service areas
 
-  4. PRICING PAGE (/pricing and /en/pricing) — NEW
+  4. PRICING PAGE (/pricing and /en/pricing) — ✅ CREATED
      Target: A6, B6 (pricing & cost keywords)
      Action: Create comprehensive pricing table
      H1: "أسعار صيانة مكيف السيارة" / "Car AC Repair Prices"
@@ -718,10 +718,10 @@ ARABIZI INTEGRATION (Section C):
 │ ✅ Generate service type pages                                               │
 │ ✅ Generate city × service cross-dimensional pages                           │
 │ □ Write & publish blog posts 2-8                                             │
-│ □ Create pricing page (manual)                                               │
+│ ✅ Create pricing page (manual)                                              │
 │ □ Create knowledge hub page (manual)                                         │
 │                                                                              │
-│ Deliverable: ✅ 358 programmatic pages live | □ blog + manual remaining      │
+│ Deliverable: ✅ 360 pages live (incl. pricing) | □ blog + manual remaining   │
 └──────────────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────────────────┐

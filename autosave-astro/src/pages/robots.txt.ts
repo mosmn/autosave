@@ -1,16 +1,15 @@
 import type { APIRoute } from 'astro';
 
-export const GET: APIRoute = () => {
-  const siteUrl = import.meta.env.SITE ?? 'https://autosave.sa';
-
-  const robotsTxt = `
+const getRobotsTxt = (sitemapURL: URL) => `\
 User-agent: *
 Allow: /
 
-Sitemap: ${siteUrl}/sitemap-index.xml
-`.trim();
+Sitemap: ${sitemapURL.href}
+`;
 
-  return new Response(robotsTxt, {
+export const GET: APIRoute = ({ site }) => {
+  const sitemapURL = new URL('sitemap-index.xml', site);
+  return new Response(getRobotsTxt(sitemapURL), {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
     },

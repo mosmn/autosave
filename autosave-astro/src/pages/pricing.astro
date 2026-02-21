@@ -1,0 +1,416 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { getContentByLanguage } from '../lib/content';
+import { getLocalizedPath } from '../lib/i18n';
+import ComingSoonLink from '../components/ComingSoonLink.astro';
+import FAQSchema from '../components/FAQSchema.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
+import { services } from '../data/services';
+import { components as acComponents } from '../data/components';
+
+const lang = 'ar' as const;
+const content = getContentByLanguage(lang);
+
+const pricingFaqs = [
+  {
+    question: 'كم تكلفة إصلاح مكيف السيارة في السعودية؟',
+    answer: 'تتراوح تكلفة إصلاح مكيف السيارة بين 80 و 5,000 ريال حسب نوع العطل. تعبئة الفريون تبدأ من 150 ريال، بينما تغيير الكمبروسر قد يصل إلى 3,500 ريال.',
+  },
+  {
+    question: 'هل أسعاركم تشمل القطع وأجرة العمل؟',
+    answer: 'رسوم الخدمة (49 أو 200 ريال) تغطي التنسيق وضبط الجودة وضمان السعر. القطع وأجرة الإصلاح تُحسب بشكل منفصل بأفضل الأسعار المضمونة.',
+  },
+  {
+    question: 'كيف تضمنون أفضل سعر لقطع الغيار؟',
+    answer: 'نقارن أسعار قطع الغيار من عدة موردين معتمدين ونختار الأفضل سعراً مع ضمان الجودة. إذا وجدت سعراً أقل، نرد لك الفرق خلال 48 ساعة.',
+  },
+  {
+    question: 'هل يوجد ضمان على الإصلاح؟',
+    answer: 'نعم، جميع أعمال الإصلاح مشمولة بضمان على الخدمة والقطع. مدة الضمان تختلف حسب نوع الإصلاح والقطعة المستخدمة.',
+  },
+  {
+    question: 'ما الفرق بين خدمة التسليم للمركز وخدمة الاستلام والإرجاع؟',
+    answer: 'في خدمة التسليم (49 ريال) تُسلم سيارتك بنفسك لأقرب مركز معتمد. في خدمة الاستلام والإرجاع (200 ريال) نستلم سيارتك من باب منزلك ونعيدها بعد الإصلاح.',
+  },
+  {
+    question: 'هل الأسعار تختلف حسب نوع السيارة؟',
+    answer: 'نعم، تختلف أسعار قطع الغيار حسب ماركة وموديل السيارة. السيارات الفاخرة والأوروبية عادة أغلى من السيارات اليابانية والكورية. رسوم الخدمة ثابتة لجميع السيارات.',
+  },
+];
+---
+
+<PageLayout
+  title="أسعار صيانة مكيف السيارة | اوتو سيف"
+  description="تعرف على أسعار إصلاح وصيانة مكيف السيارة في السعودية. أسعار شفافة لتعبئة الفريون وتغيير الكمبروسر وجميع خدمات التكييف مع ضمان أفضل سعر."
+  lang={lang}
+  keywords={['أسعار صيانة مكيف السيارة', 'تكلفة إصلاح مكيف السيارة', 'سعر تعبئة فريون', 'سعر كمبروسر المكيف', 'أسعار قطع غيار المكيف']}
+>
+  {/* Hero */}
+  <section class="relative overflow-hidden hero-gradient text-[#f0ebe0]">
+    <div class="hero-pattern"></div>
+    <div class="relative z-10 mx-auto max-w-7xl px-4 py-24 lg:px-8 lg:py-32">
+      <div class="max-w-2xl">
+        <span class="hero-animate eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-primary">الأسعار</span>
+        <h1 class="hero-animate hero-animate-delay-1 mt-4 text-4xl font-bold tracking-tight font-display sm:text-5xl">أسعار صيانة مكيف السيارة</h1>
+        <p class="hero-animate hero-animate-delay-2 mt-6 text-lg text-[#f0ebe0]/65 leading-relaxed">أسعار شفافة وواضحة لجميع خدمات إصلاح وصيانة مكيف السيارة. نضمن أفضل أسعار لقطع الغيار مع مراكز خدمة معتمدة.</p>
+      </div>
+    </div>
+  </section>
+
+  {/* Service Plans */}
+  <section class="py-20 lg:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">خطط الخدمة</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">اختر الخطة المناسبة لك</h2>
+        <p class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">كلتا الخطتين تشملان ضمان أفضل سعر لقطع الغيار وفحص جودة بعد الإصلاح.</p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+        {/* Drop-Off Plan */}
+        <div class="rounded-2xl border border-border bg-card p-8 shadow-sm card-hover-lift" data-animate="fade-in-up">
+          <h3 class="text-xl font-bold font-display">خدمة التسليم للمركز</h3>
+          <p class="mt-2 text-sm text-muted-foreground">تُسلم سيارتك لأقرب مركز معتمد ونحن نتولى التنسيق.</p>
+          <div class="mt-6 flex items-baseline gap-1">
+            <span class="text-5xl font-bold font-display text-primary">49</span>
+            <span class="text-lg text-muted-foreground">ريال</span>
+          </div>
+          <p class="mt-1 text-xs text-muted-foreground">رسوم الخدمة فقط</p>
+          <ul class="mt-8 space-y-3">
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">مطابقة مع أقرب مركز معتمد</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">بحث أفضل أسعار القطع</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">فحص جودة بعد الإصلاح</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">دعم عبر واتساب</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">ضمان على الخدمة</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">توصيل القطع للمركز مجانا</span>
+            </li>
+          </ul>
+          <div class="mt-8">
+            <ComingSoonLink
+              href={getLocalizedPath('/contact', lang)}
+              lang={lang}
+              class="block w-full rounded-lg border-2 border-primary py-3 text-center text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
+            >
+              احجز التسليم
+            </ComingSoonLink>
+          </div>
+        </div>
+
+        {/* Pickup Plan */}
+        <div class="relative rounded-2xl border-2 border-primary bg-card p-8 shadow-lg" data-animate="fade-in-up" data-animate-delay="100">
+          <div class="absolute -top-4 start-1/2 -translate-x-1/2 rounded-full gold-gradient px-4 py-1 text-xs font-bold text-white">الأكثر طلبا</div>
+          <h3 class="text-xl font-bold font-display">استلام وإرجاع</h3>
+          <p class="mt-2 text-sm text-muted-foreground">نستلم سيارتك من باب منزلك ونعيدها بعد الإصلاح.</p>
+          <div class="mt-6 flex items-baseline gap-1">
+            <span class="text-5xl font-bold font-display text-primary">200</span>
+            <span class="text-lg text-muted-foreground">ريال</span>
+          </div>
+          <p class="mt-1 text-xs text-muted-foreground">رسوم الخدمة فقط</p>
+          <ul class="mt-8 space-y-3">
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">استلام وتسليم من الباب</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">مطابقة مع مركز معتمد</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">بحث أفضل أسعار القطع</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">فحص جودة بعد الإصلاح</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">دعم عبر واتساب</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">ضمان على الخدمة</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">توصيل القطع للمركز مجانا</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">إرجاع السيارة بعد الانتهاء</span>
+            </li>
+          </ul>
+          <div class="mt-8">
+            <ComingSoonLink
+              href={getLocalizedPath('/contact', lang)}
+              lang={lang}
+              class="block w-full rounded-lg gold-gradient gold-shimmer py-3 text-center text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:shadow-xl"
+            >
+              احجز الاستلام
+            </ComingSoonLink>
+          </div>
+        </div>
+      </div>
+      <p class="mt-8 text-center text-sm text-muted-foreground max-w-2xl mx-auto">* رسوم الخدمة تشمل التنسيق وضبط الجودة وضمان السعر. القطع وأجرة الإصلاح تُحسب بشكل منفصل بأفضل الأسعار المضمونة.</p>
+    </div>
+  </section>
+
+  {/* Service Pricing Table */}
+  <section class="py-20 lg:py-28 bg-secondary/40">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">أسعار الخدمات</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">تكلفة خدمات صيانة المكيف</h2>
+        <p class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">أسعار تقديرية لأعمال الإصلاح والصيانة. السعر النهائي يُحدد بعد الفحص حسب نوع السيارة وحالة المكيف.</p>
+      </div>
+
+      <div class="overflow-x-auto max-w-4xl mx-auto" data-animate="fade-in-up">
+        <table class="w-full border-collapse rounded-xl overflow-hidden shadow-sm">
+          <thead>
+            <tr class="bg-foreground text-card">
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">الخدمة</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">المدة التقديرية</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">نطاق السعر (ريال)</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold font-display">التفاصيل</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            {services.map((service, i) => (
+              <tr class:list={['transition hover:bg-secondary/60', i % 2 === 0 ? 'bg-card' : 'bg-secondary/20']}>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-sm">{service.nameAr}</span>
+                </td>
+                <td class="px-6 py-4 text-sm text-muted-foreground">
+                  {service.durationMinutes >= 60
+                    ? `${Math.floor(service.durationMinutes / 60)} ساعة${service.durationMinutes % 60 > 0 ? ` و ${service.durationMinutes % 60} دقيقة` : ''}`
+                    : `${service.durationMinutes} دقيقة`}
+                </td>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-primary text-sm">{service.priceRangeMin} - {service.priceRangeMax}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <ComingSoonLink
+                    href={getLocalizedPath(`/services/${service.slug}`, lang)}
+                    lang={lang}
+                    class="text-sm font-medium text-primary hover:underline"
+                  >
+                    عرض التفاصيل
+                  </ComingSoonLink>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* Parts Pricing Table */}
+  <section class="py-20 lg:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">أسعار القطع</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">أسعار قطع غيار مكيف السيارة</h2>
+        <p class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">مقارنة بين أسعار القطع الأصلية (OEM) والبديلة. نبحث لك عن أفضل سعر من موردين معتمدين.</p>
+      </div>
+
+      <div class="overflow-x-auto max-w-5xl mx-auto" data-animate="fade-in-up">
+        <table class="w-full border-collapse rounded-xl overflow-hidden shadow-sm">
+          <thead>
+            <tr class="bg-foreground text-card">
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">القطعة</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">أصلي (OEM) - ريال</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">بديل - ريال</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold font-display">التفاصيل</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            {acComponents.map((component, i) => (
+              <tr class:list={['transition hover:bg-secondary/60', i % 2 === 0 ? 'bg-card' : 'bg-secondary/20']}>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-sm">{component.nameAr}</span>
+                </td>
+                <td class="px-6 py-4 text-sm text-muted-foreground">
+                  {component.priceRangeOEM.min} - {component.priceRangeOEM.max}
+                </td>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-primary text-sm">{component.priceRangeAftermarket.min} - {component.priceRangeAftermarket.max}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <ComingSoonLink
+                    href={getLocalizedPath(`/parts/${component.slug}`, lang)}
+                    lang={lang}
+                    class="text-sm font-medium text-primary hover:underline"
+                  >
+                    عرض التفاصيل
+                  </ComingSoonLink>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* Price Guarantee */}
+  <section class="py-20 lg:py-28 bg-secondary/40">
+    <div class="container mx-auto px-4">
+      <div class="grid items-center gap-12 lg:grid-cols-2 max-w-5xl mx-auto">
+        <div data-animate="fade-in-up">
+          <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">ضمان السعر</span>
+          <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">ضمان أفضل سعر لقطع الغيار</h2>
+          <p class="mt-4 text-muted-foreground leading-relaxed">نبحث عن أفضل الأسعار من عدة موردين معتمدين لنفس القطعة. إذا وجدت سعرا أقل لنفس القطعة بنفس الجودة، نرد لك الفرق خلال 48 ساعة.</p>
+          <div class="mt-8 grid grid-cols-2 gap-6">
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">مقارنة أسعار متعددة</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">موردون معتمدون</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">استرداد الفرق</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">شفافية كاملة</span>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-border bg-card p-8 shadow-sm" data-animate="fade-in-up" data-animate-delay="100">
+          <h3 class="text-lg font-bold font-display mb-6">كيف يعمل ضمان السعر؟</h3>
+          <div class="space-y-6">
+            <div class="flex gap-4">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full gold-gradient text-white text-sm font-bold font-display">1</div>
+              <div>
+                <h4 class="font-semibold text-sm">نبحث ونقارن</h4>
+                <p class="mt-1 text-sm text-muted-foreground">نتواصل مع عدة موردين معتمدين لنفس القطعة ونقارن الأسعار.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full gold-gradient text-white text-sm font-bold font-display">2</div>
+              <div>
+                <h4 class="font-semibold text-sm">نختار الأفضل</h4>
+                <p class="mt-1 text-sm text-muted-foreground">نختار أفضل سعر مع ضمان جودة القطعة وتوافقها مع سيارتك.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full gold-gradient text-white text-sm font-bold font-display">3</div>
+              <div>
+                <h4 class="font-semibold text-sm">ضمان الفرق</h4>
+                <p class="mt-1 text-sm text-muted-foreground">إذا وجدت نفس القطعة بسعر أقل، نرد لك الفرق خلال 48 ساعة.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ */}
+  <section class="py-20 lg:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">أسئلة شائعة</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">أسئلة شائعة حول الأسعار</h2>
+      </div>
+      <div class="mx-auto max-w-3xl space-y-4" data-animate="fade-in-up">
+        {pricingFaqs.map((faq) => (
+          <details class="group rounded-xl border border-border bg-card p-0 shadow-sm">
+            <summary class="flex cursor-pointer items-center justify-between px-6 py-5 font-semibold text-sm font-display list-none [&::-webkit-details-marker]:hidden">
+              <span>{faq.question}</span>
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              {faq.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* CTA */}
+  <section class="relative py-20 lg:py-28 overflow-hidden hero-gradient text-[#f0ebe0]">
+    <div class="hero-pattern"></div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <div class="w-16 h-1 gold-gradient mx-auto mb-8 rounded-full" data-animate="scale-in"></div>
+      <h2 class="text-3xl font-bold font-display mb-5" data-animate="fade-in-up">احصل على عرض سعر مجاني</h2>
+      <p class="text-lg text-[#f0ebe0]/65 max-w-2xl mx-auto mb-10" data-animate="fade-in-up" data-animate-delay="100">تواصل معنا عبر واتساب واحصل على تشخيص وعرض سعر خلال دقائق. بدون التزام.</p>
+      <ComingSoonLink
+        href={getLocalizedPath('/contact', lang)}
+        lang={lang}
+        class="inline-flex items-center justify-center rounded-lg gold-gradient gold-shimmer px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/20 transition hover:shadow-xl"
+        data-animate="fade-in-up"
+        data-animate-delay="200"
+      >
+        تواصل عبر واتساب
+      </ComingSoonLink>
+    </div>
+  </section>
+
+  {/* JSON-LD */}
+  <FAQSchema />
+  <LocalBusinessSchema lang={lang} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Car AC Repair and Maintenance",
+    "provider": {
+      "@type": "AutomotiveBusiness",
+      "name": "اوتو سيف",
+      "url": "https://autosaveksa.com"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Saudi Arabia"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "خدمات صيانة مكيف السيارة",
+      "itemListElement": services.map(service => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": service.nameAr,
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "SAR",
+          "minPrice": service.priceRangeMin,
+          "maxPrice": service.priceRangeMax,
+        }
+      }))
+    }
+  })} />
+</PageLayout>

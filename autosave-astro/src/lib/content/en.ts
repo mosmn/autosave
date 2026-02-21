@@ -3,6 +3,7 @@ export const enContent = {
     nav: [
       { name: "Home", href: "/" },
       { name: "About", href: "/about" },
+      { name: "Pricing", href: "/pricing" },
       { name: "Blog", href: "/blog" },
       { name: "Contact", href: "/contact" },
       { name: "Terms", href: "/terms" },
@@ -38,6 +39,7 @@ export const enContent = {
         title: "Company",
         links: [
           { name: "About Us", href: "/about" },
+          { name: "Pricing", href: "/pricing" },
           { name: "Contact", href: "/contact" },
           { name: "Terms & Guarantee", href: "/terms" },
           { name: "Blog", href: "/blog" },

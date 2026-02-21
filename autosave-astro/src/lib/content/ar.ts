@@ -3,6 +3,7 @@ export const arContent = {
     nav: [
       { name: "الرئيسية", href: "/" },
       { name: "من نحن", href: "/about" },
+      { name: "الأسعار", href: "/pricing" },
       { name: "المدونة", href: "/blog" },
       { name: "تواصل معنا", href: "/contact" },
       { name: "الشروط", href: "/terms" },
@@ -38,6 +39,7 @@ export const arContent = {
         title: "الشركة",
         links: [
           { name: "من نحن", href: "/about" },
+          { name: "الأسعار", href: "/pricing" },
           { name: "تواصل معنا", href: "/contact" },
           { name: "الشروط والضمان", href: "/terms" },
           { name: "المدونة", href: "/blog" },
@@ -356,7 +358,7 @@ export const arContent = {
       quickLinks: "روابط سريعة",
       quickLinkItems: [
         { name: "خدماتنا", href: "/about" },
-        { name: "خطط الأسعار", href: "/#pricing" },
+        { name: "الأسعار", href: "/pricing" },
         { name: "طلب خدمة", href: "/contact" },
         { name: "كل المقالات", href: "/blog" },
       ],

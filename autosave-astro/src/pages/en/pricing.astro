@@ -1,0 +1,416 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getContentByLanguage } from '../../lib/content';
+import { getLocalizedPath } from '../../lib/i18n';
+import ComingSoonLink from '../../components/ComingSoonLink.astro';
+import FAQSchema from '../../components/FAQSchema.astro';
+import LocalBusinessSchema from '../../components/LocalBusinessSchema.astro';
+import { services } from '../../data/services';
+import { components as acComponents } from '../../data/components';
+
+const lang = 'en' as const;
+const content = getContentByLanguage(lang);
+
+const pricingFaqs = [
+  {
+    question: 'How much does car AC repair cost in Saudi Arabia?',
+    answer: 'Car AC repair costs range from 80 to 5,000 SAR depending on the issue. A freon recharge starts at 150 SAR, while a compressor replacement can cost up to 3,500 SAR.',
+  },
+  {
+    question: 'Do your prices include parts and labor?',
+    answer: 'The service fee (49 or 200 SAR) covers coordination, quality assurance, and price matching. Parts and repair labor are billed separately at guaranteed best prices.',
+  },
+  {
+    question: 'How do you guarantee the best price on spare parts?',
+    answer: 'We compare prices from multiple certified suppliers for the same part and select the best value with guaranteed quality. If you find a lower price, we refund the difference within 48 hours.',
+  },
+  {
+    question: 'Is there a warranty on the repair?',
+    answer: 'Yes, all repair work includes a warranty on both service and parts. The warranty duration varies depending on the type of repair and parts used.',
+  },
+  {
+    question: 'What is the difference between Drop-Off and Pickup service?',
+    answer: 'With Drop-Off service (49 SAR), you drive your car to the nearest certified center. With Pickup & Return service (200 SAR), we collect your car from your doorstep and return it after repair.',
+  },
+  {
+    question: 'Do prices vary by car brand?',
+    answer: 'Yes, spare parts prices vary by car make and model. European and luxury vehicles typically cost more than Japanese and Korean cars. Service fees remain the same for all vehicles.',
+  },
+];
+---
+
+<PageLayout
+  title="Car AC Repair Prices | AUTO SAVE"
+  description="View transparent pricing for car AC repair and maintenance in Saudi Arabia. Freon recharge, compressor replacement, and all AC services with best price guarantee."
+  lang={lang}
+  keywords={['car AC repair cost', 'car AC service price', 'freon recharge price', 'compressor replacement cost', 'AC spare parts prices Saudi Arabia']}
+>
+  {/* Hero */}
+  <section class="relative overflow-hidden hero-gradient text-[#f0ebe0]">
+    <div class="hero-pattern"></div>
+    <div class="relative z-10 mx-auto max-w-7xl px-4 py-24 lg:px-8 lg:py-32">
+      <div class="max-w-2xl">
+        <span class="hero-animate eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-primary">Pricing</span>
+        <h1 class="hero-animate hero-animate-delay-1 mt-4 text-4xl font-bold tracking-tight font-display sm:text-5xl">Car AC Repair Prices</h1>
+        <p class="hero-animate hero-animate-delay-2 mt-6 text-lg text-[#f0ebe0]/65 leading-relaxed">Transparent, upfront pricing for all car AC repair and maintenance services. We guarantee the best prices on spare parts through certified service centers.</p>
+      </div>
+    </div>
+  </section>
+
+  {/* Service Plans */}
+  <section class="py-20 lg:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">Service Plans</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">Choose the Right Plan for You</h2>
+        <p class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">Both plans include our best price guarantee on spare parts and post-repair quality inspection.</p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+        {/* Drop-Off Plan */}
+        <div class="rounded-2xl border border-border bg-card p-8 shadow-sm card-hover-lift" data-animate="fade-in-up">
+          <h3 class="text-xl font-bold font-display">Drop-Off Service</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Drive to the nearest certified center and we handle the coordination.</p>
+          <div class="mt-6 flex items-baseline gap-1">
+            <span class="text-5xl font-bold font-display text-primary">49</span>
+            <span class="text-lg text-muted-foreground">SAR</span>
+          </div>
+          <p class="mt-1 text-xs text-muted-foreground">Service fee only</p>
+          <ul class="mt-8 space-y-3">
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Matched to nearest certified center</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Best spare parts price search</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Quality-checked repair</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Dedicated WhatsApp support</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Service warranty included</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Free part delivery to center</span>
+            </li>
+          </ul>
+          <div class="mt-8">
+            <ComingSoonLink
+              href={getLocalizedPath('/contact', lang)}
+              lang={lang}
+              class="block w-full rounded-lg border-2 border-primary py-3 text-center text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
+            >
+              Book Drop-Off
+            </ComingSoonLink>
+          </div>
+        </div>
+
+        {/* Pickup Plan */}
+        <div class="relative rounded-2xl border-2 border-primary bg-card p-8 shadow-lg" data-animate="fade-in-up" data-animate-delay="100">
+          <div class="absolute -top-4 start-1/2 -translate-x-1/2 rounded-full gold-gradient px-4 py-1 text-xs font-bold text-white">Most Popular</div>
+          <h3 class="text-xl font-bold font-display">Pickup & Return</h3>
+          <p class="mt-2 text-sm text-muted-foreground">We pick up your car from your door and return it after repair.</p>
+          <div class="mt-6 flex items-baseline gap-1">
+            <span class="text-5xl font-bold font-display text-primary">200</span>
+            <span class="text-lg text-muted-foreground">SAR</span>
+          </div>
+          <p class="mt-1 text-xs text-muted-foreground">Service fee only</p>
+          <ul class="mt-8 space-y-3">
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Door-to-door car pickup</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Matched to certified center</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Best spare parts price search</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Quality-checked repair</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Dedicated WhatsApp support</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Service warranty included</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Free part delivery to center</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              <span class="text-sm">Car delivered back to you</span>
+            </li>
+          </ul>
+          <div class="mt-8">
+            <ComingSoonLink
+              href={getLocalizedPath('/contact', lang)}
+              lang={lang}
+              class="block w-full rounded-lg gold-gradient gold-shimmer py-3 text-center text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:shadow-xl"
+            >
+              Book Pickup
+            </ComingSoonLink>
+          </div>
+        </div>
+      </div>
+      <p class="mt-8 text-center text-sm text-muted-foreground max-w-2xl mx-auto">* Service fees cover coordination, quality assurance, and price matching. Spare parts and repair labor are billed separately at guaranteed best prices.</p>
+    </div>
+  </section>
+
+  {/* Service Pricing Table */}
+  <section class="py-20 lg:py-28 bg-secondary/40">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">Service Pricing</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">AC Service Cost Estimates</h2>
+        <p class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">Estimated pricing for repair and maintenance services. Final price is determined after inspection based on vehicle type and AC condition.</p>
+      </div>
+
+      <div class="overflow-x-auto max-w-4xl mx-auto" data-animate="fade-in-up">
+        <table class="w-full border-collapse rounded-xl overflow-hidden shadow-sm">
+          <thead>
+            <tr class="bg-foreground text-card">
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">Service</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">Est. Duration</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">Price Range (SAR)</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold font-display">Details</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            {services.map((service, i) => (
+              <tr class:list={['transition hover:bg-secondary/60', i % 2 === 0 ? 'bg-card' : 'bg-secondary/20']}>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-sm">{service.nameEn}</span>
+                </td>
+                <td class="px-6 py-4 text-sm text-muted-foreground">
+                  {service.durationMinutes >= 60
+                    ? `${Math.floor(service.durationMinutes / 60)}h${service.durationMinutes % 60 > 0 ? ` ${service.durationMinutes % 60}m` : ''}`
+                    : `${service.durationMinutes} min`}
+                </td>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-primary text-sm">{service.priceRangeMin} - {service.priceRangeMax}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <ComingSoonLink
+                    href={getLocalizedPath(`/services/${service.slug}`, lang)}
+                    lang={lang}
+                    class="text-sm font-medium text-primary hover:underline"
+                  >
+                    View Details
+                  </ComingSoonLink>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* Parts Pricing Table */}
+  <section class="py-20 lg:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">Parts Pricing</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">AC Spare Parts Prices</h2>
+        <p class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">Compare OEM and aftermarket part prices. We search certified suppliers to find you the best value.</p>
+      </div>
+
+      <div class="overflow-x-auto max-w-5xl mx-auto" data-animate="fade-in-up">
+        <table class="w-full border-collapse rounded-xl overflow-hidden shadow-sm">
+          <thead>
+            <tr class="bg-foreground text-card">
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">Part</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">OEM Price (SAR)</th>
+              <th class="px-6 py-4 text-start text-sm font-semibold font-display">Aftermarket (SAR)</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold font-display">Details</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            {acComponents.map((component, i) => (
+              <tr class:list={['transition hover:bg-secondary/60', i % 2 === 0 ? 'bg-card' : 'bg-secondary/20']}>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-sm">{component.nameEn}</span>
+                </td>
+                <td class="px-6 py-4 text-sm text-muted-foreground">
+                  {component.priceRangeOEM.min} - {component.priceRangeOEM.max}
+                </td>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-primary text-sm">{component.priceRangeAftermarket.min} - {component.priceRangeAftermarket.max}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <ComingSoonLink
+                    href={getLocalizedPath(`/parts/${component.slug}`, lang)}
+                    lang={lang}
+                    class="text-sm font-medium text-primary hover:underline"
+                  >
+                    View Details
+                  </ComingSoonLink>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* Price Guarantee */}
+  <section class="py-20 lg:py-28 bg-secondary/40">
+    <div class="container mx-auto px-4">
+      <div class="grid items-center gap-12 lg:grid-cols-2 max-w-5xl mx-auto">
+        <div data-animate="fade-in-up">
+          <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">Price Guarantee</span>
+          <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">Best Price Guarantee on Spare Parts</h2>
+          <p class="mt-4 text-muted-foreground leading-relaxed">We search multiple certified suppliers for the same part to find the best price. If you find a lower price for the same part with equal quality, we refund the difference within 48 hours.</p>
+          <div class="mt-8 grid grid-cols-2 gap-6">
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">Multi-supplier comparison</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">Certified suppliers only</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">Difference refund</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium">Full transparency</span>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-border bg-card p-8 shadow-sm" data-animate="fade-in-up" data-animate-delay="100">
+          <h3 class="text-lg font-bold font-display mb-6">How Our Price Guarantee Works</h3>
+          <div class="space-y-6">
+            <div class="flex gap-4">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full gold-gradient text-white text-sm font-bold font-display">1</div>
+              <div>
+                <h4 class="font-semibold text-sm">We Search & Compare</h4>
+                <p class="mt-1 text-sm text-muted-foreground">We contact multiple certified suppliers for the same part and compare prices.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full gold-gradient text-white text-sm font-bold font-display">2</div>
+              <div>
+                <h4 class="font-semibold text-sm">We Choose the Best</h4>
+                <p class="mt-1 text-sm text-muted-foreground">We select the best price while ensuring part quality and compatibility with your car.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full gold-gradient text-white text-sm font-bold font-display">3</div>
+              <div>
+                <h4 class="font-semibold text-sm">Price Match Promise</h4>
+                <p class="mt-1 text-sm text-muted-foreground">Found the same part cheaper elsewhere? We refund the difference within 48 hours.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ */}
+  <section class="py-20 lg:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-14" data-animate="fade-in-up">
+        <span class="eyebrow-decorated text-sm font-semibold uppercase tracking-widest text-accent">FAQ</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight font-display sm:text-4xl">Frequently Asked Questions About Pricing</h2>
+      </div>
+      <div class="mx-auto max-w-3xl space-y-4" data-animate="fade-in-up">
+        {pricingFaqs.map((faq) => (
+          <details class="group rounded-xl border border-border bg-card p-0 shadow-sm">
+            <summary class="flex cursor-pointer items-center justify-between px-6 py-5 font-semibold text-sm font-display list-none [&::-webkit-details-marker]:hidden">
+              <span>{faq.question}</span>
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              {faq.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* CTA */}
+  <section class="relative py-20 lg:py-28 overflow-hidden hero-gradient text-[#f0ebe0]">
+    <div class="hero-pattern"></div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <div class="w-16 h-1 gold-gradient mx-auto mb-8 rounded-full" data-animate="scale-in"></div>
+      <h2 class="text-3xl font-bold font-display mb-5" data-animate="fade-in-up">Get a Free Quote</h2>
+      <p class="text-lg text-[#f0ebe0]/65 max-w-2xl mx-auto mb-10" data-animate="fade-in-up" data-animate-delay="100">Contact us via WhatsApp for a diagnosis and price quote within minutes. No commitment required.</p>
+      <ComingSoonLink
+        href={getLocalizedPath('/contact', lang)}
+        lang={lang}
+        class="inline-flex items-center justify-center rounded-lg gold-gradient gold-shimmer px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/20 transition hover:shadow-xl"
+        data-animate="fade-in-up"
+        data-animate-delay="200"
+      >
+        Contact via WhatsApp
+      </ComingSoonLink>
+    </div>
+  </section>
+
+  {/* JSON-LD */}
+  <FAQSchema />
+  <LocalBusinessSchema lang={lang} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Car AC Repair and Maintenance",
+    "provider": {
+      "@type": "AutomotiveBusiness",
+      "name": "AUTO SAVE",
+      "url": "https://autosaveksa.com"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Saudi Arabia"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Car AC Repair Services",
+      "itemListElement": services.map(service => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": service.nameEn,
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "SAR",
+          "minPrice": service.priceRangeMin,
+          "maxPrice": service.priceRangeMax,
+        }
+      }))
+    }
+  })} />
+</PageLayout>
