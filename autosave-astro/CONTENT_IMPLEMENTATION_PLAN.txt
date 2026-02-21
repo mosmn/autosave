@@ -433,7 +433,7 @@ Published in src/lib/blog-data.ts + blog-data-ar.ts
   Keywords: B2 smell symptoms, A2
   Slug: car-ac-bad-smell-causes
   Target: "car ac bad smell", "رائحة كريهة من مكيف السيارة"
-  Status: □ Pending
+  Status: ✅ Published
 
   POST 6 (Week 3)
   "Car AC Making Noise? Here's What Each Sound Means"
@@ -724,11 +724,11 @@ ARABIZI INTEGRATION (Section C):
 │ ✅ Generate AC component/parts pages                                         │
 │ ✅ Generate service type pages                                               │
 │ ✅ Generate city × service cross-dimensional pages                           │
-│ ◐ Write & publish blog posts 2-8 (6/7 published, Post 5 pending)             │
+│ ✅ Write & publish blog posts 2-8 (7/7 published)                             │
 │ ✅ Create pricing page (manual)                                              │
 │ □ Create knowledge hub page (manual)                                         │
 │                                                                              │
-│ Deliverable: ✅ 360 pages live (incl. pricing) | □ blog + manual remaining   │
+│ Deliverable: ✅ 360 pages live (incl. pricing) | □ manual pages remaining     │
 └──────────────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────────────────┐

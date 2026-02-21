@@ -7,7 +7,7 @@ const isGitHubPages = !!process.env.GITHUB_ACTIONS;
 
 // https://astro.build/config
 export default defineConfig({
-  site: isGitHubPages ? 'https://AbuKhaled22.github.io' : 'https://autosave.sa',
+  site: isGitHubPages ? 'https://AbuKhaled22.github.io' : 'https://autosaveksa.com',
   base: isGitHubPages ? '/autosave' : '/',
   i18n: {
     defaultLocale: 'ar',

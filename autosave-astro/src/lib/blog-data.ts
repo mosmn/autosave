@@ -444,6 +444,115 @@ Annual AC service (which includes checking refrigerant levels, testing performan
     `,
   },
   {
+    slug: "car-ac-bad-smell-causes",
+    title: "7 Reasons Your Car AC Smells Bad (And How to Fix It)",
+    excerpt:
+      "Bad smell from your car AC vents? Learn the most common causes behind musty, sour, and burning odors, plus the exact fixes that restore clean airflow in hot climates.",
+    image: "/images/blog/car-ac-bad-smell-causes.jpeg",
+    imageAlt: "Driver noticing unpleasant smell while car AC is running",
+    date: "2026-01-24",
+    readTime: "8 min read",
+    category: "Troubleshooting",
+    tags: [
+      "car AC bad smell",
+      "musty smell from car vents",
+      "car AC odor causes",
+      "evaporator mold",
+      "cabin air filter replacement",
+      "car AC cleaning",
+    ],
+    content: `
+## Why Does Your Car AC Smell Bad?
+
+If your car AC smells bad when you turn it on, the odor usually comes from moisture, dirt buildup, or overheating components somewhere in the HVAC system. In Saudi heat, AC systems run for long hours, so small hygiene and airflow issues can quickly become noticeable smells.
+
+The important part is identifying *which smell* you are getting. Musty, sour, chemical, and burning odors each point to different root causes.
+
+## 1) Mold or Bacteria on the Evaporator
+
+The evaporator core sits in a dark, damp housing behind your dashboard. That makes it a perfect place for microbial growth if condensation does not dry properly.
+
+**Typical smell:** musty, damp, “old towel” odor when AC starts.
+
+**Fix:** evaporator cleaning and disinfecting service. Running the blower for a minute before parking also helps dry the core.
+
+## 2) Dirty Cabin Air Filter
+
+A clogged cabin filter traps dust, humidity, and organic particles. Over time it becomes a source of odor and reduces airflow, making your AC feel weaker.
+
+**Typical smell:** dusty or stale air, especially on low fan speed.
+
+**Fix:** replace the cabin air filter and inspect the filter housing for debris.
+
+## 3) Blocked Evaporator Drain Line
+
+Your AC produces condensation that should exit through a drain tube. If that drain is blocked, water can stagnate inside the HVAC box and produce odor.
+
+**Typical smell:** sour, swamp-like smell that gets worse after short trips.
+
+**Fix:** clear the drain line and sanitize the evaporator case.
+
+## 4) Refrigerant Leak
+
+Some refrigerant leaks can create a chemical-like odor, especially when mixed with oil residue and cabin airflow. While not always strongly scented, this should never be ignored.
+
+**Typical smell:** sharp chemical scent.
+
+**Fix:** professional leak detection, repair of the leaking point, then proper evacuation and recharge.
+
+## 5) Overheating Electrical Components
+
+A failing blower motor resistor, wiring issue, or overloaded connector can produce a burning smell when the fan or AC is running.
+
+**Typical smell:** hot plastic or burning insulation.
+
+**Fix:** immediate electrical inspection. Avoid continued AC use until diagnosed.
+
+## 6) Debris in Air Intake or Blower Housing
+
+Leaves, dust, and small particles can accumulate near the cowl intake or inside blower passages. In humid conditions, debris starts to decompose and smell.
+
+**Typical smell:** earthy or rotten odor that appears with higher fan speeds.
+
+**Fix:** clean intake screens, blower housing, and air channels.
+
+## 7) Compressor or Belt Overheating
+
+If the compressor clutch slips or the belt is worn, friction can create a noticeable burnt-rubber smell, often with unusual noise.
+
+**Typical smell:** burning rubber, sometimes with squealing.
+
+**Fix:** inspect belt condition, tensioner, and compressor clutch operation.
+
+## Quick Diagnosis Checklist
+
+Before booking service, note these details:
+
+1. Does the smell appear only when AC is on, or also on fan mode?
+2. Is the smell strongest at startup, then fades?
+3. Do you also have weak airflow or unusual noise?
+4. Do you see excess water leakage inside the cabin?
+
+These clues help technicians pinpoint the source faster.
+
+## How to Prevent AC Odors in Hot Climate Driving
+
+- Replace cabin filter every 10,000-15,000 km (or sooner in dusty cities).
+- Clean evaporator and AC ducts periodically.
+- Run fan-only mode for 30-60 seconds before shutting the car off.
+- Keep windshield cowl area clean from leaves and dirt.
+- Perform a pre-summer AC inspection each year.
+
+## When to Get Immediate Professional Help
+
+Seek urgent inspection if the smell is burning, chemical, or accompanied by smoke, fuse blowing, or sudden AC shutdown. These symptoms may indicate electrical or compressor-related risk.
+
+## Final Takeaway
+
+Most bad AC smells are fixable and often preventable. The fastest route is targeted diagnosis: identify odor type, inspect airflow components, then treat the exact cause instead of masking it with temporary air fresheners.
+    `,
+  },
+  {
     slug: "car-ac-maintenance-tips-extend-system-life",
     title: "15 Car AC Maintenance Tips for Peak Performance",
     excerpt:
