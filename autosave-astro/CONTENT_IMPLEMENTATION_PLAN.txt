@@ -1,0 +1,1079 @@
+================================================================================
+  AUTO SAVE KSA — CONTENT IMPLEMENTATION PLAN
+  Based on SEO_KEYWORDS.txt (1,400+ keywords, Sections A–I)
+  Created: February 2026
+  Stack: Astro (SSG), Bilingual AR/EN
+================================================================================
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  TABLE OF CONTENTS                                                           ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  1. Strategy Overview & Keyword-to-Page Mapping                              ║
+║  2. Programmatic SEO Pages (Templated, Auto-Generated)                       ║
+║  3. Manual Content Pages (Hand-Written, High-Quality)                        ║
+║  4. Blog Content Calendar (30 Articles)                                      ║
+║  5. Technical SEO & Structured Data                                          ║
+║  6. Implementation Phases & Timeline                                         ║
+║  7. Page Templates & Data Schemas                                            ║
+║  8. Internal Linking Strategy                                                ║
+║  9. Measurement & KPIs                                                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+================================================================================
+1. STRATEGY OVERVIEW & KEYWORD-TO-PAGE MAPPING
+================================================================================
+
+CORE PRINCIPLE:
+  Use PROGRAMMATIC SEO for high-volume, pattern-based keyword combos
+  (city × service, brand × service, component × service).
+  Use MANUAL CONTENT for educational, long-tail, trust-building pages.
+
+KEYWORD SECTION → PAGE TYPE MAPPING:
+┌─────────┬──────────────────────────────────────┬─────────────────────────┐
+│ Section │ Keyword Category                     │ Page Type               │
+├─────────┼──────────────────────────────────────┼─────────────────────────┤
+│ A1, B1  │ Core Services                        │ Service Pages (manual)  │
+│ A2, B2  │ Symptoms & Problems                  │ Programmatic symptom pg │
+│ A3, B3  │ User Questions                       │ Blog posts + FAQ schema │
+│ A4, B4  │ Vehicle Brand + AC                   │ Programmatic brand pg   │
+│ A5, B5  │ Location-Based                       │ Programmatic city pg    │
+│ A6, B6  │ Pricing & Cost                       │ Pricing page + blog     │
+│ A7, B7  │ Seasonal                             │ Seasonal blog posts     │
+│ A8, B8  │ Spare Parts                          │ Programmatic parts pg   │
+│ A9, B9  │ Service & Delivery                   │ Service features page   │
+│ A10,B10 │ General Related                      │ Homepage + about        │
+│ A11,B11 │ EV AC                                │ Blog + dedicated page   │
+│ B12     │ Long-tail Conversational              │ Blog posts              │
+│ C       │ Arabizi                              │ Meta tags + alt text    │
+│ D       │ High-Intent Commercial               │ CTA pages + landing pg  │
+│ E       │ Competitor & Comparison               │ Trust/review pages      │
+│ F       │ Educational                          │ Knowledge hub (blog)    │
+│ G       │ Voice Search                         │ FAQ schema + content    │
+│ H       │ FAQ Schema Targets                   │ FAQ JSON-LD on pages    │
+│ I       │ Negative Keywords                    │ Google Ads exclusions   │
+└─────────┴──────────────────────────────────────┴─────────────────────────┘
+
+ESTIMATED TOTAL PAGES:
+  Programmatic:  ~350-400 pages
+  Manual:        ~25-30 pages
+  Blog:          ~30 articles (initial), ongoing
+  Total:         ~400-460 indexed pages
+
+
+================================================================================
+2. PROGRAMMATIC SEO PAGES (Templated, Auto-Generated)
+================================================================================
+
+All programmatic pages are generated at build time from data files (JSON/TS)
+using Astro dynamic routes ([...slug].astro). Each page is unique via:
+  - Unique <title>, <meta description>, <h1>
+  - Localized intro paragraph (template with variable insertion)
+  - Relevant FAQ section (drawn from keyword questions)
+  - Consistent CTA (WhatsApp booking)
+  - Internal links to related pages
+  - JSON-LD structured data (LocalBusiness + Service)
+
+────────────────────────────────────────────────────────────────────────────────
+2A. CITY LANDING PAGES  (Targets: A5, B5 — Location Keywords)
+────────────────────────────────────────────────────────────────────────────────
+
+ROUTE PATTERN:
+  /services/[city-slug]                        (Arabic, default)
+  /en/services/[city-slug]                     (English)
+
+CITIES TO GENERATE (20 pages × 2 langs = 40 pages):
+  ┌────────────────────┬──────────────────────┬────────────────────────┐
+  │ City (EN)          │ City (AR)            │ Slug                   │
+  ├────────────────────┼──────────────────────┼────────────────────────┤
+  │ Riyadh             │ الرياض               │ riyadh                 │
+  │ Jeddah             │ جدة                  │ jeddah                 │
+  │ Dammam             │ الدمام               │ dammam                 │
+  │ Khobar             │ الخبر                │ khobar                 │
+  │ Makkah             │ مكة                  │ makkah                 │
+  │ Madinah            │ المدينة المنورة       │ madinah                │
+  │ Buraidah           │ بريدة                │ buraidah               │
+  │ Abha               │ أبها                 │ abha                   │
+  │ Tabuk              │ تبوك                 │ tabuk                  │
+  │ Taif               │ الطائف               │ taif                   │
+  │ Hail               │ حائل                 │ hail                   │
+  │ Al Ahsa            │ الأحساء              │ al-ahsa                │
+  │ Najran             │ نجران                │ najran                 │
+  │ Jubail             │ الجبيل               │ jubail                 │
+  │ Yanbu              │ ينبع                 │ yanbu                  │
+  │ Khamis Mushait     │ خميس مشيط            │ khamis-mushait         │
+  └────────────────────┴──────────────────────┴────────────────────────┘
+
+RIYADH SUB-PAGES (neighborhood-level, 12 pages × 2 langs = 24 pages):
+  /services/riyadh/[neighborhood-slug]
+  Neighborhoods: north, south, east, west, al-naseem, al-malaz,
+                 al-suli, al-aziziyah, al-rabwa, al-yarmook,
+                 al-narjis, al-yasmin
+
+PAGE TEMPLATE STRUCTURE:
+  - H1: "إصلاح مكيف السيارة في {المدينة}" / "Car AC Repair in {City}"
+  - Intro paragraph (unique per city, mentioning climate/demand)
+  - Services offered list (recharge, compressor, diagnostics, etc.)
+  - Pricing table snippet (links to main pricing page)
+  - Customer testimonial (city-specific if available)
+  - FAQ section (3-5 city-relevant questions from Section H)
+  - CTA: WhatsApp booking with pre-filled city name
+  - Map embed (Google Maps for service area)
+  - JSON-LD: LocalBusiness schema with areaServed
+
+DATA FILE: src/data/cities.ts
+  Export array of { slug, nameAr, nameEn, neighborhoods[], climate notes }
+
+TOTAL CITY PAGES: ~64
+
+────────────────────────────────────────────────────────────────────────────────
+2B. CAR BRAND PAGES  (Targets: A4, B4 — Vehicle Brand Keywords)
+────────────────────────────────────────────────────────────────────────────────
+
+ROUTE PATTERN:
+  /car-ac/[brand-slug]                         (Arabic)
+  /en/car-ac/[brand-slug]                      (English)
+
+BRANDS TO GENERATE (30 brands × 2 langs = 60 pages):
+  Toyota, Hyundai, Nissan, Chevrolet, Ford, Kia, Honda, Jeep,
+  Dodge, GMC, Lexus, Mercedes, BMW, Mitsubishi, Infiniti,
+  Genesis, MG, Geely, Chery, Haval, Changan, GAC, BYD,
+  Mazda, Ram, Tesla (EV), Volkswagen, Audi, Porsche, Isuzu
+
+SUB-PAGES PER BRAND (top 8 brands get model-specific pages):
+  /car-ac/toyota/[model-slug]
+  Example: /car-ac/toyota/camry, /car-ac/toyota/corolla, etc.
+
+  Top brands with model pages:
+  - Toyota: Camry, Corolla, Land Cruiser, Hilux, Yaris, Avalon, RAV4, FJ
+  - Hyundai: Sonata, Accent, Tucson, Santa Fe, Elantra
+  - Nissan: Patrol, Altima, Sunny, X-Trail, Maxima
+  - Chevrolet: Tahoe, Silverado, Captiva, Malibu
+  - Ford: Explorer, Expedition, Taurus, Edge
+  - Kia: Cerato, Optima, Sorento, Sportage, K5
+  - Honda: Civic, Accord, CR-V
+  - Mercedes: C-Class, E-Class, S-Class, GLC
+
+  ~50 model pages × 2 langs = ~100 pages
+
+PAGE TEMPLATE STRUCTURE:
+  - H1: "إصلاح مكيف {الماركة}" / "Car AC Repair for {Brand}"
+  - Brand logo + brief overview of common AC issues for this brand
+  - Specific models served (with internal links to model pages)
+  - Common AC problems for this brand
+  - Compatible parts info (OEM vs aftermarket)
+  - Pricing estimate for brand-specific repairs
+  - CTA: WhatsApp with brand pre-filled
+  - JSON-LD: Service schema with brand in serviceType
+
+DATA FILE: src/data/car-brands.ts
+  Export array of { slug, nameAr, nameEn, logo, models[], commonIssues[] }
+
+TOTAL BRAND PAGES: ~160
+
+────────────────────────────────────────────────────────────────────────────────
+2C. SYMPTOM/PROBLEM PAGES  (Targets: A2, B2 — Symptom Keywords)
+────────────────────────────────────────────────────────────────────────────────
+
+ROUTE PATTERN:
+  /symptoms/[symptom-slug]                     (Arabic)
+  /en/symptoms/[symptom-slug]                  (English)
+
+SYMPTOM PAGES TO GENERATE (20 symptoms × 2 langs = 40 pages):
+  ┌────────────────────────────────────┬────────────────────────────────┐
+  │ Symptom (EN slug)                  │ Primary Keyword                │
+  ├────────────────────────────────────┼────────────────────────────────┤
+  │ ac-not-cooling                     │ car ac not cooling             │
+  │ ac-blowing-warm-air                │ car ac blowing warm air        │
+  │ ac-stopped-working                 │ car ac stopped working         │
+  │ ac-weak-cooling                    │ car ac weak cooling            │
+  │ ac-intermittent-cooling            │ car ac works then stops        │
+  │ ac-one-side-only                   │ car ac cools one side only     │
+  │ ac-only-cools-driving              │ ac only cools when driving     │
+  │ ac-clicking-noise                  │ car ac clicking noise          │
+  │ ac-grinding-noise                  │ car ac grinding noise          │
+  │ ac-squealing-noise                 │ car ac squealing noise         │
+  │ ac-hissing-noise                   │ car ac hissing noise           │
+  │ ac-bad-smell                       │ car ac bad smell               │
+  │ ac-musty-smell                     │ car ac musty smell             │
+  │ ac-burning-smell                   │ car ac burning smell           │
+  │ ac-water-leak                      │ car ac water leak              │
+  │ ac-lines-freezing                  │ car ac lines freezing          │
+  │ ac-compressor-not-engaging         │ ac compressor not engaging     │
+  │ ac-fuse-blowing                    │ car ac fuse keeps blowing      │
+  │ ac-weak-airflow                    │ car ac weak airflow            │
+  │ car-shakes-with-ac                 │ car shakes when ac is on       │
+  └────────────────────────────────────┴────────────────────────────────┘
+
+PAGE TEMPLATE STRUCTURE:
+  - H1: "مكيف السيارة {العرض}" / "Car AC {Symptom}"
+  - Symptom description and what the user experiences
+  - Possible causes (ranked by likelihood)
+  - DIY diagnostic steps
+  - When to seek professional help
+  - Estimated repair cost range
+  - Related symptoms (internal links)
+  - CTA: "Experiencing this? Book a diagnosis"
+  - JSON-LD: FAQPage schema
+
+DATA FILE: src/data/symptoms.ts
+  Export array of { slug, titleAr, titleEn, descriptionAr, descriptionEn,
+                    causes[], diagnosticSteps[], costRange, relatedSymptoms[] }
+
+TOTAL SYMPTOM PAGES: ~40
+
+────────────────────────────────────────────────────────────────────────────────
+2D. AC COMPONENT/PARTS PAGES  (Targets: A8, B8 — Spare Parts Keywords)
+────────────────────────────────────────────────────────────────────────────────
+
+ROUTE PATTERN:
+  /parts/[component-slug]                      (Arabic)
+  /en/parts/[component-slug]                   (English)
+
+COMPONENTS TO GENERATE (15 components × 2 langs = 30 pages):
+  compressor, condenser, evaporator, expansion-valve, receiver-dryer,
+  cabin-filter, ac-hoses, compressor-clutch, compressor-bearing,
+  ac-belt, condenser-fan, fan-motor, ac-relay, ac-fuse, pressure-sensor
+
+PAGE TEMPLATE STRUCTURE:
+  - H1: "{Component} مكيف السيارة" / "Car AC {Component}"
+  - What does this part do? (educational)
+  - Signs it needs replacement
+  - OEM vs aftermarket comparison
+  - Price range (SAR)
+  - Compatible vehicle list
+  - Service: repair vs replace
+  - CTA: "Need this part replaced? Get a quote"
+  - JSON-LD: Product schema (for parts) + Service schema
+
+DATA FILE: src/data/components.ts
+  Export array of { slug, nameAr, nameEn, description, signs[],
+                    priceRange, brands[], image }
+
+TOTAL PARTS PAGES: ~30
+
+────────────────────────────────────────────────────────────────────────────────
+2E. SERVICE TYPE PAGES  (Targets: A1, B1 — Core Service Keywords)
+────────────────────────────────────────────────────────────────────────────────
+
+ROUTE PATTERN:
+  /services/[service-slug]                     (Arabic)
+  /en/services/[service-slug]                  (English)
+
+SERVICES TO GENERATE (10 services × 2 langs = 20 pages):
+  ac-recharge, compressor-replacement, leak-detection,
+  ac-cleaning, condenser-repair, evaporator-replacement,
+  cabin-filter-replacement, ac-diagnostic, ac-belt-replacement,
+  full-ac-overhaul
+
+PAGE TEMPLATE STRUCTURE:
+  - H1: Service name
+  - What the service includes
+  - Step-by-step process
+  - Duration estimate
+  - Price range
+  - Before/after or process images
+  - Which vehicles this applies to
+  - FAQ section
+  - CTA: Book this service
+  - JSON-LD: Service schema
+
+DATA FILE: src/data/services.ts
+
+TOTAL SERVICE PAGES: ~20
+
+────────────────────────────────────────────────────────────────────────────────
+2F. CROSS-DIMENSIONAL PAGES (CITY × SERVICE)
+────────────────────────────────────────────────────────────────────────────────
+
+ROUTE PATTERN:
+  /services/[city-slug]/[service-slug]         (Arabic)
+  /en/services/[city-slug]/[service-slug]      (English)
+
+PURPOSE: Capture "تعبئة فريون الرياض" / "car ac recharge Riyadh" type queries.
+Only generate for top 5 cities × top 5 services = 25 × 2 langs = 50 pages.
+
+Top cities: Riyadh, Jeddah, Dammam, Makkah, Madinah
+Top services: ac-recharge, compressor-replacement, leak-detection,
+             ac-diagnostic, ac-cleaning
+
+PAGE TEMPLATE:
+  Combines city template intro + service template details.
+  Unique H1: "تعبئة فريون مكيف السيارة في الرياض"
+  Inherits FAQ from both city and service data.
+
+TOTAL CITY×SERVICE PAGES: ~50
+
+
+PROGRAMMATIC SEO SUMMARY:
+┌────────────────────────────────┬──────────┐
+│ Page Type                      │ Est Pages│
+├────────────────────────────────┼──────────┤
+│ City landing pages             │ 64       │
+│ Car brand pages                │ 160      │
+│ Symptom/problem pages          │ 40       │
+│ AC component pages             │ 30       │
+│ Service type pages             │ 20       │
+│ City × Service pages           │ 50       │
+├────────────────────────────────┼──────────┤
+│ TOTAL PROGRAMMATIC             │ ~364     │
+└────────────────────────────────┴──────────┘
+
+
+================================================================================
+3. MANUAL CONTENT PAGES (Hand-Written, High Quality)
+================================================================================
+
+These pages require unique, in-depth content and cannot be templated.
+
+────────────────────────────────────────────────────────────────────────────────
+3A. CORE SITE PAGES (Already exist, optimize with keywords)
+────────────────────────────────────────────────────────────────────────────────
+
+  1. HOMEPAGE (/ and /en/)
+     Target: A10, B10, D1, D2 (brand keywords, general)
+     Action: Optimize title, meta, H1 with core service keywords
+     Add: FAQ section targeting Section H keywords
+     Add: JSON-LD WebSite + LocalBusiness + FAQPage
+
+  2. ABOUT PAGE (/about and /en/about)
+     Target: E1, E2 (trust, comparison keywords)
+     Action: Add certifications, experience, "why choose us"
+     Optimize for: "أفضل ورشة مكيف سيارات" / "best car ac repair shop"
+
+  3. CONTACT PAGE (/contact and /en/contact)
+     Target: D1, D2, A9, B9 (booking, action keywords)
+     Action: WhatsApp CTA with pre-filled message
+     Add: Location map, business hours, service areas
+
+  4. PRICING PAGE (/pricing and /en/pricing) — NEW
+     Target: A6, B6 (pricing & cost keywords)
+     Action: Create comprehensive pricing table
+     H1: "أسعار صيانة مكيف السيارة" / "Car AC Repair Prices"
+     Include: All service prices, parts price ranges, comparison table
+     FAQ: Cost-related questions from Section H
+     JSON-LD: Service schema with priceRange
+
+  5. TERMS PAGE (/terms and /en/terms)
+     Exists, no keyword optimization needed.
+
+────────────────────────────────────────────────────────────────────────────────
+3B. NEW MANUAL PAGES
+────────────────────────────────────────────────────────────────────────────────
+
+  6. KNOWLEDGE HUB / GUIDE CENTER (/guides and /en/guides) — NEW
+     Target: F1, F2 (educational keywords)
+     Acts as a pillar page linking to all educational content
+     H1: "دليلك الشامل لمكيف السيارة" / "Complete Car AC Guide"
+     Subsections linking to blog posts and component pages
+
+  7. EV AC SERVICE PAGE (/ev-ac and /en/ev-ac) — NEW
+     Target: A11, B11 (EV keywords)
+     H1: "صيانة مكيف السيارة الكهربائية" / "Electric Car AC Service"
+     Content: How EV AC differs, heat pumps, battery impact, brands served
+
+  8. MOBILE SERVICE PAGE (/mobile-service and /en/mobile-service) — NEW
+     Target: A9, B9 (service & delivery keywords)
+     H1: "خدمة إصلاح مكيف متنقلة" / "Mobile Car AC Repair Service"
+     Content: Pickup/delivery, home service, same-day, emergency
+
+  9. WARRANTY & GUARANTEE PAGE (/warranty and /en/warranty) — NEW
+     Target: B9, E2 (trust keywords)
+     Content: Repair warranty, parts guarantee, satisfaction promise
+
+  10. SERVICE AREAS MAP PAGE (/service-areas and /en/service-areas) — NEW
+      Target: A5, B5 (all location keywords)
+      Interactive map showing all served cities
+      Links to all city landing pages
+      JSON-LD: Service schema with areaServed list
+
+
+================================================================================
+4. BLOG CONTENT CALENDAR (30 Articles)
+================================================================================
+
+Blog posts target: A3, A7, B3, B7, B12, F1, F2, G1, G2
+Each post: 1,500-2,500 words, bilingual (AR + EN), with images.
+Published in src/lib/blog-data.ts + blog-data-ar.ts
+
+─── MONTH 1: FOUNDATION (Educational + High-Volume) ─────────────────────────
+
+  POST 1 (Week 1) — ALREADY EXISTS
+  "Car AC Not Cooling? 10 Common Causes & How to Fix Them"
+  Keywords: A2+B2 symptom keywords, B3 question keywords
+  Status: ✅ Published
+
+  POST 2 (Week 1)
+  "Complete Guide: How Your Car AC System Works"
+  Keywords: F2 educational, B10 general, A10
+  Slug: how-car-ac-system-works
+  Target: "how car ac works", "شرح نظام تكييف السيارة"
+
+  POST 3 (Week 2)
+  "Car AC Compressor: Signs It's Failing & Replacement Cost"
+  Keywords: B2 compressor symptoms, B6 pricing, A2+A6
+  Slug: car-ac-compressor-guide
+  Target: "car ac compressor replacement cost", "تغيير كمبروسر المكيف"
+
+  POST 4 (Week 2)
+  "Car AC Freon Recharge: Everything You Need to Know"
+  Keywords: B1 recharge keywords, B6 pricing, A1+A6
+  Slug: car-ac-freon-recharge-guide
+  Target: "car ac recharge", "تعبئة فريون السيارة"
+
+  POST 5 (Week 3)
+  "7 Reasons Your Car AC Smells Bad (And How to Fix It)"
+  Keywords: B2 smell symptoms, A2
+  Slug: car-ac-bad-smell-causes
+  Target: "car ac bad smell", "رائحة كريهة من مكيف السيارة"
+
+  POST 6 (Week 3)
+  "Car AC Making Noise? Here's What Each Sound Means"
+  Keywords: B2 noise symptoms, A2
+  Slug: car-ac-noise-diagnosis
+  Target: "car ac making noise", "صوت مكيف السيارة"
+
+  POST 7 (Week 4)
+  "Prepare Your Car AC for Saudi Summer: Complete Checklist"
+  Keywords: B7 seasonal, A7
+  Slug: prepare-car-ac-for-summer
+  Target: "prepare car ac for summer", "تجهيز مكيف السيارة للصيف"
+
+  POST 8 (Week 4)
+  "Car AC Leak Detection: Signs, Methods & Repair Costs"
+  Keywords: B1 leak keywords, B2 symptoms, B6 pricing
+  Slug: car-ac-leak-detection-guide
+  Target: "car ac leak detection", "كشف تسريب فريون"
+
+─── MONTH 2: BRAND-SPECIFIC + PROBLEM-SOLVING ──────────────────────────────
+
+  POST 9
+  "Toyota Car AC Problems: Model-by-Model Guide"
+  Keywords: A4+B4 Toyota keywords
+  Slug: toyota-car-ac-problems-guide
+
+  POST 10
+  "Hyundai & Kia Car AC: Common Issues & Solutions"
+  Keywords: A4+B4 Hyundai/Kia keywords
+  Slug: hyundai-kia-car-ac-guide
+
+  POST 11
+  "Why Car AC Stops Cooling When Idling (And Fixes)"
+  Keywords: B2+A2 idle-specific symptoms
+  Slug: car-ac-stops-cooling-when-idling
+
+  POST 12
+  "OEM vs Aftermarket AC Compressor: Which to Choose?"
+  Keywords: B8 parts, A3 questions, F2 educational
+  Slug: oem-vs-aftermarket-ac-compressor
+
+  POST 13
+  "Car AC Cabin Filter: When to Change & How"
+  Keywords: B8 filter keywords, A1+A8
+  Slug: cabin-air-filter-replacement-guide
+
+  POST 14
+  "R134a vs R1234yf: Which Refrigerant Does Your Car Use?"
+  Keywords: F2 educational, A3 questions, B8
+  Slug: r134a-vs-r1234yf-refrigerant
+
+  POST 15
+  "Nissan & Infiniti AC Repair Guide for Saudi Owners"
+  Keywords: A4+B4 Nissan/Infiniti keywords
+  Slug: nissan-infiniti-ac-repair-guide
+
+  POST 16
+  "Car AC Condenser: What It Does & When to Replace"
+  Keywords: B8 parts, F2 educational
+  Slug: car-ac-condenser-guide
+
+─── MONTH 3: SEASONAL + LONG-TAIL + LOCAL ──────────────────────────────────
+
+  POST 17
+  "Best Car AC Settings for 50°C Saudi Heat"
+  Keywords: B7 seasonal, B12 long-tail
+  Slug: best-car-ac-settings-extreme-heat
+
+  POST 18
+  "Car AC Maintenance Schedule for Hot Climates"
+  Keywords: B12 long-tail, B7 seasonal, F2
+  Slug: car-ac-maintenance-schedule-hot-climate
+
+  POST 19
+  "Car AC Repair Riyadh: What to Expect & Where to Go"
+  Keywords: A5+B5 Riyadh keywords
+  Slug: car-ac-repair-riyadh-guide
+
+  POST 20
+  "Electric Car AC: How It's Different & What You Need to Know"
+  Keywords: A11+B11 EV keywords
+  Slug: electric-car-ac-guide
+
+  POST 21
+  "Car AC Compressor Clutch: Diagnosis & Repair"
+  Keywords: B2+B8 clutch symptoms/parts
+  Slug: car-ac-compressor-clutch-guide
+
+  POST 22
+  "Why Your Car AC Only Cools on One Side"
+  Keywords: B2+A2 uneven cooling
+  Slug: car-ac-cools-one-side-only
+
+  POST 23
+  "Common Car AC Myths Debunked"
+  Keywords: F2 educational myths
+  Slug: car-ac-myths-debunked
+
+  POST 24
+  "Should You Run Car AC in Winter? Yes, Here's Why"
+  Keywords: B7 seasonal winter
+  Slug: running-car-ac-in-winter
+
+─── MONTH 4: TRUST, COMPARISON, ADVANCED ──────────────────────────────────
+
+  POST 25
+  "How to Choose a Reliable Car AC Repair Shop"
+  Keywords: E1+E2 comparison, A3+B3 questions
+  Slug: how-to-choose-car-ac-repair-shop
+
+  POST 26
+  "Car AC Evaporator: Complete Guide"
+  Keywords: B8 parts, F2 educational
+  Slug: car-ac-evaporator-guide
+
+  POST 27
+  "Car AC Repair Cost Guide: Saudi Arabia 2026"
+  Keywords: A6+B6 all pricing keywords
+  Slug: car-ac-repair-cost-saudi-arabia
+
+  POST 28
+  "Ford & Chevrolet AC Problems in Saudi Heat"
+  Keywords: A4+B4 American brand keywords
+  Slug: ford-chevrolet-ac-problems-guide
+
+  POST 29
+  "Mercedes & BMW AC Repair: What Makes It Different?"
+  Keywords: A4+B4 luxury brand keywords
+  Slug: mercedes-bmw-ac-repair-guide
+
+  POST 30
+  "Chinese Car AC (MG, Geely, Chery, Haval): A Complete Guide"
+  Keywords: A4+B4 Chinese brand keywords
+  Slug: chinese-car-ac-repair-guide
+
+
+================================================================================
+5. TECHNICAL SEO & STRUCTURED DATA
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+5A. JSON-LD STRUCTURED DATA
+────────────────────────────────────────────────────────────────────────────────
+
+SCHEMA TYPES TO IMPLEMENT:
+
+  1. LocalBusiness (on every page)
+     {
+       "@type": "AutoRepair",
+       "name": "Auto Save KSA",
+       "areaServed": [list of cities],
+       "serviceType": "Car Air Conditioning Repair"
+     }
+
+  2. FAQPage (on FAQ sections — targets Section H)
+     Apply to: Homepage, service pages, symptom pages, blog posts
+     Generate from: Section H1 + H2 questions
+     Min 3 questions per page, max 10
+
+  3. Service (on service pages)
+     {
+       "@type": "Service",
+       "serviceType": "Car AC Compressor Replacement",
+       "provider": { "@type": "AutoRepair" },
+       "areaServed": "Riyadh",
+       "priceRange": "$$"
+     }
+
+  4. Article (on blog posts)
+     {
+       "@type": "Article",
+       "headline": "...",
+       "author": { "@type": "Organization" }
+     }
+
+  5. BreadcrumbList (on all pages)
+     Auto-generated from URL path.
+
+  6. Product (on parts pages)
+     {
+       "@type": "Product",
+       "name": "Car AC Compressor",
+       "category": "Auto Parts"
+     }
+
+────────────────────────────────────────────────────────────────────────────────
+5B. META TAGS STRATEGY
+────────────────────────────────────────────────────────────────────────────────
+
+TITLE TAG FORMULA:
+  Programmatic city:   "{Service} في {City} | اوتو سيف"
+  Programmatic brand:  "إصلاح مكيف {Brand} | اوتو سيف"
+  Symptom page:        "{Symptom}؟ الأسباب والحلول | اوتو سيف"
+  Blog post:           "{Post Title} | مدونة اوتو سيف"
+
+META DESCRIPTION FORMULA:
+  Include: primary keyword + benefit + CTA
+  Example: "خدمة تعبئة فريون مكيف السيارة في الرياض بأفضل الأسعار.
+           تشخيص مجاني وضمان على القطع. احجز الآن عبر واتساب."
+
+ARABIZI INTEGRATION (Section C):
+  - Include Arabizi variants in meta keywords tag
+  - Use Arabizi in image alt text where natural
+  - Add Arabizi terms in blog post body text naturally
+  Example: Include "mukayif sayara" alongside "مكيف السيارة"
+
+────────────────────────────────────────────────────────────────────────────────
+5C. TECHNICAL IMPLEMENTATION
+────────────────────────────────────────────────────────────────────────────────
+
+  1. HREFLANG TAGS
+     Every page must have <link rel="alternate" hreflang="ar" ...>
+     and <link rel="alternate" hreflang="en" ...>
+
+  2. CANONICAL URLS
+     Each programmatic page gets a unique canonical URL.
+     No duplicate content between AR/EN (different content, same topic).
+
+  3. SITEMAP.XML
+     Auto-generate from all pages (Astro handles this).
+     Include lastmod, changefreq, priority.
+     Priority: Homepage 1.0, services 0.8, blog 0.7, programmatic 0.6
+
+  4. ROBOTS.TXT
+     Allow all pages. Block /api/ if any.
+
+  5. PAGE SPEED
+     All images: WebP format, lazy loading below fold.
+     Critical CSS inlined.
+     No client-side JS for SEO content (Astro SSG handles this).
+
+  6. INTERNAL LINKING (see Section 8)
+
+  7. OPEN GRAPH & TWITTER CARDS
+     Every page gets og:title, og:description, og:image.
+     Blog posts get article-specific OG tags.
+
+
+================================================================================
+6. IMPLEMENTATION PHASES & TIMELINE
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 1: FOUNDATION (Weeks 1-2)                                             │
+│ Priority: HIGH                                                               │
+│                                                                              │
+│ □ Create data files:                                                         │
+│   - src/data/cities.ts (20 cities with metadata)                             │
+│   - src/data/car-brands.ts (30 brands with models)                           │
+│   - src/data/symptoms.ts (20 symptoms with causes)                           │
+│   - src/data/components.ts (15 AC components)                                │
+│   - src/data/services.ts (10 core services)                                  │
+│                                                                              │
+│ □ Create page templates:                                                     │
+│   - src/pages/services/[city].astro                                          │
+│   - src/pages/car-ac/[brand].astro                                           │
+│   - src/pages/symptoms/[symptom].astro                                       │
+│   - src/pages/parts/[component].astro                                        │
+│   - src/pages/services/[service].astro (non-city)                            │
+│   - Duplicate for /en/ routes                                                │
+│                                                                              │
+│ □ Create shared components:                                                  │
+│   - ProgrammaticHero.astro                                                   │
+│   - ServiceList.astro                                                        │
+│   - FAQSection.astro (with JSON-LD)                                          │
+│   - CTAWhatsApp.astro                                                        │
+│   - BreadcrumbNav.astro                                                      │
+│   - PriceTable.astro                                                         │
+│                                                                              │
+│ □ Implement JSON-LD schemas                                                  │
+│ □ Set up hreflang tags                                                       │
+│ □ Update sitemap generation                                                  │
+│                                                                              │
+│ Deliverable: ~160 programmatic pages live (cities + brands basic)            │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 2: CONTENT EXPANSION (Weeks 3-4)                                       │
+│ Priority: HIGH                                                               │
+│                                                                              │
+│ □ Generate all city landing pages (incl. Riyadh neighborhoods)               │
+│ □ Generate all car brand + model pages                                       │
+│ □ Generate symptom pages                                                     │
+│ □ Generate AC component/parts pages                                          │
+│ □ Generate service type pages                                                │
+│ □ Generate city × service cross-dimensional pages                            │
+│ □ Write & publish blog posts 2-8                                             │
+│ □ Create pricing page (manual)                                               │
+│ □ Create knowledge hub page (manual)                                         │
+│                                                                              │
+│ Deliverable: ~364 programmatic + 8 blog posts live                           │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 3: DEPTH & TRUST (Weeks 5-8)                                           │
+│ Priority: MEDIUM                                                             │
+│                                                                              │
+│ □ Write & publish blog posts 9-16                                            │
+│ □ Create EV AC service page (manual)                                         │
+│ □ Create mobile service page (manual)                                        │
+│ □ Create warranty page (manual)                                              │
+│ □ Create service areas map page (manual)                                     │
+│ □ Add customer testimonials to city pages                                    │
+│ □ Enrich brand pages with model-specific content                             │
+│ □ Build internal linking network                                             │
+│ □ Submit sitemap to Google Search Console                                    │
+│ □ Set up Google Business Profile optimization                                │
+│                                                                              │
+│ Deliverable: Full site with 400+ pages, 16 blog posts                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 4: ONGOING GROWTH (Weeks 9+)                                           │
+│ Priority: ONGOING                                                            │
+│                                                                              │
+│ □ Publish blog posts 17-30 (2 per week)                                      │
+│ □ Monitor Search Console for keyword gaps                                    │
+│ □ Add new brand/model pages as needed                                        │
+│ □ Seasonal content updates (pre-summer push)                                 │
+│ □ A/B test meta descriptions for CTR                                         │
+│ □ Build backlinks via automotive forums, directories                         │
+│ □ Update pricing data quarterly                                              │
+│ □ Add new cities/neighborhoods based on demand                               │
+│ □ Google Ads: Use Section I negative keywords                                │
+│                                                                              │
+│ Deliverable: 30 blog posts, ongoing optimization                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+================================================================================
+7. PAGE TEMPLATES & DATA SCHEMAS
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+7A. DATA FILE STRUCTURES
+────────────────────────────────────────────────────────────────────────────────
+
+FILE: src/data/cities.ts
+
+  interface City {
+    slug: string;
+    nameAr: string;
+    nameEn: string;
+    regionAr: string;
+    regionEn: string;
+    population: string;
+    climateNoteAr: string;
+    climateNoteEn: string;
+    neighborhoods: { slug: string; nameAr: string; nameEn: string }[];
+    introAr: string;     // Unique 2-3 sentence intro for this city
+    introEn: string;
+    faqs: { questionAr: string; questionEn: string;
+            answerAr: string; answerEn: string }[];
+  }
+
+FILE: src/data/car-brands.ts
+
+  interface CarBrand {
+    slug: string;
+    nameAr: string;
+    nameEn: string;
+    logoPath: string;
+    popularity: 'high' | 'medium' | 'low';  // determines model pages
+    models: {
+      slug: string;
+      nameAr: string;
+      nameEn: string;
+      years: string;       // e.g., "2015-2026"
+      commonAcIssuesAr: string[];
+      commonAcIssuesEn: string[];
+    }[];
+    generalIssuesAr: string;
+    generalIssuesEn: string;
+  }
+
+FILE: src/data/symptoms.ts
+
+  interface Symptom {
+    slug: string;
+    titleAr: string;
+    titleEn: string;
+    descriptionAr: string;
+    descriptionEn: string;
+    keywordsAr: string[];
+    keywordsEn: string[];
+    causes: {
+      titleAr: string;
+      titleEn: string;
+      explanationAr: string;
+      explanationEn: string;
+      likelihood: 'high' | 'medium' | 'low';
+    }[];
+    diagnosticStepsAr: string[];
+    diagnosticStepsEn: string[];
+    costRangeMin: number;
+    costRangeMax: number;
+    relatedSymptomSlugs: string[];
+    relatedComponentSlugs: string[];
+  }
+
+FILE: src/data/components.ts
+
+  interface ACComponent {
+    slug: string;
+    nameAr: string;
+    nameEn: string;
+    descriptionAr: string;
+    descriptionEn: string;
+    functionAr: string;
+    functionEn: string;
+    failureSignsAr: string[];
+    failureSignsEn: string[];
+    priceRangeOEM: { min: number; max: number };
+    priceRangeAftermarket: { min: number; max: number };
+    imagePath: string;
+    relatedSymptomSlugs: string[];
+  }
+
+FILE: src/data/services.ts
+
+  interface ACService {
+    slug: string;
+    nameAr: string;
+    nameEn: string;
+    descriptionAr: string;
+    descriptionEn: string;
+    processStepsAr: string[];
+    processStepsEn: string[];
+    durationMinutes: number;
+    priceRangeMin: number;
+    priceRangeMax: number;
+    partsInvolved: string[];   // component slugs
+    keywordsAr: string[];
+    keywordsEn: string[];
+  }
+
+────────────────────────────────────────────────────────────────────────────────
+7B. ASTRO PAGE TEMPLATE STRUCTURE
+────────────────────────────────────────────────────────────────────────────────
+
+EXAMPLE: src/pages/services/[city].astro
+
+  ---
+  import { cities } from '../../data/cities';
+  import CityTemplate from '../../layouts/CityTemplate.astro';
+
+  export function getStaticPaths() {
+    return cities.map(city => ({
+      params: { city: city.slug },
+      props: { city }
+    }));
+  }
+
+  const { city } = Astro.props;
+  ---
+  <CityTemplate city={city} lang="ar" />
+
+EXAMPLE: src/pages/en/services/[city].astro
+  (Same but with lang="en")
+
+The layout component (CityTemplate.astro) renders the full page using
+the city data object and language parameter.
+
+
+================================================================================
+8. INTERNAL LINKING STRATEGY
+================================================================================
+
+Internal links are critical for both UX and SEO. Build a "web" of links:
+
+LINK ARCHITECTURE:
+                          ┌──────────────┐
+                          │   HOMEPAGE   │
+                          └──────┬───────┘
+             ┌────────────────┬──┴──┬────────────────┐
+             ▼                ▼     ▼                ▼
+       ┌──────────┐    ┌─────────┐ ┌──────┐   ┌──────────┐
+       │ Services │    │  Blog   │ │About │   │ Pricing  │
+       └────┬─────┘    └────┬────┘ └──────┘   └──────────┘
+            │               │
+    ┌───────┼───────┐       │
+    ▼       ▼       ▼       ▼
+  Cities  Types  City×Svc  Posts
+    │                        │
+    └───────┬───┬────────────┘
+            ▼   ▼
+         Symptoms  Components  Brands
+            │          │          │
+            └──────────┼──────────┘
+                       ▼
+                  Cross-links
+
+LINKING RULES:
+
+  1. EVERY programmatic page links to:
+     - Homepage (via breadcrumb)
+     - Parent category page
+     - 3-5 related pages of the same type
+     - 1-2 related blog posts
+     - Pricing page
+     - Contact/booking page
+
+  2. EVERY blog post links to:
+     - 2-3 related blog posts
+     - 1-2 relevant service pages
+     - 1-2 relevant symptom/component pages
+     - Relevant city page (if location-specific)
+
+  3. EVERY symptom page links to:
+     - Related component pages (what might be broken)
+     - Related service pages (what service fixes this)
+     - Related blog post (in-depth reading)
+
+  4. EVERY brand page links to:
+     - Model sub-pages
+     - Common symptom pages for that brand
+     - Relevant service pages
+
+  5. ANCHOR TEXT: Use keyword-rich anchor text from SEO_KEYWORDS.txt
+     Example: Link text "تغيير كمبروسر المكيف" pointing to compressor page
+     Example: Link text "car ac repair Riyadh" pointing to Riyadh city page
+
+IMPLEMENTATION:
+  Create a utility function in src/lib/internal-links.ts:
+  - getRelatedPages(currentSlug, pageType, limit) → returns related pages
+  - Uses tag/keyword matching to find relevant connections
+  - Component: <RelatedLinks /> renders a "Related Services" or
+    "You Might Also Need" section at the bottom of each page
+
+
+================================================================================
+9. MEASUREMENT & KPIs
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+9A. TOOLS
+────────────────────────────────────────────────────────────────────────────────
+
+  - Google Search Console (impressions, clicks, CTR, position)
+  - Google Analytics 4 (traffic, engagement, conversions)
+  - Ahrefs or SEMrush (keyword tracking, backlinks)
+
+────────────────────────────────────────────────────────────────────────────────
+9B. KPIs BY PHASE
+────────────────────────────────────────────────────────────────────────────────
+
+  PHASE 1 (Month 1):
+    □ All programmatic pages indexed (check via site: query)
+    □ 0 crawl errors in Search Console
+    □ Page speed: all pages < 3s LCP
+    □ Schema validation: 0 errors in Rich Results Test
+
+  PHASE 2 (Month 2-3):
+    □ 500+ keywords appearing in Search Console
+    □ 50+ keywords in top 50 positions
+    □ 1,000+ organic impressions/month
+    □ 100+ organic clicks/month
+    □ 10+ WhatsApp inquiries from organic
+
+  PHASE 3 (Month 4-6):
+    □ 200+ keywords in top 20 positions
+    □ 5,000+ organic impressions/month
+    □ 500+ organic clicks/month
+    □ 50+ WhatsApp inquiries from organic/month
+    □ Featured snippets for 5+ FAQ queries
+    □ Blog posts appearing in Google Discover
+
+  PHASE 4 (Month 7-12):
+    □ 500+ keywords in top 10 positions
+    □ 20,000+ organic impressions/month
+    □ 2,000+ organic clicks/month
+    □ 150+ monthly WhatsApp inquiries from organic
+    □ Top 3 for "إصلاح مكيف السيارة الرياض"
+    □ Top 5 for "car ac repair Riyadh"
+    □ Domain Authority: 20+
+
+────────────────────────────────────────────────────────────────────────────────
+9C. TRACKING KEYWORD GROUPS
+────────────────────────────────────────────────────────────────────────────────
+
+  Track rankings for these priority keyword clusters:
+
+  CLUSTER 1 — Brand keywords (highest commercial intent):
+    "اوتو سيف", "Auto Save KSA", "autosaveksa"
+
+  CLUSTER 2 — Core service + Riyadh:
+    "إصلاح مكيف السيارة الرياض", "car ac repair Riyadh"
+    "تعبئة فريون الرياض", "car ac recharge Riyadh"
+
+  CLUSTER 3 — Symptom keywords:
+    "مكيف السيارة لا يبرد", "car ac not cooling"
+    "المكيف ما يبرد", "car ac blowing warm air"
+
+  CLUSTER 4 — Cost keywords:
+    "كم سعر تعبئة فريون المكيف", "car ac recharge cost"
+    "سعر كمبروسر المكيف", "ac compressor replacement cost"
+
+  CLUSTER 5 — Near-me keywords:
+    "ورشة مكيف سيارات قريبة", "car ac repair near me"
+
+────────────────────────────────────────────────────────────────────────────────
+9D. GOOGLE ADS NEGATIVE KEYWORDS (Section I)
+────────────────────────────────────────────────────────────────────────────────
+
+  If running Google Ads, add these as campaign-level negatives:
+
+  Arabic negatives:
+    مكيف منزلي, مكيف سبليت, مكيف شباك, مكيف مركزي منزل, تكييف مبنى
+
+  English negatives:
+    home ac repair, split ac repair, window ac unit,
+    central air home, hvac home repair, residential ac service
+
+
+================================================================================
+END OF CONTENT IMPLEMENTATION PLAN
+================================================================================
+
+QUICK REFERENCE — FILE CREATION CHECKLIST:
+  □ src/data/cities.ts
+  □ src/data/car-brands.ts
+  □ src/data/symptoms.ts
+  □ src/data/components.ts
+  □ src/data/services.ts
+  □ src/pages/services/[city].astro
+  □ src/pages/services/[city]/[service].astro
+  □ src/pages/services/[city]/[neighborhood].astro
+  □ src/pages/car-ac/[brand].astro
+  □ src/pages/car-ac/[brand]/[model].astro
+  □ src/pages/symptoms/[symptom].astro
+  □ src/pages/parts/[component].astro
+  □ src/pages/en/services/[city].astro
+  □ src/pages/en/services/[city]/[service].astro
+  □ src/pages/en/car-ac/[brand].astro
+  □ src/pages/en/car-ac/[brand]/[model].astro
+  □ src/pages/en/symptoms/[symptom].astro
+  □ src/pages/en/parts/[component].astro
+  □ src/layouts/CityTemplate.astro
+  □ src/layouts/BrandTemplate.astro
+  □ src/layouts/SymptomTemplate.astro
+  □ src/layouts/ComponentTemplate.astro
+  □ src/layouts/ServiceTemplate.astro
+  □ src/components/programmatic/ProgrammaticHero.astro
+  □ src/components/programmatic/FAQSection.astro
+  □ src/components/programmatic/CTAWhatsApp.astro
+  □ src/components/programmatic/BreadcrumbNav.astro
+  □ src/components/programmatic/RelatedLinks.astro
+  □ src/components/programmatic/PriceTable.astro
+  □ src/lib/internal-links.ts
+  □ 30 blog posts in src/lib/blog-data.ts + blog-data-ar.ts
