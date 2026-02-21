@@ -1,0 +1,21 @@
+# v0 runtime files (should only exist in preview, not in git)
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+
+# Common ignores
+node_modules/
+.next/
+out/
+.turbo/
+.pnpm-store/
+coverage/
+dist/
+*.log
+.vercel/
+.env
+.env*.local
+.env.*
+!.env.example
+.DS_Store
+tsconfig.tsbuildinfo
