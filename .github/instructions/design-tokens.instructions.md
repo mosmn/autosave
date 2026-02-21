@@ -1,5 +1,5 @@
 ---
-applyTo: "**/*.astro,**/*.tsx,**/*.ts,**/*.css"
+applyTo: "autosave-astro/**/*.astro,autosave-astro/**/*.tsx,autosave-astro/**/*.ts,autosave-astro/**/*.css"
 ---
 
 # Design Token & Styling Instructions

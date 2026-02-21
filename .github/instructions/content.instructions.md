@@ -1,5 +1,5 @@
 ---
-applyTo: "src/content/**/*.{md,mdx}"
+applyTo: "autosave-astro/src/content/**/*.{md,mdx}"
 ---
 
 # Content Collection Guidelines

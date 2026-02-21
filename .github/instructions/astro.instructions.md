@@ -1,5 +1,5 @@
 ---
-applyTo: "**/*.astro"
+applyTo: "autosave-astro/**/*.astro"
 ---
 
 # Astro Component & SEO Guidelines

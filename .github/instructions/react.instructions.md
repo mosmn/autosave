@@ -1,5 +1,5 @@
 ---
-applyTo: "**/*.tsx,**/*.ts"
+applyTo: "autosave-astro/**/*.tsx,autosave-astro/**/*.ts"
 excludeFrom: "code-review"
 ---
 
