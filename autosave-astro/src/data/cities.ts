@@ -467,7 +467,7 @@ export const cities: City[] = [
         questionAr: 'ما أكثر أعطال المكيف شيوعاً في ينبع؟',
         questionEn: 'What are the most common AC problems in Yanbu?',
         answerAr:
-          'بسبب الرطوبة العالية، أكثر الأعطال شيوعاً هي تسريب الفريون وتآكل المكثف وتراكم الفطريات في المبخر.',
+          'بسبب الرطوبة العالية، أكثر الأعطال شيوعاً هي تسريب الفريون وتآكل المكثف وتراكم الفطريات في الثلاجة.',
         answerEn:
           'Due to high humidity, the most common issues are freon leaks, condenser corrosion, and mold buildup in the evaporator.',
       },

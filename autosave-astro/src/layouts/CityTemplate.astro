@@ -12,7 +12,6 @@ import CTAWhatsApp from '../components/programmatic/CTAWhatsApp.astro';
 import RelatedLinks from '../components/programmatic/RelatedLinks.astro';
 import type { City } from '../data/cities';
 import type { Language } from '../lib/i18n';
-import { cities } from '../data/cities';
 
 interface Props {
   city: City;
@@ -53,17 +52,7 @@ const whatsappMessage = isAr
   ? `السلام عليكم، أريد حجز موعد لصيانة مكيف سيارتي في ${cityName}`
   : `Hi, I would like to book a car AC repair appointment in ${cityName}`;
 
-// Related cities (exclude current, pick 5)
-const relatedCities = cities
-  .filter((c) => c.slug !== city.slug)
-  .slice(0, 5)
-  .map((c) => ({
-    title: isAr
-      ? `إصلاح مكيف السيارة في ${c.nameAr}`
-      : `Car AC Repair in ${c.nameEn}`,
-    href: isAr ? `/services/${c.slug}` : `/en/services/${c.slug}`,
-    description: redactMoney(isAr ? c.introAr : c.introEn),
-  }));
+const relatedCities: { title: string; href: string; description: string }[] = [];
 
 // Neighborhood links (for cities with neighborhoods)
 const neighborhoodLinks = city.neighborhoods.map((n) => ({
@@ -172,11 +161,13 @@ const neighborhoodLinks = city.neighborhoods.map((n) => ({
   </div>
 
   {/* Related cities */}
-  <RelatedLinks
-    links={relatedCities}
-    lang={lang}
-    title={isAr ? 'خدماتنا في مدن أخرى' : 'Our Services in Other Cities'}
-  />
+  {relatedCities.length > 0 && (
+    <RelatedLinks
+      links={relatedCities}
+      lang={lang}
+      title={isAr ? 'خدماتنا في مدن أخرى' : 'Our Services in Other Cities'}
+    />
+  )}
 
   {/* CTA */}
   <CTAWhatsApp lang={lang} message={whatsappMessage} />

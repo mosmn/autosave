@@ -410,3 +410,64 @@ details .faq-answer-inner {
 .group:hover .blog-card-image::after {
   opacity: 1;
 }
+
+/* ════════════════════════════════════════
+   maintenance center image screen slider
+   ════════════════════════════════════════ */
+@keyframes installmentSlideFrame {
+  0% {
+    opacity: 0;
+    transform: scale(1.08) translateX(1.5%);
+  }
+  8% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.98) translateX(-1.5%);
+  }
+}
+
+.installment-slider-screen {
+  --slide-duration: 2s;
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(160deg, rgba(12, 27, 46, 0.08), rgba(201, 162, 39, 0.08));
+}
+
+.installment-slider-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(circle at 85% 15%, rgba(232, 197, 71, 0.22), transparent 36%),
+    linear-gradient(180deg, transparent 55%, rgba(12, 27, 46, 0.28) 100%);
+}
+
+.installment-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  animation-name: installmentSlideFrame;
+  animation-duration: calc(var(--slide-count) * var(--slide-duration));
+  animation-delay: calc(var(--slide-index) * var(--slide-duration));
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .installment-slide {
+    animation: none;
+  }
+  .installment-slide:first-child {
+    opacity: 1;
+    transform: none;
+  }
+}

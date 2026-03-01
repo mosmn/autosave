@@ -113,14 +113,14 @@ export const components: ACComponent[] = [
   },
   {
     slug: 'evaporator',
-    nameAr: 'مبخر مكيف السيارة (إيفابوريتور)',
+    nameAr: 'ثلاجة مكيف السيارة (إيفابوريتور)',
     nameEn: 'Car AC Evaporator',
     descriptionAr:
-      'المبخر يقع داخل لوحة القيادة وهو المسؤول عن تبريد الهواء الذي يدخل المقصورة. يمتص الحرارة من الهواء الداخلي ويرسل هواءً بارداً.',
+      'الثلاجة يقع داخل لوحة القيادة وهو المسؤول عن تبريد الهواء الذي يدخل المقصورة. يمتص الحرارة من الهواء الداخلي ويرسل هواءً بارداً.',
     descriptionEn:
       'The evaporator is located inside the dashboard and is responsible for cooling the air entering the cabin. It absorbs heat from interior air and delivers cold air.',
     functionAr:
-      'يتحول الفريون السائل إلى غاز داخل المبخر، وهذا التحول يمتص الحرارة من الهواء المحيط مما يبرد الهواء الداخل للمقصورة.',
+      'يتحول الفريون السائل إلى غاز داخل الثلاجة، وهذا التحول يمتص الحرارة من الهواء المحيط مما يبرد الهواء الداخل للمقصورة.',
     functionEn:
       'Liquid refrigerant evaporates inside the evaporator, absorbing heat from the surrounding air, which cools the air entering the cabin.',
     failureSignsAr: [
@@ -140,7 +140,7 @@ export const components: ACComponent[] = [
     relatedSymptomSlugs: ['ac-weak-cooling', 'ac-bad-smell', 'ac-musty-smell', 'ac-water-leak', 'ac-lines-freezing'],
     faqs: [
       {
-        questionAr: 'لماذا تغيير المبخر مكلف؟',
+        questionAr: 'لماذا تغيير الثلاجة مكلف؟',
         questionEn: 'Why is evaporator replacement so expensive?',
         answerAr:
           'لأنه يتطلب فك لوحة القيادة بالكامل للوصول إليه، وهذا يحتاج ساعات عمل طويلة بالإضافة لتكلفة القطعة.',
@@ -154,16 +154,16 @@ export const components: ACComponent[] = [
     nameAr: 'صمام التمدد (إكسبانشن فالف)',
     nameEn: 'Expansion Valve',
     descriptionAr:
-      'صمام التمدد يتحكم في كمية الفريون السائل التي تدخل المبخر. يقلل ضغط الفريون ويحوله من سائل عالي الضغط إلى رذاذ منخفض الضغط.',
+      'صمام التمدد يتحكم في كمية الفريون السائل التي تدخل الثلاجة. يقلل ضغط الفريون ويحوله من سائل عالي الضغط إلى رذاذ منخفض الضغط.',
     descriptionEn:
       'The expansion valve controls the amount of liquid refrigerant entering the evaporator. It reduces refrigerant pressure, converting it from high-pressure liquid to low-pressure mist.',
     functionAr:
-      'ينظم تدفق الفريون إلى المبخر حسب حاجة النظام للتبريد، ويحافظ على التوازن بين الضغط العالي والمنخفض في الدورة.',
+      'ينظم تدفق الفريون إلى الثلاجة حسب حاجة النظام للتبريد، ويحافظ على التوازن بين الضغط العالي والمنخفض في الدورة.',
     functionEn:
       'Regulates refrigerant flow to the evaporator based on cooling demand, maintaining balance between high and low pressure in the system.',
     failureSignsAr: [
       'تذبذب في درجة التبريد',
-      'تجمد على خطوط التكييف أو المبخر',
+      'تجمد على خطوط التكييف أو الثلاجة',
       'ضعف مستمر في التبريد',
       'صوت هسهسة غير طبيعي',
     ],
@@ -234,7 +234,7 @@ export const components: ACComponent[] = [
     descriptionEn:
       'The cabin air filter purifies outside air before it enters the AC system and cabin. It captures dust, dirt, pollen, and pollutants.',
     functionAr:
-      'يرشح الهواء من الجزيئات الضارة والأتربة والروائح، ويحمي المبخر من تراكم الأوساخ التي تقلل كفاءته.',
+      'يرشح الهواء من الجزيئات الضارة والأتربة والروائح، ويحمي الثلاجة من تراكم الأوساخ التي تقلل كفاءته.',
     functionEn:
       'Filters air from harmful particles, dust, and odors, and protects the evaporator from dirt buildup that reduces its efficiency.',
     failureSignsAr: [
@@ -456,11 +456,11 @@ export const components: ACComponent[] = [
     nameAr: 'موتور مروحة المكيف',
     nameEn: 'AC Blower Motor',
     descriptionAr:
-      'موتور المروحة (البلور) يدفع الهواء من خلال المبخر إلى داخل مقصورة السيارة. يتحكم في قوة تدفق الهواء من فتحات التهوية.',
+      'موتور المروحة (البلور) يدفع الهواء من خلال الثلاجة إلى داخل مقصورة السيارة. يتحكم في قوة تدفق الهواء من فتحات التهوية.',
     descriptionEn:
       'The blower motor pushes air through the evaporator into the car cabin. It controls the airflow force from the vents.',
     functionAr:
-      'يسحب الهواء ويدفعه عبر المبخر ثم إلى فتحات التهوية في المقصورة بسرعات مختلفة حسب إعداد المروحة.',
+      'يسحب الهواء ويدفعه عبر الثلاجة ثم إلى فتحات التهوية في المقصورة بسرعات مختلفة حسب إعداد المروحة.',
     functionEn:
       'Draws air and pushes it through the evaporator, then to the cabin vents at different speeds based on the fan setting.',
     failureSignsAr: [

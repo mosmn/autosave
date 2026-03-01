@@ -3,6 +3,8 @@ import type { Language } from '../lib/i18n';
 import { getContentByLanguage } from '../lib/content';
 import { getLocalizedPath, getAlternateLang } from '../lib/i18n';
 import { carBrands } from '../data/car-brands';
+import { services } from '../data/services';
+import { getCityBySlug } from '../data/cities';
 import ComingSoonLink from './ComingSoonLink.astro';
 
 interface Props {
@@ -24,8 +26,18 @@ function getBasePath(path: string): string {
 const basePath = getBasePath(currentPath);
 const toggleHref = getLocalizedPath(basePath, altLang);
 const toggleLabel = altLang === 'ar' ? 'العربية' : 'English';
+const authorizedInstallmentHref = getLocalizedPath('/authorized-installment-center', lang);
+const authorizedInstallmentLabel = lang === 'ar' ? 'المراكز المعتمدة' : 'authorized maintenance Center';
 const brandsWithModelPages = new Set(carBrands.filter((brand) => brand.popularity === 'high').map((brand) => brand.slug));
 const localizedBrandName = (nameAr: string, nameEn: string) => (lang === 'ar' ? nameAr : nameEn);
+const localizedServiceName = (nameAr: string, nameEn: string) => (lang === 'ar' ? nameAr : nameEn);
+const riyadh = getCityBySlug('riyadh');
+const riyadhNeighborhoods = riyadh?.neighborhoods ?? [];
+const servicesQuickLinks = [
+  { label: content.header.servicesMenu.pricingLinkLabel, href: '/pricing' },
+  { label: content.header.servicesMenu.riyadhLinkLabel, href: '/services/riyadh' },
+  { label: content.header.servicesMenu.contactLinkLabel, href: '/contact' },
+];
 
 const carsQuickLinks = [
   { label: content.header.carsMenu.blogLinkLabel, href: '/blog' },
@@ -53,6 +65,79 @@ const carsQuickLinks = [
       >
         {content.header.nav[0].name}
       </a>
+
+      <div class="group relative">
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          aria-label={content.header.servicesMenu.trigger}
+          aria-haspopup="true"
+        >
+          <span>{content.header.servicesMenu.trigger}</span>
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <div class="pointer-events-none invisible absolute start-0 top-full z-50 mt-3 w-[min(94vw,60rem)] rounded-2xl border border-border bg-card p-5 opacity-0 shadow-xl transition-all duration-200 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100">
+          <div class="grid gap-5 lg:grid-cols-[2fr_1fr]">
+            <section>
+              <h2 class="font-display text-lg font-semibold text-foreground">{content.header.servicesMenu.title}</h2>
+              <p class="mt-1 text-sm text-muted-foreground">{content.header.servicesMenu.description}</p>
+              <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-primary">{content.header.servicesMenu.categoriesLabel}</p>
+
+              <div class="mt-3 grid max-h-[60vh] gap-2 overflow-y-auto pe-1">
+                {services.map((service) => (
+                  <details class="rounded-lg border border-border bg-background/60 p-3">
+                    <summary class="cursor-pointer list-none text-sm font-semibold text-foreground">
+                      <span>{localizedServiceName(service.nameAr, service.nameEn)}</span>
+                    </summary>
+                    <div class="mt-2 space-y-2 border-t border-border pt-2">
+                      <a
+                        href={getLocalizedPath(`/services/${service.slug}`, lang)}
+                        class="inline-flex rounded-md border border-primary/30 px-2.5 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/5"
+                      >
+                        {content.header.servicesMenu.viewServiceLabel}
+                      </a>
+
+                      {riyadhNeighborhoods.length > 0 && (
+                        <div>
+                          <p class="text-xs font-medium text-muted-foreground">{content.header.servicesMenu.areasLabel}</p>
+                          <div class="mt-2 flex flex-wrap gap-1.5">
+                            {riyadhNeighborhoods.slice(0, 6).map((neighborhood) => (
+                              <a
+                                href={getLocalizedPath(`/services/riyadh/${neighborhood.slug}`, lang)}
+                                class="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                              >
+                                {lang === 'ar' ? neighborhood.nameAr : neighborhood.nameEn}
+                              </a>
+                            ))}
+                          </div>
+                          <p class="mt-2 text-xs text-muted-foreground">{content.header.servicesMenu.neighborhoodsHintLabel}</p>
+                        </div>
+                      )}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </section>
+
+            <aside class="rounded-xl border border-border bg-secondary/35 p-4">
+              <h3 class="font-display text-base font-semibold text-foreground">{content.header.servicesMenu.quickLinksLabel}</h3>
+              <div class="mt-3 space-y-2">
+                {servicesQuickLinks.map((link) => (
+                  <a
+                    href={getLocalizedPath(link.href, lang)}
+                    class="block rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
 
       <div class="group relative">
         <button
@@ -150,6 +235,14 @@ const carsQuickLinks = [
 
     {/* Actions */}
     <div class="flex items-center gap-3">
+      <a
+        href={authorizedInstallmentHref}
+        aria-label={authorizedInstallmentLabel}
+        class="hidden lg:inline-flex min-h-11 items-center justify-center rounded-lg border border-primary/30 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/5"
+      >
+        {authorizedInstallmentLabel}
+      </a>
+
       {/* Language toggle */}
       <a
         href={toggleHref}
@@ -193,6 +286,53 @@ const carsQuickLinks = [
             {item.name}
           </a>
         ))}
+
+        <section class="mt-2 rounded-xl border border-border bg-secondary/25 p-3">
+          <h2 class="font-display text-base font-semibold text-foreground">{content.header.servicesMenu.title}</h2>
+          <p class="mt-1 text-xs text-muted-foreground">{content.header.servicesMenu.description}</p>
+
+          <div class="mt-3 max-h-72 space-y-2 overflow-y-auto">
+            {services.map((service) => (
+              <details class="rounded-lg border border-border bg-card p-2.5">
+                <summary class="cursor-pointer list-none text-sm font-semibold text-foreground">
+                  {localizedServiceName(service.nameAr, service.nameEn)}
+                </summary>
+                <div class="mt-2 space-y-2 border-t border-border pt-2">
+                  <a
+                    href={getLocalizedPath(`/services/${service.slug}`, lang)}
+                    class="inline-flex rounded-md border border-primary/30 px-2.5 py-1.5 text-xs font-medium text-primary"
+                  >
+                    {content.header.servicesMenu.viewServiceLabel}
+                  </a>
+
+                  {riyadhNeighborhoods.length > 0 && (
+                    <div class="flex flex-wrap gap-1.5">
+                      {riyadhNeighborhoods.slice(0, 6).map((neighborhood) => (
+                        <a
+                          href={getLocalizedPath(`/services/riyadh/${neighborhood.slug}`, lang)}
+                          class="rounded-md border border-border px-2 py-1 text-xs text-foreground"
+                        >
+                          {lang === 'ar' ? neighborhood.nameAr : neighborhood.nameEn}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+
+          <div class="mt-3 grid gap-2">
+            {servicesQuickLinks.map((link) => (
+              <a
+                href={getLocalizedPath(link.href, lang)}
+                class="rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
 
         <section class="mt-2 rounded-xl border border-border bg-secondary/25 p-3">
           <h2 class="font-display text-base font-semibold text-foreground">{content.header.carsMenu.title}</h2>
@@ -259,6 +399,14 @@ const carsQuickLinks = [
         >
           {content.header.quoteButton}
         </ComingSoonLink>
+
+        <a
+          href={authorizedInstallmentHref}
+          aria-label={authorizedInstallmentLabel}
+          class="mt-2 inline-flex min-h-11 items-center justify-center rounded-lg border border-primary/30 bg-card px-4 py-2.5 text-sm font-semibold text-primary"
+        >
+          {authorizedInstallmentLabel}
+        </a>
       </nav>
     </div>
   </div>

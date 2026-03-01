@@ -181,7 +181,7 @@ export const symptoms: Symptom[] = [
       {
         titleAr: 'فلتر مقصورة مسدود',
         titleEn: 'Clogged Cabin Filter',
-        explanationAr: 'فلتر المقصورة المتسخ يقلل تدفق الهواء عبر المبخر.',
+        explanationAr: 'فلتر المقصورة المتسخ يقلل تدفق الهواء عبر الثلاجة.',
         explanationEn: 'A dirty cabin filter reduces airflow through the evaporator.',
         likelihood: 'high',
       },
@@ -205,7 +205,7 @@ export const symptoms: Symptom[] = [
       'غير فلتر المقصورة إن كان متسخاً',
       'نظف المكثف من الأوساخ والحشرات',
       'افحص مستوى الفريون بمقياس الضغط',
-      'تحقق من عمل المروحة والمبخر',
+      'تحقق من عمل المروحة والثلاجة',
     ],
     diagnosticStepsEn: [
       'Measure vent air temperature (ideal is 3-8 degrees C)',
@@ -515,9 +515,9 @@ export const symptoms: Symptom[] = [
     keywordsEn: ['ac bad smell', 'car ac smells bad', 'ac musty smell', 'ac odor'],
     causes: [
       {
-        titleAr: 'بكتيريا وفطريات في المبخر',
+        titleAr: 'بكتيريا وفطريات في الثلاجة',
         titleEn: 'Bacteria and Mold on Evaporator',
-        explanationAr: 'تراكم البكتيريا والفطريات على سطح المبخر الرطب يسبب رائحة كريهة.',
+        explanationAr: 'تراكم البكتيريا والفطريات على سطح الثلاجة الرطب يسبب رائحة كريهة.',
         explanationEn: 'Bacteria and mold buildup on the moist evaporator surface causes bad odor.',
         likelihood: 'high',
       },
@@ -532,7 +532,7 @@ export const symptoms: Symptom[] = [
     diagnosticStepsAr: [
       'افحص فلتر المقصورة واستبدله إن كان متسخاً',
       'شغل المكيف وشمّ الهواء الخارج لتحديد نوع الرائحة',
-      'افحص المبخر بصرياً إن أمكن',
+      'افحص الثلاجة بصرياً إن أمكن',
       'تحقق من عدم وجود تسريب ماء في المقصورة',
     ],
     diagnosticStepsEn: [
@@ -549,7 +549,7 @@ export const symptoms: Symptom[] = [
       {
         questionAr: 'كيف أتخلص من رائحة مكيف السيارة الكريهة؟',
         questionEn: 'How do I get rid of car AC bad smell?',
-        answerAr: 'غيّر فلتر المقصورة وأجرِ تنظيف وتعقيم للمبخر ومجاري الهواء. هذا يزيل البكتيريا المسببة للرائحة.',
+        answerAr: 'غيّر فلتر المقصورة وأجرِ تنظيف وتعقيم للثلاجة ومجاري الهواء. هذا يزيل البكتيريا المسببة للرائحة.',
         answerEn: 'Replace the cabin filter and have the evaporator and air ducts cleaned and sanitized. This removes odor-causing bacteria.',
       },
     ],
@@ -566,16 +566,16 @@ export const symptoms: Symptom[] = [
     keywordsEn: ['musty ac smell', 'ac damp smell', 'ac mildew smell'],
     causes: [
       {
-        titleAr: 'نمو فطريات على المبخر',
+        titleAr: 'نمو فطريات على الثلاجة',
         titleEn: 'Mold Growth on Evaporator',
-        explanationAr: 'الرطوبة المتبقية على المبخر بعد إيقاف المكيف تسمح بنمو الفطريات.',
+        explanationAr: 'الرطوبة المتبقية على الثلاجة بعد إيقاف المكيف تسمح بنمو الفطريات.',
         explanationEn: 'Residual moisture on the evaporator after AC shutdown allows mold growth.',
         likelihood: 'high',
       },
       {
         titleAr: 'انسداد أنبوب تصريف التكثيف',
         titleEn: 'Clogged Condensate Drain',
-        explanationAr: 'انسداد أنبوب تصريف الماء من المبخر يسبب تجمع الماء وظهور العفن.',
+        explanationAr: 'انسداد أنبوب تصريف الماء من الثلاجة يسبب تجمع الماء وظهور العفن.',
         explanationEn: 'A clogged condensate drain tube causes water to pool, promoting mold growth.',
         likelihood: 'medium',
       },
@@ -584,7 +584,7 @@ export const symptoms: Symptom[] = [
       'تحقق من تصريف ماء التكثيف أسفل السيارة',
       'نظف أنبوب التصريف إن كان مسدوداً',
       'غير فلتر المقصورة',
-      'اطلب تنظيف وتعقيم المبخر',
+      'اطلب تنظيف وتعقيم الثلاجة',
     ],
     diagnosticStepsEn: [
       'Check condensate drain under the car',
@@ -600,7 +600,7 @@ export const symptoms: Symptom[] = [
       {
         questionAr: 'كيف أمنع رائحة العفن من المكيف؟',
         questionEn: 'How do I prevent musty AC smell?',
-        answerAr: 'أطفئ المكيف قبل الوصول بـ 5 دقائق وشغل المروحة فقط لتجفيف المبخر. وغير فلتر المقصورة بانتظام.',
+        answerAr: 'أطفئ المكيف قبل الوصول بـ 5 دقائق وشغل المروحة فقط لتجفيف الثلاجة. وغير فلتر المقصورة بانتظام.',
         answerEn: 'Turn off AC 5 minutes before arriving and run the fan only to dry the evaporator. Also replace the cabin filter regularly.',
       },
     ],
@@ -1013,9 +1013,9 @@ export const symptoms: Symptom[] = [
         likelihood: 'high',
       },
       {
-        titleAr: 'تلف صينية المبخر',
+        titleAr: 'تلف صينية الثلاجة',
         titleEn: 'Damaged Evaporator Tray',
-        explanationAr: 'صينية تجميع الماء تحت المبخر متشققة أو تالفة.',
+        explanationAr: 'صينية تجميع الماء تحت الثلاجة متشققة أو تالفة.',
         explanationEn: 'The water collection tray under the evaporator is cracked or damaged.',
         likelihood: 'low',
       },
@@ -1024,7 +1024,7 @@ export const symptoms: Symptom[] = [
       'تحقق من تصريف الماء أسفل السيارة (يجب أن ينقط عند عمل المكيف)',
       'إذا لا ينقط من تحت، فأنبوب التصريف مسدود',
       'نظف أنبوب التصريف بسلك أو هواء مضغوط',
-      'افحص المنطقة حول المبخر لعلامات تسريب',
+      'افحص المنطقة حول الثلاجة لعلامات تسريب',
     ],
     diagnosticStepsEn: [
       'Check water dripping under the car (should drip when AC is on)',
@@ -1071,9 +1071,9 @@ export const symptoms: Symptom[] = [
         likelihood: 'medium',
       },
       {
-        titleAr: 'ضعف تدفق الهواء على المبخر',
+        titleAr: 'ضعف تدفق الهواء على الثلاجة',
         titleEn: 'Poor Airflow Over Evaporator',
-        explanationAr: 'فلتر مسدود أو مروحة ضعيفة تمنع تدفق هواء كافٍ على المبخر فيتجمد.',
+        explanationAr: 'فلتر مسدود أو مروحة ضعيفة تمنع تدفق هواء كافٍ على الثلاجة فيتجمد.',
         explanationEn: 'A clogged filter or weak blower prevents sufficient airflow over the evaporator, causing freezing.',
         likelihood: 'medium',
       },
@@ -1083,7 +1083,7 @@ export const symptoms: Symptom[] = [
       'افحص مستوى الفريون',
       'غير فلتر المقصورة',
       'افحص صمام التمدد',
-      'تحقق من تدفق الهواء عبر المبخر',
+      'تحقق من تدفق الهواء عبر الثلاجة',
     ],
     diagnosticStepsEn: [
       'Turn off AC and let lines defrost',

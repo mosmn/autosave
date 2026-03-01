@@ -1,16 +1,19 @@
 ---
 /**
  * City landing pages (Arabic — default locale).
- * Generates /services/[city] for all cities.
+ * Generates /services/[city] for Riyadh only.
  */
-import { cities } from '../../data/cities';
+import { getCityBySlug } from '../../data/cities';
 import CityTemplate from '../../layouts/CityTemplate.astro';
 
 export function getStaticPaths() {
-  return cities.map((city) => ({
-    params: { city: city.slug },
-    props: { city },
-  }));
+  const riyadh = getCityBySlug('riyadh');
+  if (!riyadh) return [];
+
+  return [{
+    params: { city: riyadh.slug },
+    props: { city: riyadh },
+  }];
 }
 
 const { city } = Astro.props;

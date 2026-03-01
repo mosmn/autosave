@@ -1,18 +1,15 @@
 ---
 /**
  * Combined city landing + service type pages (Arabic — default locale).
- * Generates /services/[slug] for all cities AND all services.
+ * Generates /services/[slug] for Riyadh city landing + all services.
  */
-import { cities, type City } from '../../data/cities';
+import type { City } from '../../data/cities';
 import { services, type ACService } from '../../data/services';
 import CityTemplate from '../../layouts/CityTemplate.astro';
 import ServiceTemplate from '../../layouts/ServiceTemplate.astro';
 
 export function getStaticPaths() {
-  const cityPaths = cities.map((city) => ({
-    params: { slug: city.slug },
-    props: { city, service: null as ACService | null, pageType: 'city' as const },
-  }));
+  const cityPaths: { params: { slug: string }; props: { city: City | null; service: ACService | null; pageType: 'city' } }[] = [];
 
   const servicePaths = services.map((service) => ({
     params: { slug: service.slug },

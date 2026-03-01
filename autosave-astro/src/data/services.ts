@@ -213,7 +213,7 @@ export const services: ACService[] = [
       'Professional car AC cleaning and sanitization service to eliminate bacteria, mold, and bad odors. We use specialized cleaning agents that are safe for the AC system and passenger health.',
     processStepsAr: [
       'فحص فلتر المقصورة واستبداله إن لزم',
-      'تنظيف المبخر بالمواد المتخصصة',
+      'تنظيف الثلاجة بالمواد المتخصصة',
       'تعقيم مجاري الهواء',
       'تنظيف فتحات التهوية',
       'اختبار جودة الهواء بعد التنظيف',
@@ -303,17 +303,17 @@ export const services: ACService[] = [
   },
   {
     slug: 'evaporator-replacement',
-    nameAr: 'تغيير مبخر مكيف السيارة',
+    nameAr: 'تغيير ثلاجة مكيف السيارة',
     nameEn: 'Car AC Evaporator Replacement',
     descriptionAr:
-      'خدمة تغيير مبخر (إيفابوريتور) مكيف السيارة. المبخر مسؤول عن تبريد الهواء داخل المقصورة، وتلفه أو تسريبه يتطلب استبداله بقطعة جديدة.',
+      'خدمة تغيير ثلاجة مكيف السيارة. الثلاجة مسؤول عن تبريد الهواء داخل المقصورة، وتلفه أو تسريبه يتطلب استبداله بقطعة جديدة.',
     descriptionEn:
       'Professional car AC evaporator replacement service. The evaporator is responsible for cooling the cabin air, and when it fails or leaks, it requires replacement with a new unit.',
     processStepsAr: [
-      'تشخيص تلف المبخر',
+      'تشخيص تلف الثلاجة',
       'تفريغ نظام التكييف من الفريون',
-      'فك لوحة القيادة للوصول للمبخر',
-      'تركيب المبخر الجديد',
+      'فك لوحة القيادة للوصول للثلاجة',
+      'تركيب الثلاجة الجديد',
       'إعادة تجميع لوحة القيادة',
       'تعبئة الفريون واختبار التبريد',
     ],
@@ -330,10 +330,10 @@ export const services: ACService[] = [
     priceRangeMax: 3000,
     partsInvolved: ['evaporator', 'expansion-valve', 'receiver-dryer'],
     keywordsAr: [
-      'تغيير مبخر المكيف',
+      'تغيير ثلاجة المكيف',
       'إيفابوريتور مكيف السيارة',
-      'مبخر التكييف',
-      'استبدال مبخر المكيف',
+      'ثلاجة التكييف',
+      'استبدال ثلاجة المكيف',
     ],
     keywordsEn: [
       'evaporator replacement',
@@ -343,10 +343,10 @@ export const services: ACService[] = [
     ],
     faqs: [
       {
-        questionAr: 'لماذا تغيير المبخر مكلف؟',
+        questionAr: 'لماذا تغيير الثلاجة مكلف؟',
         questionEn: 'Why is evaporator replacement expensive?',
         answerAr:
-          'تغيير المبخر مكلف لأنه يتطلب فك لوحة القيادة بالكامل للوصول إليه، مما يستغرق وقتاً طويلاً في العمالة بالإضافة لتكلفة القطعة نفسها.',
+          'تغيير الثلاجة مكلف لأنه يتطلب فك لوحة القيادة بالكامل للوصول إليه، مما يستغرق وقتاً طويلاً في العمالة بالإضافة لتكلفة القطعة نفسها.',
         answerEn:
           'Evaporator replacement is expensive because it requires removing the entire dashboard to access it, which takes significant labor time in addition to the part cost.',
       },

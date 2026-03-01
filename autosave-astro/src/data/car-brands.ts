@@ -48,7 +48,7 @@ export const carBrands: CarBrand[] = [
         commonAcIssuesAr: [
           'ضعف تبريد بسبب نقص فريون',
           'صوت طقطقة من أكتويتر باب الخلط',
-          'تسريب من المبخر في الموديلات القديمة',
+          'تسريب من الثلاجة في الموديلات القديمة',
         ],
         commonAcIssuesEn: [
           'Weak cooling due to low refrigerant',
@@ -64,7 +64,7 @@ export const carBrands: CarBrand[] = [
         commonAcIssuesAr: [
           'ضعف تبريد في الحرارة الشديدة',
           'تسريب فريون من وصلات الخطوط',
-          'رائحة عفنة من المبخر',
+          'رائحة عفنة من الثلاجة',
         ],
         commonAcIssuesEn: [
           'Weak cooling in extreme heat',
@@ -179,7 +179,7 @@ export const carBrands: CarBrand[] = [
         nameEn: 'Elantra',
         years: '2011-2026',
         commonAcIssuesAr: [
-          'تسريب فريون من المبخر',
+          'تسريب فريون من الثلاجة',
           'ضعف تبريد في الصيف',
           'صوت من موتور المروحة',
         ],
@@ -197,7 +197,7 @@ export const carBrands: CarBrand[] = [
         commonAcIssuesAr: [
           'ضعف كلتش الكمبروسر',
           'تسريب من خطوط المكيف',
-          'رائحة عفنة من المبخر',
+          'رائحة عفنة من الثلاجة',
         ],
         commonAcIssuesEn: [
           'Weak compressor clutch',
@@ -281,7 +281,7 @@ export const carBrands: CarBrand[] = [
         years: '2011-2023',
         commonAcIssuesAr: [
           'ضعف التبريد في الحرارة الشديدة',
-          'تسريب من المبخر',
+          'تسريب من الثلاجة',
           'مشكلة في نظام التحكم الآلي',
         ],
         commonAcIssuesEn: [
@@ -351,7 +351,7 @@ export const carBrands: CarBrand[] = [
         commonAcIssuesAr: [
           'ضعف تبريد المكيف الخلفي',
           'تلف الكمبروسر من الحمل الزائد',
-          'تسريب من المبخر الخلفي',
+          'تسريب من الثلاجة الخلفي',
         ],
         commonAcIssuesEn: [
           'Weak rear AC cooling',
@@ -398,7 +398,7 @@ export const carBrands: CarBrand[] = [
         years: '2015-2026',
         commonAcIssuesAr: [
           'ضعف تبريد بسبب حجم المقصورة',
-          'رائحة عفنة من المبخر',
+          'رائحة عفنة من الثلاجة',
           'انسداد أنبوب التصريف',
         ],
         commonAcIssuesEn: [
@@ -435,7 +435,7 @@ export const carBrands: CarBrand[] = [
         years: '2010-2026',
         commonAcIssuesAr: [
           'ضعف تبريد المكيف الخلفي',
-          'تسريب فريون من المبخر الأمامي',
+          'تسريب فريون من الثلاجة الأمامي',
           'أكتويتر باب الخلط يحتاج تغيير',
         ],
         commonAcIssuesEn: [
@@ -452,7 +452,7 @@ export const carBrands: CarBrand[] = [
         commonAcIssuesAr: [
           'ضعف تبريد بسبب حجم المقصورة الكبير',
           'تلف الكمبروسر من الحمل المستمر',
-          'تسريب من المبخر',
+          'تسريب من الثلاجة',
         ],
         commonAcIssuesEn: [
           'Weak cooling due to large cabin',
@@ -501,7 +501,7 @@ export const carBrands: CarBrand[] = [
       {
         questionAr: 'المكيف الخلفي في تاهو ضعيف، ما الحل؟',
         questionEn: 'Rear AC in Tahoe is weak, what is the fix?',
-        answerAr: 'تحقق من مستوى الفريون أولاً. ثم افحص المبخر الخلفي وصمام التمدد الخلفي. في بعض الموديلات يحتاج تغيير صمام التمدد.',
+        answerAr: 'تحقق من مستوى الفريون أولاً. ثم افحص الثلاجة الخلفي وصمام التمدد الخلفي. في بعض الموديلات يحتاج تغيير صمام التمدد.',
         answerEn: 'Check refrigerant level first. Then inspect the rear evaporator and expansion valve. In some models, the expansion valve needs replacement.',
       },
     ],
@@ -520,7 +520,7 @@ export const carBrands: CarBrand[] = [
         years: '2010-2026',
         commonAcIssuesAr: [
           'ضعف المكيف الخلفي',
-          'تسريب من المبخر',
+          'تسريب من الثلاجة',
           'أكتويتر باب الخلط يتلف بشكل متكرر',
         ],
         commonAcIssuesEn: [
@@ -568,7 +568,7 @@ export const carBrands: CarBrand[] = [
         years: '2013-2026',
         commonAcIssuesAr: [
           'ضعف المكيف الخلفي',
-          'رائحة عفنة من المبخر',
+          'رائحة عفنة من الثلاجة',
           'تسريب بطيء من الوصلات',
         ],
         commonAcIssuesEn: [
@@ -621,7 +621,7 @@ export const carBrands: CarBrand[] = [
         years: '2012-2026',
         commonAcIssuesAr: [
           'ضعف تبريد بسبب كمبروسر صغير',
-          'تسريب من المبخر',
+          'تسريب من الثلاجة',
           'رائحة كريهة من المكيف',
         ],
         commonAcIssuesEn: [
@@ -664,7 +664,7 @@ export const carBrands: CarBrand[] = [
       },
     ],
     generalIssuesAr:
-      'سيارات هوندا تتميز بنظام تكييف موثوق عموماً. أكثر المشاكل شيوعاً تسريب المكثف والمبخر مع التقدم في العمر.',
+      'سيارات هوندا تتميز بنظام تكييف موثوق عموماً. أكثر المشاكل شيوعاً تسريب المكثف والثلاجة مع التقدم في العمر.',
     generalIssuesEn:
       'Honda vehicles generally have reliable AC systems. The most common problems are condenser and evaporator leaks with age.',
     faqs: [
@@ -722,7 +722,7 @@ export const carBrands: CarBrand[] = [
         years: '2015-2026',
         commonAcIssuesAr: [
           'ضعف تبريد في الصيف',
-          'رائحة كريهة من المبخر',
+          'رائحة كريهة من الثلاجة',
           'مشكلة في نظام المناخ الآلي',
         ],
         commonAcIssuesEn: [
@@ -756,7 +756,7 @@ export const carBrands: CarBrand[] = [
       {
         questionAr: 'هل يمكن استخدام قطع تويوتا في مكيف لكزس؟',
         questionEn: 'Can Toyota parts be used for Lexus AC?',
-        answerAr: 'بعض القطع الأساسية متوافقة مثل فلاتر المقصورة والفريون. لكن الكمبروسر والمبخر عادةً مختلفين ويجب استخدام القطع المخصصة.',
+        answerAr: 'بعض القطع الأساسية متوافقة مثل فلاتر المقصورة والفريون. لكن الكمبروسر والثلاجة عادةً مختلفين ويجب استخدام القطع المخصصة.',
         answerEn: 'Some basic parts are compatible like cabin filters and refrigerant. But the compressor and evaporator are usually different and require specific parts.',
       },
     ],
@@ -775,7 +775,7 @@ export const carBrands: CarBrand[] = [
         nameAr: 'يوكن',
         nameEn: 'Yukon',
         years: '2010-2026',
-        commonAcIssuesAr: ['ضعف المكيف الخلفي', 'تسريب من المبخر', 'أكتويتر باب الخلط'],
+        commonAcIssuesAr: ['ضعف المكيف الخلفي', 'تسريب من الثلاجة', 'أكتويتر باب الخلط'],
         commonAcIssuesEn: ['Weak rear AC', 'Evaporator leak', 'Blend door actuator'],
       },
       {
@@ -843,7 +843,7 @@ export const carBrands: CarBrand[] = [
         nameAr: 'الفئة الثالثة',
         nameEn: '3 Series',
         years: '2012-2026',
-        commonAcIssuesAr: ['ضعف تبريد', 'رائحة كريهة', 'تسريب من المبخر'],
+        commonAcIssuesAr: ['ضعف تبريد', 'رائحة كريهة', 'تسريب من الثلاجة'],
         commonAcIssuesEn: ['Weak cooling', 'Bad smell', 'Evaporator leak'],
       },
     ],
@@ -1191,7 +1191,7 @@ export const carBrands: CarBrand[] = [
         nameAr: 'اسكاليد',
         nameEn: 'Escalade',
         years: '2015-2026',
-        commonAcIssuesAr: ['ضعف المكيف الخلفي', 'أكتويتر باب الخلط', 'تسريب من المبخر'],
+        commonAcIssuesAr: ['ضعف المكيف الخلفي', 'أكتويتر باب الخلط', 'تسريب من الثلاجة'],
         commonAcIssuesEn: ['Weak rear AC', 'Blend door actuator', 'Evaporator leak'],
       },
     ],
