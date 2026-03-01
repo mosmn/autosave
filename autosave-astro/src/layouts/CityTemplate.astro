@@ -37,6 +37,22 @@ const pageDescription = isAr
   ? `خدمات إصلاح وصيانة مكيف السيارة في ${cityName}، ${regionName}. تعبئة فريون، تغيير كمبروسر، كشف تسريب وأكثر. ضمان أفضل سعر.`
   : `Car AC repair and maintenance services in ${cityName}, ${regionName}. Freon recharge, compressor replacement, leak detection and more. Best price guarantee.`;
 
+const leakLaserKeywordsAr = [
+  `كشف تسريب فريون ${cityName}`,
+  `فحص تسريب المكيف ${cityName}`,
+  `فحص ليزر ${cityName}`,
+  'فحص ليزر تسريب الفريون',
+  'فحص ليزر لمكيف السيارة',
+];
+
+const leakLaserKeywordsEn = [
+  `car ac leak detection ${cityName}`,
+  `refrigerant leak car ${cityName}`,
+  `laser leak test car ac ${cityName}`,
+  'car ac laser inspection',
+  'freon leak laser test',
+];
+
 const heroEyebrow = isAr ? `خدماتنا في ${cityName}` : `Our Services in ${cityName}`;
 const heroTitle = isAr
   ? `إصلاح مكيف السيارة في ${cityName}`
@@ -68,8 +84,8 @@ const neighborhoodLinks = city.neighborhoods.map((n) => ({
   description={pageDescription}
   lang={lang}
   keywords={isAr
-    ? [`إصلاح مكيف السيارة ${cityName}`, `صيانة مكيف سيارة ${cityName}`, `تعبئة فريون ${cityName}`]
-    : [`car ac repair ${cityName}`, `ac service ${cityName}`, `freon recharge ${cityName}`]
+    ? [`إصلاح مكيف السيارة ${cityName}`, `صيانة مكيف سيارة ${cityName}`, `تعبئة فريون ${cityName}`, ...leakLaserKeywordsAr]
+    : [`car ac repair ${cityName}`, `ac service ${cityName}`, `freon recharge ${cityName}`, ...leakLaserKeywordsEn]
   }
 >
   <ProgrammaticHero

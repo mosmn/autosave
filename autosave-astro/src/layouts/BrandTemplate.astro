@@ -31,6 +31,22 @@ const pageDescription = isAr
   ? `متخصصون في إصلاح وصيانة مكيف سيارات ${brandName}. تشخيص دقيق، قطع غيار أصلية وبديلة، ضمان على الصيانة. احجز الآن.`
   : `Specialists in ${brandName} car AC repair and maintenance. Accurate diagnosis, OEM and aftermarket parts, service warranty. Book now.`;
 
+const leakLaserKeywordsAr = [
+  `تسريب فريون ${brandName}`,
+  `كشف تسريب مكيف ${brandName}`,
+  `فحص ليزر ${brandName}`,
+  'فحص ليزر تسريب الفريون',
+  'فحص ليزر لمكيف السيارة',
+];
+
+const leakLaserKeywordsEn = [
+  `${brandName} refrigerant leak`,
+  `${brandName} ac leak detection`,
+  `laser leak test car ac ${brandName}`,
+  'car ac laser inspection',
+  'freon leak laser test',
+];
+
 const breadcrumbs = [
   { label: isAr ? 'الرئيسية' : 'Home', href: isAr ? '/' : '/en' },
   { label: isAr ? 'السيارات' : 'Car Brands', href: isAr ? '/car-ac' : '/en/car-ac' },
@@ -61,8 +77,8 @@ const relatedBrands = carBrands
   description={pageDescription}
   lang={lang}
   keywords={isAr
-    ? [`مكيف ${brandName}`, `إصلاح مكيف ${brandName}`, `صيانة مكيف ${brandName}`]
-    : [`${brandName} ac repair`, `${brandName} ac service`, `${brandName} ac problems`]
+    ? [`مكيف ${brandName}`, `إصلاح مكيف ${brandName}`, `صيانة مكيف ${brandName}`, ...leakLaserKeywordsAr]
+    : [`${brandName} ac repair`, `${brandName} ac service`, `${brandName} ac problems`, ...leakLaserKeywordsEn]
   }
 >
   <ProgrammaticHero

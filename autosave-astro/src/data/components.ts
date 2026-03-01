@@ -15,6 +15,8 @@ export interface ACComponent {
   failureSignsEn: string[];
   priceRangeOEM: { min: number; max: number };
   priceRangeAftermarket: { min: number; max: number };
+  keywordsAr?: string[];
+  keywordsEn?: string[];
   relatedSymptomSlugs: string[];
   faqs: {
     questionAr: string;
@@ -53,6 +55,20 @@ export const components: ACComponent[] = [
     ],
     priceRangeOEM: { min: 1200, max: 3500 },
     priceRangeAftermarket: { min: 600, max: 1800 },
+    keywordsAr: [
+      'تسريب فريون من الكمبروسر',
+      'تسريب زيت الكمبروسر',
+      'فحص ليزر',
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ],
+    keywordsEn: [
+      'compressor refrigerant leak',
+      'ac compressor freon leak',
+      'laser leak test car ac',
+      'car ac laser inspection',
+      'freon leak laser test',
+    ],
     relatedSymptomSlugs: ['ac-not-cooling', 'ac-clicking-noise', 'ac-compressor-not-engaging', 'ac-fuse-blowing'],
     faqs: [
       {
@@ -99,6 +115,20 @@ export const components: ACComponent[] = [
     ],
     priceRangeOEM: { min: 500, max: 1500 },
     priceRangeAftermarket: { min: 250, max: 800 },
+    keywordsAr: [
+      'تسريب فريون من المكثف',
+      'تسريب كوندنسر المكيف',
+      'فحص ليزر',
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ],
+    keywordsEn: [
+      'condenser refrigerant leak',
+      'ac condenser leak test',
+      'laser leak test car ac',
+      'car ac laser inspection',
+      'freon leak laser test',
+    ],
     relatedSymptomSlugs: ['ac-weak-cooling', 'ac-not-cooling', 'ac-water-leak'],
     faqs: [
       {
@@ -137,6 +167,20 @@ export const components: ACComponent[] = [
     ],
     priceRangeOEM: { min: 800, max: 2500 },
     priceRangeAftermarket: { min: 400, max: 1200 },
+    keywordsAr: [
+      'تسريب فريون من الثلاجة',
+      'تسريب إيفابوريتور المكيف',
+      'فحص ليزر',
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ],
+    keywordsEn: [
+      'evaporator refrigerant leak',
+      'ac evaporator leak detection',
+      'laser leak test car ac',
+      'car ac laser inspection',
+      'freon leak laser test',
+    ],
     relatedSymptomSlugs: ['ac-weak-cooling', 'ac-bad-smell', 'ac-musty-smell', 'ac-water-leak', 'ac-lines-freezing'],
     faqs: [
       {
@@ -175,6 +219,20 @@ export const components: ACComponent[] = [
     ],
     priceRangeOEM: { min: 200, max: 600 },
     priceRangeAftermarket: { min: 100, max: 350 },
+    keywordsAr: [
+      'تسريب عند صمام التمدد',
+      'فحص صمام التمدد تسريب',
+      'فحص ليزر',
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ],
+    keywordsEn: [
+      'expansion valve leak',
+      'ac expansion valve leak test',
+      'laser leak test car ac',
+      'car ac laser inspection',
+      'freon leak laser test',
+    ],
     relatedSymptomSlugs: ['ac-intermittent-cooling', 'ac-lines-freezing', 'ac-weak-cooling', 'ac-hissing-noise'],
     faqs: [
       {
@@ -213,6 +271,20 @@ export const components: ACComponent[] = [
     ],
     priceRangeOEM: { min: 100, max: 350 },
     priceRangeAftermarket: { min: 50, max: 200 },
+    keywordsAr: [
+      'تسريب عند فلتر التجفيف',
+      'فحص رسيفر دراير تسريب',
+      'فحص ليزر',
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ],
+    keywordsEn: [
+      'receiver dryer leak',
+      'ac receiver dryer leak test',
+      'laser leak test car ac',
+      'car ac laser inspection',
+      'freon leak laser test',
+    ],
     relatedSymptomSlugs: ['ac-weak-cooling', 'ac-lines-freezing'],
     faqs: [
       {
@@ -289,6 +361,20 @@ export const components: ACComponent[] = [
     ],
     priceRangeOEM: { min: 150, max: 500 },
     priceRangeAftermarket: { min: 80, max: 300 },
+    keywordsAr: [
+      'تسريب خرطوم المكيف',
+      'تسريب فريون من الخراطيم',
+      'فحص ليزر',
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ],
+    keywordsEn: [
+      'ac hose leak',
+      'refrigerant hose leak car',
+      'laser leak test car ac',
+      'car ac laser inspection',
+      'freon leak laser test',
+    ],
     relatedSymptomSlugs: ['ac-not-cooling', 'ac-weak-cooling', 'ac-hissing-noise'],
     faqs: [
       {
@@ -585,6 +671,20 @@ export const components: ACComponent[] = [
     ],
     priceRangeOEM: { min: 80, max: 250 },
     priceRangeAftermarket: { min: 40, max: 120 },
+    keywordsAr: [
+      'حساس ضغط مكيف السيارة',
+      'فحص ضغط الفريون',
+      'فحص ليزر',
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ],
+    keywordsEn: [
+      'ac pressure sensor test',
+      'refrigerant pressure check',
+      'laser leak test car ac',
+      'car ac laser inspection',
+      'freon leak laser test',
+    ],
     relatedSymptomSlugs: ['ac-compressor-not-engaging', 'ac-intermittent-cooling'],
     faqs: [
       {

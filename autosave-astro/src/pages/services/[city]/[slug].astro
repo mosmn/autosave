@@ -98,9 +98,25 @@ const isNeighborhood = props.pageType === 'neighborhood';
 const pageData = isNeighborhood
   ? getNeighborhoodData(props.city, props.neighborhood!)
   : getCityServiceData(props.city, props.service!);
+
+const pageKeywords = isNeighborhood
+  ? [
+      `إصلاح مكيف السيارة ${props.neighborhood!.nameAr}`,
+      `كشف تسريب فريون ${props.neighborhood!.nameAr}`,
+      `فحص ليزر ${props.neighborhood!.nameAr}`,
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ]
+  : [
+      `${props.service!.nameAr} ${props.city.nameAr}`,
+      ...props.service!.keywordsAr,
+      `فحص ليزر ${props.city.nameAr}`,
+      'فحص ليزر تسريب الفريون',
+      'فحص ليزر لمكيف السيارة',
+    ];
 ---
 
-<PageLayout title={pageData.title} description={pageData.description} lang={lang}>
+<PageLayout title={pageData.title} description={pageData.description} lang={lang} keywords={pageKeywords}>
   {isNeighborhood && props.neighborhood && (
     <>
       <ProgrammaticHero

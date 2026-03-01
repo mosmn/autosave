@@ -32,6 +32,14 @@ const lang = 'ar';
 
 const title = `إصلاح مكيف ${brand.nameAr} ${model.nameAr} | أوتو سيف`;
 const description = `خدمة إصلاح وصيانة مكيف سيارة ${brand.nameAr} ${model.nameAr} (${model.years}). تشخيص وإصلاح مشاكل التكييف الشائعة بأيدي فنيين متخصصين.`;
+const keywords = [
+  `إصلاح مكيف ${brand.nameAr} ${model.nameAr}`,
+  `تسريب فريون ${brand.nameAr} ${model.nameAr}`,
+  `كشف تسريب مكيف ${brand.nameAr} ${model.nameAr}`,
+  `فحص ليزر ${brand.nameAr} ${model.nameAr}`,
+  'فحص ليزر تسريب الفريون',
+  'فحص ليزر لمكيف السيارة',
+];
 
 const breadcrumbs = [
   { label: 'الرئيسية', href: '/' },
@@ -55,7 +63,7 @@ const serviceLinks = services.slice(0, 6).map((s) => ({
 }));
 ---
 
-<PageLayout title={title} description={description} lang={lang}>
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
   <ProgrammaticHero
     eyebrow={`${brand.nameAr} ${model.nameAr}`}
     title={`إصلاح مكيف ${brand.nameAr} ${model.nameAr}`}

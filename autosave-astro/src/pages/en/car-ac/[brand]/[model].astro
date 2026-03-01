@@ -32,6 +32,14 @@ const lang = 'en';
 
 const title = `${brand.nameEn} ${model.nameEn} AC Repair | Auto Save`;
 const description = `Professional ${brand.nameEn} ${model.nameEn} (${model.years}) car AC repair and maintenance service. Expert diagnosis and repair of common AC problems.`;
+const keywords = [
+  `${brand.nameEn} ${model.nameEn} ac repair`,
+  `${brand.nameEn} ${model.nameEn} refrigerant leak`,
+  `${brand.nameEn} ${model.nameEn} ac leak detection`,
+  `laser leak test car ac ${brand.nameEn} ${model.nameEn}`,
+  'car ac laser inspection',
+  'freon leak laser test',
+];
 
 const breadcrumbs = [
   { label: 'Home', href: '/en/' },
@@ -49,7 +57,7 @@ const relatedModels = brand.models
   }));
 ---
 
-<PageLayout title={title} description={description} lang={lang}>
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
   <ProgrammaticHero
     eyebrow={`${brand.nameEn} ${model.nameEn}`}
     title={`${brand.nameEn} ${model.nameEn} AC Repair`}

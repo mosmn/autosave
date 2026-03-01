@@ -903,6 +903,12 @@ A pre-summer AC service costs $50-$150. A mid-summer emergency compressor replac
       "refrigerant leak signs",
       "AC leak fix",
       "UV dye leak detection",
+      "how to find ac leak in car",
+      "how to check for refrigerant leak in car",
+      "freon leak in car",
+      "car ac laser inspection",
+      "laser leak test car ac",
+      "freon leak laser test",
     ],
     content: `
 ## The Hidden Problem: AC Refrigerant Leaks

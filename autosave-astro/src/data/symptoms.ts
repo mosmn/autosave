@@ -43,8 +43,8 @@ export const symptoms: Symptom[] = [
       'مكيف السيارة يعمل لكنه لا يخرج هواء بارد. هذه المشكلة شائعة جداً خاصة في فصل الصيف في السعودية وقد تكون لها أسباب متعددة.',
     descriptionEn:
       'The car AC runs but does not produce cold air. This is a very common problem especially during summer in Saudi Arabia and can have multiple causes.',
-    keywordsAr: ['مكيف السيارة لا يبرد', 'المكيف ما يبرد', 'مكيف السيارة حار', 'المكيف لا يعمل بارد'],
-    keywordsEn: ['car ac not cooling', 'ac not blowing cold', 'car ac warm air', 'ac not cold'],
+    keywordsAr: ['مكيف السيارة لا يبرد', 'المكيف ما يبرد', 'مكيف السيارة حار', 'المكيف لا يعمل بارد', 'فحص ليزر', 'فحص ليزر تسريب الفريون', 'فحص ليزر لمكيف السيارة'],
+    keywordsEn: ['car ac not cooling', 'ac not blowing cold', 'car ac warm air', 'ac not cold', 'laser leak test car ac', 'car ac laser inspection', 'freon leak laser test'],
     causes: [
       {
         titleAr: 'نقص الفريون',
@@ -110,8 +110,8 @@ export const symptoms: Symptom[] = [
       'مكيف السيارة يعمل لكنه يخرج هواء حار أو دافئ بدلاً من الهواء البارد. مشكلة محبطة خاصة في حرارة السعودية.',
     descriptionEn:
       'The car AC is running but blowing warm or hot air instead of cold air. A frustrating problem especially in Saudi Arabia\'s heat.',
-    keywordsAr: ['مكيف السيارة يطلع حار', 'هواء حار من المكيف', 'المكيف يطلع هواء دافئ'],
-    keywordsEn: ['ac blowing warm air', 'ac blowing hot air', 'car ac not blowing cold'],
+    keywordsAr: ['مكيف السيارة يطلع حار', 'هواء حار من المكيف', 'المكيف يطلع هواء دافئ', 'فحص ليزر', 'فحص ليزر تسريب الفريون', 'فحص ليزر لمكيف السيارة'],
+    keywordsEn: ['ac blowing warm air', 'ac blowing hot air', 'car ac not blowing cold', 'laser leak test car ac', 'car ac laser inspection', 'freon leak laser test'],
     causes: [
       {
         titleAr: 'فريون فارغ بالكامل',
@@ -168,8 +168,8 @@ export const symptoms: Symptom[] = [
       'مكيف السيارة يبرد لكن بشكل ضعيف وغير كافٍ. الهواء ليس حاراً تماماً لكنه ليس بارداً بما يكفي للراحة في حرارة السعودية.',
     descriptionEn:
       'The car AC cools but weakly and insufficiently. The air is not completely warm but not cold enough for comfort in Saudi Arabia\'s heat.',
-    keywordsAr: ['ضعف تبريد المكيف', 'المكيف ما يبرد زين', 'تبريد المكيف ضعيف'],
-    keywordsEn: ['car ac weak cooling', 'ac not cold enough', 'ac weak performance'],
+    keywordsAr: ['ضعف تبريد المكيف', 'المكيف ما يبرد زين', 'تبريد المكيف ضعيف', 'فحص ليزر', 'فحص ليزر تسريب الفريون', 'فحص ليزر لمكيف السيارة'],
+    keywordsEn: ['car ac weak cooling', 'ac not cold enough', 'ac weak performance', 'laser leak test car ac', 'car ac laser inspection', 'freon leak laser test'],
     causes: [
       {
         titleAr: 'نقص جزئي في الفريون',
@@ -302,8 +302,8 @@ export const symptoms: Symptom[] = [
       'مكيف السيارة يبرد لفترة ثم يتوقف عن التبريد ثم يعود مرة أخرى. تذبذب مزعج في أداء التبريد.',
     descriptionEn:
       'The car AC cools for a while then stops cooling, then resumes again. An annoying fluctuation in cooling performance.',
-    keywordsAr: ['المكيف يشتغل ويطفي', 'تبريد متقطع', 'المكيف يبرد ويوقف'],
-    keywordsEn: ['ac intermittent cooling', 'ac cycles on and off', 'ac works then stops'],
+    keywordsAr: ['المكيف يشتغل ويطفي', 'تبريد متقطع', 'المكيف يبرد ويوقف', 'فحص ليزر', 'فحص ليزر تسريب الفريون', 'فحص ليزر لمكيف السيارة'],
+    keywordsEn: ['ac intermittent cooling', 'ac cycles on and off', 'ac works then stops', 'laser leak test car ac', 'car ac laser inspection', 'freon leak laser test'],
     causes: [
       {
         titleAr: 'فريون منخفض',
@@ -893,8 +893,8 @@ export const symptoms: Symptom[] = [
       'صوت هسهسة أو تسريب هواء من نظام التكييف. قد يكون طبيعياً في بعض الحالات أو يشير لتسريب.',
     descriptionEn:
       'A hissing or air-leak sound from the AC system. It may be normal in some cases or indicate a leak.',
-    keywordsAr: ['صوت هسهسة من المكيف', 'صوت تسريب هواء من المكيف'],
-    keywordsEn: ['ac hissing noise', 'ac hissing sound', 'ac air leak sound'],
+    keywordsAr: ['صوت هسهسة من المكيف', 'صوت تسريب هواء من المكيف', 'فحص ليزر', 'فحص ليزر تسريب الفريون', 'فحص ليزر لمكيف السيارة'],
+    keywordsEn: ['ac hissing noise', 'ac hissing sound', 'ac air leak sound', 'laser leak test car ac', 'car ac laser inspection', 'freon leak laser test'],
     causes: [
       {
         titleAr: 'تسريب فريون',
@@ -1053,8 +1053,8 @@ export const symptoms: Symptom[] = [
       'تشكل جليد أو صقيع على خطوط وأنابيب مكيف السيارة. مؤشر على مشكلة في تدفق الفريون أو تدفق الهواء.',
     descriptionEn:
       'Ice or frost forming on the car AC lines and pipes. Indicates a problem with refrigerant flow or airflow.',
-    keywordsAr: ['تجمد خطوط المكيف', 'ثلج على أنابيب المكيف', 'خطوط المكيف متجمدة'],
-    keywordsEn: ['ac lines freezing', 'frost on ac pipes', 'ac icing up'],
+    keywordsAr: ['تجمد خطوط المكيف', 'ثلج على أنابيب المكيف', 'خطوط المكيف متجمدة', 'فحص ليزر', 'فحص ليزر تسريب الفريون', 'فحص ليزر لمكيف السيارة'],
+    keywordsEn: ['ac lines freezing', 'frost on ac pipes', 'ac icing up', 'laser leak test car ac', 'car ac laser inspection', 'freon leak laser test'],
     causes: [
       {
         titleAr: 'نقص الفريون',

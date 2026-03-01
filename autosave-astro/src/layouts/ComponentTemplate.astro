@@ -31,6 +31,16 @@ const pageTitle = isAr
 
 const pageDescription = isAr ? component.descriptionAr : component.descriptionEn;
 
+const defaultKeywordsAr = [`${compName}`, `${compName} مكيف السيارة`, `سعر ${compName}`];
+const defaultKeywordsEn = [
+  `car ac ${compName.toLowerCase()}`,
+  `${compName.toLowerCase()} replacement`,
+  `${compName.toLowerCase()} price`,
+];
+const pageKeywords = isAr
+  ? [...defaultKeywordsAr, ...(component.keywordsAr ?? [])]
+  : [...defaultKeywordsEn, ...(component.keywordsEn ?? [])];
+
 const breadcrumbs = [
   { label: isAr ? 'الرئيسية' : 'Home', href: isAr ? '/' : '/en' },
   { label: isAr ? 'قطع الغيار' : 'Parts', href: isAr ? '/parts' : '/en/parts' },
@@ -94,10 +104,7 @@ const productSchema = {
   title={pageTitle}
   description={pageDescription}
   lang={lang}
-  keywords={isAr
-    ? [`${compName}`, `${compName} مكيف السيارة`, `سعر ${compName}`]
-    : [`car ac ${compName.toLowerCase()}`, `${compName.toLowerCase()} replacement`, `${compName.toLowerCase()} price`]
-  }
+  keywords={pageKeywords}
 >
   <ProgrammaticHero
     eyebrow={isAr ? 'قطع الغيار' : 'Parts'}
