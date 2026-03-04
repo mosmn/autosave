@@ -14,6 +14,7 @@ import type { Symptom } from '../data/symptoms';
 import type { Language } from '../lib/i18n';
 import { symptoms, getSymptomBySlug } from '../data/symptoms';
 import { getComponentBySlug } from '../data/components';
+import { getSymptomSeoByFamily, shouldNoindexThinContent } from '../lib/seo-hardening';
 
 interface Props {
   symptom: Symptom;
@@ -24,12 +25,10 @@ const { symptom, lang } = Astro.props;
 const isAr = lang === 'ar';
 
 const symptomTitle = isAr ? symptom.titleAr : symptom.titleEn;
-
-const pageTitle = isAr
-  ? `${symptomTitle}؟ الأسباب والحلول | اوتو سيف`
-  : `${symptomTitle}? Causes & Solutions | Auto Save`;
-
 const pageDescription = isAr ? symptom.descriptionAr : symptom.descriptionEn;
+const symptomSeo = getSymptomSeoByFamily(symptom.slug, symptomTitle, lang);
+const pageTitle = symptomSeo.title;
+const metaDescription = symptomSeo.description;
 
 const breadcrumbs = [
   { label: isAr ? 'الرئيسية' : 'Home', href: isAr ? '/' : '/en' },
@@ -78,6 +77,87 @@ const relatedComponentLinks = symptom.relatedComponentSlugs
   }));
 
 const allRelatedLinks = [...relatedSymptomLinks, ...relatedComponentLinks];
+const intentHubLinks = [
+  {
+    title: isAr ? 'تشخيص أعطال المكيف' : 'AC Diagnostic Service',
+    href: isAr ? '/services/ac-diagnostic' : '/en/services/ac-diagnostic',
+    description: isAr
+      ? 'ابدأ بالتشخيص الفني عند تكرار العرض أو تعدد الاحتمالات.'
+      : 'Start with professional diagnosis when recurrence or overlap appears.',
+  },
+  {
+    title: isAr ? 'إصلاح تسريب المكيف' : 'AC Leak Repair',
+    href: isAr ? '/services/leak-detection' : '/en/services/leak-detection',
+    description: isAr
+      ? 'مسار مرتبط بالأعراض التي تشير لفقدان كفاءة التبريد أو تغير الضغط.'
+      : 'Relevant when symptoms indicate pressure/cooling efficiency loss.',
+  },
+  {
+    title: isAr ? 'التواصل وحجز الفحص' : 'Contact & Inspection Booking',
+    href: isAr ? '/contact' : '/en/contact',
+    description: isAr
+      ? 'حجز سريع مع وصف العرض لتوجيه الفحص من البداية.'
+      : 'Quick booking with symptom context to guide first inspection.',
+  },
+  ...relatedSymptomLinks.slice(0, 1),
+  ...relatedComponentLinks.slice(0, 1),
+].filter((link, index, arr) => arr.findIndex((item) => item.href === link.href) === index);
+
+const topCause = symptom.causes[0];
+const highLikelihoodCount = symptom.causes.filter((cause) => cause.likelihood === 'high').length;
+const mediumLikelihoodCount = symptom.causes.filter((cause) => cause.likelihood === 'medium').length;
+const firstDiagnosticStep = (isAr ? symptom.diagnosticStepsAr : symptom.diagnosticStepsEn)[0] ?? '';
+
+const symptomFamily = symptomSeo.familyKey;
+
+const symptomFamilyLeadAr: Record<string, string> = {
+  smell: 'هذا النوع يرتبط غالباً بتلوث هوائي داخل النظام.',
+  noise: 'هذا النوع يرتبط عادةً بحركة ميكانيكية غير طبيعية.',
+  cooling: 'هذا النوع يرتبط بكفاءة تبريد الدورة تحت الحمل الحراري.',
+  airflow: 'هذا النوع يرتبط بتدفق الهواء داخل المقصورة.',
+  fluid: 'هذا النوع يرتبط بحالة خطوط التبريد والرطوبة والتكاثف.',
+  electrical: 'هذا النوع يرتبط بدائرة التحكم والتغذية الكهربائية.',
+  load: 'هذا النوع يرتبط بتحميل المحرك عند تشغيل المكيف.',
+  general: 'هذا العرض يحتاج مسار فحص تدريجي لتحديد السبب بدقة.',
+};
+
+const symptomFamilyLeadEn: Record<string, string> = {
+  smell: 'This pattern is often linked to contamination inside the AC airflow path.',
+  noise: 'This pattern is usually linked to abnormal mechanical movement.',
+  cooling: 'This pattern is linked to cooling-cycle efficiency under heat load.',
+  airflow: 'This pattern is linked to cabin airflow delivery.',
+  fluid: 'This pattern is linked to refrigerant lines, moisture, and condensate behavior.',
+  electrical: 'This pattern is linked to control and power supply circuits.',
+  load: 'This pattern is linked to engine load behavior when AC engages.',
+  general: 'This symptom requires stepwise diagnosis to confirm the exact cause.',
+};
+
+const symptomCueAr: Record<string, string> = {
+  smell: 'الروائح',
+  noise: 'الأصوات',
+  cooling: 'التبريد',
+  airflow: 'تدفق الهواء',
+  fluid: 'الخطوط والسوائل',
+  electrical: 'الدائرة الكهربائية',
+  load: 'حمل المحرك',
+  general: 'أعراض المكيف',
+};
+
+const symptomCueEn: Record<string, string> = {
+  smell: 'smell pattern',
+  noise: 'noise pattern',
+  cooling: 'cooling pattern',
+  airflow: 'airflow pattern',
+  fluid: 'line/fluid pattern',
+  electrical: 'electrical pattern',
+  load: 'engine-load pattern',
+  general: 'AC symptom pattern',
+};
+
+const symptomLeadAr = symptomFamilyLeadAr[symptomFamily];
+const symptomLeadEn = symptomFamilyLeadEn[symptomFamily];
+const symptomCueArText = symptomCueAr[symptomFamily];
+const symptomCueEnText = symptomCueEn[symptomFamily];
 
 // Price range row
 const priceRows = [
@@ -87,13 +167,85 @@ const priceRows = [
     note: isAr ? 'حسب السبب ونوع السيارة' : 'Depends on cause and vehicle type',
   },
 ];
+
+const generatedSymptomFaqs = [
+  {
+    questionAr: `ما أول خطوة لفحص ${symptomCueArText} عند ظهور ${symptomTitle}؟`,
+    questionEn: `What is the first step to assess the ${symptomCueEnText} for ${symptomTitle}?`,
+    answerAr: firstDiagnosticStep
+      ? `${symptomLeadAr} وأول خطوة موصى بها هي: ${firstDiagnosticStep}`
+      : `${symptomLeadAr} ابدأ بفحص بصري أساسي لنظام التكييف ثم انتقل إلى التشخيص الفني المتخصص.`,
+    answerEn: firstDiagnosticStep
+      ? `${symptomLeadEn} The recommended first step is: ${firstDiagnosticStep}`
+      : `${symptomLeadEn} Start with a basic visual AC-system check, then proceed to professional diagnostics.`,
+  },
+  {
+    questionAr: `هل ${symptomTitle} يرتبط بسبب واحد أم عدة أسباب محتملة؟`,
+    questionEn: `Is ${symptomTitle} linked to one cause or multiple likely causes?`,
+    answerAr: topCause
+      ? `${symptomLeadAr} غالباً يوجد سبب رئيسي مرجح مثل: ${isAr ? topCause.titleAr : topCause.titleEn}، لكن التأكيد النهائي يتطلب فحصاً عملياً.`
+      : `${symptomLeadAr} قد ينتج هذا العرض عن أكثر من سبب، لذلك يلزم تشخيص فني قبل تحديد السبب النهائي.`,
+    answerEn: topCause
+      ? `${symptomLeadEn} A primary likely cause is often ${isAr ? topCause.titleAr : topCause.titleEn}, but inspection is required because multiple causes can produce the same symptom.`
+      : `${symptomLeadEn} This symptom can result from multiple causes, so professional diagnosis is required before confirming the root cause.`,
+  },
+  {
+    questionAr: `متى يجب الانتقال فوراً لتشخيص فني عند ظهور ${symptomTitle}؟`,
+    questionEn: `When should you escalate immediately to workshop diagnosis for ${symptomTitle}?`,
+    answerAr: `إذا استمر العرض بعد الفحص الأولي، أو ظهر أكثر من ${highLikelihoodCount > 0 ? 'سبب عالي الاحتمال' : 'عرض متزامن'}، فالتشخيص الفني السريع يقلل تكرار المشكلة.`,
+    answerEn: `If the symptom persists after initial checks, or more than ${highLikelihoodCount > 0 ? 'one high-likelihood cause profile' : 'one concurrent warning pattern'} appears, prompt workshop diagnosis reduces recurrence risk.`,
+  },
+];
+
+const mergedSymptomFaqs = [...symptom.faqs, ...generatedSymptomFaqs].filter((faq, index, arr) => {
+  const key = isAr ? faq.questionAr.trim() : faq.questionEn.trim();
+  return arr.findIndex((item) => (isAr ? item.questionAr.trim() : item.questionEn.trim()) === key) === index;
+});
+
+const symptomPrimaryTextLength =
+  pageDescription.length +
+  symptom.causes
+    .map((cause) => (isAr ? cause.explanationAr : cause.explanationEn))
+    .join(' ')
+    .length +
+  (isAr ? symptom.diagnosticStepsAr : symptom.diagnosticStepsEn).join(' ').length;
+
+const symptomKeyBlockCount = [
+  symptom.causes.length >= 3,
+  (isAr ? symptom.diagnosticStepsAr : symptom.diagnosticStepsEn).length >= 3,
+  allRelatedLinks.length >= 2,
+].filter(Boolean).length;
+
+const noindexThinSymptom = shouldNoindexThinContent({
+  primaryTextLength: symptomPrimaryTextLength,
+  faqCount: mergedSymptomFaqs.length,
+  keyBlockCount: symptomKeyBlockCount,
+  linkHubCount: allRelatedLinks.length + intentHubLinks.length,
+});
+
+const symptomSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalSymptom',
+  name: symptomTitle,
+  description: pageDescription,
+  url: Astro.url.href,
+  possibleTreatment: {
+    '@type': 'MedicalTherapy',
+    name: isAr ? 'تشخيص فني لمكيف السيارة' : 'Professional car AC diagnosis',
+  },
+  associatedAnatomy: {
+    '@type': 'AnatomicalSystem',
+    name: isAr ? 'نظام تكييف السيارة' : 'Car air conditioning system',
+  },
+};
 ---
 
 <PageLayout
   title={pageTitle}
-  description={pageDescription}
+  description={metaDescription}
   lang={lang}
   keywords={isAr ? symptom.keywordsAr : symptom.keywordsEn}
+  noindex={noindexThinSymptom}
 >
   <ProgrammaticHero
     eyebrow={isAr ? 'مشاكل المكيف' : 'AC Problems'}
@@ -102,6 +254,33 @@ const priceRows = [
     lang={lang}
     breadcrumbs={breadcrumbs}
   />
+
+  <section class="bg-secondary/40 py-20 lg:py-28" data-animate="fade-in-up">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <h2 class="font-display text-2xl font-bold text-foreground sm:text-3xl">
+        {isAr ? `ملخص تشخيص ${symptomTitle}` : `${symptomTitle} Diagnosis Snapshot`}
+      </h2>
+      <p class="mt-4 text-muted-foreground">
+        {isAr
+          ? `يركز هذا الدليل على عرض مسار التشخيص لهذه الحالة فقط، مع الأسباب الأكثر ترجيحاً وخطوات فحص عملية قبل الإصلاح.`
+          : `This guide focuses only on the diagnostic path for this symptom, with most likely causes and practical pre-repair inspection steps.`}
+      </p>
+      <div class="mt-6 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <p class="text-sm text-muted-foreground">{isAr ? 'أسباب عالية الاحتمال' : 'High-likelihood causes'}</p>
+          <p class="mt-2 font-display text-2xl font-bold text-foreground">{highLikelihoodCount}</p>
+        </div>
+        <div class="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <p class="text-sm text-muted-foreground">{isAr ? 'أسباب متوسطة الاحتمال' : 'Medium-likelihood causes'}</p>
+          <p class="mt-2 font-display text-2xl font-bold text-foreground">{mediumLikelihoodCount}</p>
+        </div>
+        <div class="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <p class="text-sm text-muted-foreground">{isAr ? 'أول سبب للفحص' : 'First cause to inspect'}</p>
+          <p class="mt-2 text-sm font-semibold text-foreground">{topCause ? (isAr ? topCause.titleAr : topCause.titleEn) : '-'}</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   {/* Causes section */}
   <section class="py-20 lg:py-28" data-animate="fade-in-up">
@@ -176,9 +355,9 @@ const priceRows = [
   />
 
   {/* FAQ */}
-  {symptom.faqs.length > 0 && (
+  {mergedSymptomFaqs.length > 0 && (
     <div class="bg-secondary/40">
-      <FAQSection faqs={symptom.faqs} lang={lang} />
+      <FAQSection faqs={mergedSymptomFaqs} lang={lang} />
     </div>
   )}
 
@@ -187,6 +366,18 @@ const priceRows = [
     <RelatedLinks links={allRelatedLinks} lang={lang} />
   )}
 
+  {intentHubLinks.length > 0 && (
+    <div class="bg-secondary/40">
+      <RelatedLinks
+        links={intentHubLinks}
+        lang={lang}
+        title={isAr ? 'روابط الإجراء والتشخيص' : 'Action & Diagnosis Hubs'}
+      />
+    </div>
+  )}
+
   {/* CTA */}
   <CTAWhatsApp lang={lang} message={whatsappMessage} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(symptomSchema)} />
 </PageLayout>

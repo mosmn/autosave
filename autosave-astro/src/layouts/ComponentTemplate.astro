@@ -14,6 +14,8 @@ import type { ACComponent } from '../data/components';
 import type { Language } from '../lib/i18n';
 import { components, getComponentBySlug } from '../data/components';
 import { getSymptomBySlug } from '../data/symptoms';
+import { services } from '../data/services';
+import { shouldNoindexThinContent } from '../lib/seo-hardening';
 
 interface Props {
   component: ACComponent;
@@ -86,9 +88,45 @@ const relatedComponents = components
   }));
 
 const allRelatedLinks = [...relatedSymptomLinks, ...relatedComponents];
+const servicesUsingComponent = services
+  .filter((service) => service.partsInvolved.includes(component.slug))
+  .slice(0, 6)
+  .map((service) => ({
+    title: isAr ? service.nameAr : service.nameEn,
+    href: isAr ? `/services/${service.slug}` : `/en/services/${service.slug}`,
+    description: isAr ? service.descriptionAr : service.descriptionEn,
+  }));
 
 // Failure signs
 const failureSigns = isAr ? component.failureSignsAr : component.failureSignsEn;
+const firstFailureSign = failureSigns[0] ?? (isAr ? 'انخفاض الأداء' : 'reduced performance');
+const functionText = isAr ? component.functionAr : component.functionEn;
+
+const generatedComponentFaqs = [
+  {
+    questionAr: `ما أهم دور ${compName} داخل دورة مكيف السيارة؟`,
+    questionEn: `What is the main role of ${compName} in the car AC cycle?`,
+    answerAr: `${functionText} ويتم التحقق من حالته قبل اتخاذ قرار الإصلاح أو الاستبدال.`,
+    answerEn: `${functionText} Its condition is validated before choosing repair or replacement.`,
+  },
+  {
+    questionAr: `متى يُنصح بفحص ${compName} بشكل عاجل؟`,
+    questionEn: `When should ${compName} be inspected urgently?`,
+    answerAr: `عند ظهور علامات مثل ${firstFailureSign} أو استمرار ضعف أداء المكيف رغم الفحص الأولي.`,
+    answerEn: `When signs like ${firstFailureSign} appear, or AC performance remains weak after initial checks.`,
+  },
+  {
+    questionAr: `هل يمكن تحديد حالة ${compName} بدون تشخيص فني؟`,
+    questionEn: `Can ${compName} condition be confirmed without technical diagnosis?`,
+    answerAr: `الفحص الأولي مفيد، لكن التأكيد يحتاج تشخيصاً عملياً يربط الأعراض بحالة القطعة داخل النظام.`,
+    answerEn: `Initial checks help, but confirmation requires practical diagnosis linking symptoms to actual part condition.`,
+  },
+];
+
+const mergedComponentFaqs = [...component.faqs, ...generatedComponentFaqs].filter((faq, index, arr) => {
+  const key = isAr ? faq.questionAr.trim() : faq.questionEn.trim();
+  return arr.findIndex((item) => (isAr ? item.questionAr.trim() : item.questionEn.trim()) === key) === index;
+});
 
 // JSON-LD Product schema
 const productSchema = {
@@ -96,14 +134,51 @@ const productSchema = {
   '@type': 'Product',
   name: isAr ? `${compName} مكيف السيارة` : `Car AC ${compName}`,
   description: pageDescription,
+  url: Astro.url.href,
   category: isAr ? 'قطع غيار مكيف السيارة' : 'Car AC Parts',
+  additionalProperty: [
+    {
+      '@type': 'PropertyValue',
+      name: isAr ? 'وظيفة القطعة' : 'Part Function',
+      value: isAr ? component.functionAr : component.functionEn,
+    },
+    {
+      '@type': 'PropertyValue',
+      name: isAr ? 'أشهر علامات التلف' : 'Top Failure Signs',
+      value: (isAr ? component.failureSignsAr : component.failureSignsEn).slice(0, 3).join(', '),
+    },
+  ],
 };
+
+const componentPrimaryTextLength =
+  pageDescription.length +
+  (isAr ? component.functionAr : component.functionEn).length +
+  failureSigns.join(' ').length +
+  servicesUsingComponent
+    .slice(0, 4)
+    .map((service) => service.description)
+    .join(' ')
+    .length;
+
+const componentKeyBlockCount = [
+  failureSigns.length >= 3,
+  servicesUsingComponent.length >= 1,
+  allRelatedLinks.length >= 2,
+].filter(Boolean).length;
+
+const noindexThinComponent = shouldNoindexThinContent({
+  primaryTextLength: componentPrimaryTextLength,
+  faqCount: mergedComponentFaqs.length,
+  keyBlockCount: componentKeyBlockCount,
+  linkHubCount: allRelatedLinks.length + servicesUsingComponent.length,
+});
 ---
 
 <PageLayout
   title={pageTitle}
   description={pageDescription}
   lang={lang}
+  noindex={noindexThinComponent}
   keywords={pageKeywords}
 >
   <ProgrammaticHero
@@ -171,6 +246,34 @@ const productSchema = {
     </div>
   </section>
 
+  {servicesUsingComponent.length > 0 && (
+    <section class="py-20 lg:py-28" data-animate="fade-in-up">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <h2 class="font-display text-2xl font-bold text-foreground sm:text-3xl">
+          {isAr ? `الخدمات التي تتضمن ${compName}` : `Services That Include ${compName}`}
+        </h2>
+        <p class="mt-4 text-muted-foreground">
+          {isAr
+            ? `هذه الروابط تربطك بخدمات إصلاح وصيانة مرتبطة مباشرة بهذه القطعة لتقليل التشابه بين الصفحات وتحسين مسار البحث الداخلي.`
+            : `These links connect to repair and maintenance services directly tied to this part to improve intent clarity and internal search paths.`}
+        </p>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          {servicesUsingComponent.map((service, index) => (
+            <a
+              href={service.href}
+              class="rounded-lg border border-border bg-card p-4 text-sm text-foreground shadow-sm transition hover:border-primary/40 hover:text-primary"
+              data-animate="fade-in-up"
+              data-animate-delay={String((index + 1) * 100)}
+            >
+              <p class="font-semibold">{service.title}</p>
+              <p class="mt-1 text-muted-foreground">{service.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   {/* Details */}
   <PriceTable
     rows={priceRows}
@@ -179,10 +282,10 @@ const productSchema = {
   />
 
   {/* FAQ */}
-  {component.faqs.length > 0 && (
+  {mergedComponentFaqs.length > 0 && (
     <div class="bg-secondary/40">
       <FAQSection
-        faqs={component.faqs}
+        faqs={mergedComponentFaqs}
         lang={lang}
         title={isAr
           ? `أسئلة شائعة عن ${compName}`
@@ -193,7 +296,11 @@ const productSchema = {
 
   {/* Related links */}
   {allRelatedLinks.length > 0 && (
-    <RelatedLinks links={allRelatedLinks} lang={lang} />
+    <RelatedLinks
+      links={allRelatedLinks}
+      lang={lang}
+      title={isAr ? `روابط مرتبطة بـ ${compName}` : `${compName} Related Pages`}
+    />
   )}
 
   {/* CTA */}

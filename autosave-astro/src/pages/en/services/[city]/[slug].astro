@@ -6,7 +6,12 @@
  * 1. /en/services/riyadh/[neighborhood] — neighborhood landing pages (12 pages)
  * 2. /en/services/riyadh/[service] — cross-dimensional pages for Riyadh × top services.
  */
-import { getCityBySlug, type City, type CityNeighborhood } from '../../../../data/cities';
+import {
+  INDEXABLE_CITY_SLUGS,
+  getCityBySlug,
+  type City,
+  type CityNeighborhood,
+} from '../../../../data/cities';
 import { services, getServiceBySlug, type ACService } from '../../../../data/services';
 import PageLayout from '../../../../layouts/PageLayout.astro';
 import ProgrammaticHero from '../../../../components/programmatic/ProgrammaticHero.astro';
@@ -32,7 +37,6 @@ interface CityServiceProps {
 type Props = NeighborhoodProps | CityServiceProps;
 
 export function getStaticPaths() {
-  const TOP_CITY_SLUGS = ['riyadh'];
   const TOP_SERVICE_SLUGS = ['ac-recharge', 'compressor-replacement', 'leak-detection', 'ac-diagnostic', 'ac-cleaning'];
 
   const paths: { params: { city: string; slug: string }; props: Props }[] = [];
@@ -49,7 +53,7 @@ export function getStaticPaths() {
   }
 
   // City × Service cross-dimensional
-  for (const citySlug of TOP_CITY_SLUGS) {
+  for (const citySlug of INDEXABLE_CITY_SLUGS) {
     const city = getCityBySlug(citySlug);
     if (!city) continue;
     for (const serviceSlug of TOP_SERVICE_SLUGS) {

@@ -11,7 +11,9 @@ import FAQSection from '../components/programmatic/FAQSection.astro';
 import CTAWhatsApp from '../components/programmatic/CTAWhatsApp.astro';
 import RelatedLinks from '../components/programmatic/RelatedLinks.astro';
 import type { City } from '../data/cities';
+import { services } from '../data/services';
 import type { Language } from '../lib/i18n';
+import { shouldNoindexThinContent } from '../lib/seo-hardening';
 
 interface Props {
   city: City;
@@ -69,6 +71,14 @@ const whatsappMessage = isAr
   : `Hi, I would like to book a car AC repair appointment in ${cityName}`;
 
 const relatedCities: { title: string; href: string; description: string }[] = [];
+const CITY_SERVICE_SLUGS = ['ac-recharge', 'compressor-replacement', 'leak-detection', 'ac-diagnostic', 'ac-cleaning'];
+const cityServiceLinks = services
+  .filter((service) => CITY_SERVICE_SLUGS.includes(service.slug))
+  .map((service) => ({
+  title: isAr ? `${service.nameAr} في ${cityName}` : `${service.nameEn} in ${cityName}`,
+  href: isAr ? `/services/${city.slug}/${service.slug}` : `/en/services/${city.slug}/${service.slug}`,
+  description: isAr ? service.descriptionAr : service.descriptionEn,
+}));
 
 // Neighborhood links (for cities with neighborhoods)
 const neighborhoodLinks = city.neighborhoods.map((n) => ({
@@ -77,12 +87,60 @@ const neighborhoodLinks = city.neighborhoods.map((n) => ({
     ? `/services/${city.slug}/${n.slug}`
     : `/en/services/${city.slug}/${n.slug}`,
 }));
+
+const citySchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoRepair',
+  name: isAr ? `اوتو سيف - ${cityName}` : `Auto Save - ${cityName}`,
+  description: pageDescription,
+  url: Astro.url.href,
+  areaServed: {
+    '@type': 'City',
+    name: cityName,
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: isAr ? `خدمات مكيف السيارة في ${cityName}` : `Car AC Services in ${cityName}`,
+    itemListElement: cityServiceLinks.slice(0, 4).map((link) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: link.title,
+        url: link.href,
+      },
+    })),
+  },
+};
+
+const cityPrimaryTextLength =
+  pageDescription.length +
+  (isAr ? city.introAr : city.introEn).length +
+  (isAr ? city.climateNoteAr : city.climateNoteEn).length +
+  cityServiceLinks
+    .slice(0, 4)
+    .map((link) => link.description)
+    .join(' ')
+    .length;
+
+const cityKeyBlockCount = [
+  cityServiceLinks.length >= 3,
+  city.neighborhoods.length >= 1,
+  city.faqs.length >= 2,
+].filter(Boolean).length;
+
+const noindexThinCity = shouldNoindexThinContent({
+  primaryTextLength: cityPrimaryTextLength,
+  faqCount: city.faqs.length,
+  keyBlockCount: cityKeyBlockCount,
+  linkHubCount: cityServiceLinks.length + neighborhoodLinks.length + relatedCities.length,
+});
 ---
 
 <PageLayout
   title={pageTitle}
   description={pageDescription}
   lang={lang}
+  noindex={noindexThinCity}
   keywords={isAr
     ? [`إصلاح مكيف السيارة ${cityName}`, `صيانة مكيف سيارة ${cityName}`, `تعبئة فريون ${cityName}`, ...leakLaserKeywordsAr]
     : [`car ac repair ${cityName}`, `ac service ${cityName}`, `freon recharge ${cityName}`, ...leakLaserKeywordsEn]
@@ -140,6 +198,34 @@ const neighborhoodLinks = city.neighborhoods.map((n) => ({
     />
   </div>
 
+  {cityServiceLinks.length > 0 && (
+    <section class="py-20 lg:py-28" data-animate="fade-in-up">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 class="font-display text-2xl font-bold text-foreground sm:text-3xl">
+          {isAr ? `صفحات الخدمات المحلية في ${cityName}` : `Local Service Pages in ${cityName}`}
+        </h2>
+        <p class="mt-4 max-w-3xl text-muted-foreground">
+          {isAr
+            ? `كل رابط أدناه مخصص لخدمة محددة داخل ${cityName} بهدف تقديم محتوى محلي مختلف بوضوح عن صفحات الخدمات العامة.`
+            : `Each link below is dedicated to a specific service inside ${cityName} to provide clearly differentiated local content from generic service pages.`}
+        </p>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {cityServiceLinks.map((link, index) => (
+            <a
+              href={link.href}
+              class="rounded-lg border border-border bg-card p-4 text-sm text-foreground shadow-sm transition hover:border-primary/40 hover:text-primary"
+              data-animate="fade-in-up"
+              data-animate-delay={String((index + 1) * 100)}
+            >
+              <p class="font-semibold">{link.title}</p>
+              <p class="mt-1 text-muted-foreground">{redactMoney(link.description)}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   {/* Neighborhoods (if any) */}
   {neighborhoodLinks.length > 0 && (
     <section class="py-20 lg:py-28" data-animate="fade-in-up">
@@ -187,4 +273,6 @@ const neighborhoodLinks = city.neighborhoods.map((n) => ({
 
   {/* CTA */}
   <CTAWhatsApp lang={lang} message={whatsappMessage} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(citySchema)} />
 </PageLayout>

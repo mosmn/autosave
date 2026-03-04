@@ -15,6 +15,7 @@ import type { Language } from '../lib/i18n';
 import { services } from '../data/services';
 import { getComponentBySlug } from '../data/components';
 import { getCityBySlug } from '../data/cities';
+import { getServiceSeoByFamily, shouldNoindexThinContent } from '../lib/seo-hardening';
 
 interface Props {
   service: ACService;
@@ -25,12 +26,15 @@ const { service, lang } = Astro.props;
 const isAr = lang === 'ar';
 
 const serviceName = isAr ? service.nameAr : service.nameEn;
+const involvedPartNames = service.partsInvolved
+  .map((slug) => getComponentBySlug(slug))
+  .filter(Boolean)
+  .map((part) => (isAr ? part!.nameAr : part!.nameEn));
 
-const pageTitle = isAr
-  ? `${serviceName} | اوتو سيف`
-  : `${serviceName} | Auto Save`;
-
-const pageDescription = isAr ? service.descriptionAr : service.descriptionEn;
+const pageSummary = isAr ? service.descriptionAr : service.descriptionEn;
+const serviceSeo = getServiceSeoByFamily(service.slug, serviceName, service.durationMinutes, lang);
+const pageTitle = serviceSeo.title;
+const metaDescription = serviceSeo.description;
 
 const breadcrumbs = [
   { label: isAr ? 'الرئيسية' : 'Home', href: isAr ? '/' : '/en' },
@@ -86,15 +90,139 @@ const topCities = riyadh
       href: isAr
         ? `/services/${riyadh.slug}`
         : `/en/services/${riyadh.slug}`,
+      description: isAr
+        ? `صفحة محلية لخدمة ${serviceName} في ${riyadh.nameAr}`
+        : `Local landing page for ${serviceName} in ${riyadh.nameEn}`,
     }]
   : [];
 
-const allRelatedLinks = [...relatedParts, ...relatedServices];
+const serviceSpecificLinks = [
+  ...relatedServices.slice(0, 2),
+  ...relatedParts.slice(0, 2),
+];
+const diagnosisSupportLinks = [
+  ...relatedParts.slice(2),
+  ...relatedServices.slice(2),
+];
+const intentHubLinks = [
+  ...topCities,
+  {
+    title: isAr ? 'تشخيص أعطال المكيف' : 'AC Diagnostic Service',
+    href: isAr ? '/services/ac-diagnostic' : '/en/services/ac-diagnostic',
+    description: isAr
+      ? 'نقطة الدخول الأساسية قبل تنفيذ الإصلاح أو التبديل.'
+      : 'Primary entry point before repair or replacement decisions.',
+  },
+  {
+    title: isAr ? 'تواصل وحجز الموعد' : 'Contact & Booking',
+    href: isAr ? '/contact' : '/en/contact',
+    description: isAr
+      ? 'حجز سريع للحالة مع وصف واضح للأعراض والخدمة المطلوبة.'
+      : 'Quick booking with clear symptom and service context.',
+  },
+].filter((link, index, arr) => arr.findIndex((item) => item.href === link.href) === index);
+
+const serviceFamily = serviceSeo.familyKey;
+
+const serviceFamilyLeadAr: Record<string, string> = {
+  recharge: 'تركز هذه الصفحة على استقرار التبريد بعد تعبئة الفريون.',
+  leak: 'تركز هذه الصفحة على عزل مسار التسريب وتأكيد مصدره.',
+  diagnostic: 'تركز هذه الصفحة على دقة الفحص وتحديد السبب الجذري أولاً.',
+  cleaning: 'تركز هذه الصفحة على تحسين جودة الهواء وكفاءة الدورة.',
+  replacement: 'تركز هذه الصفحة على توافق القطعة وضبط الأداء بعد التركيب.',
+  general: 'تركز هذه الصفحة على خطوات التنفيذ العملية الخاصة بهذه الخدمة.',
+};
+
+const serviceFamilyLeadEn: Record<string, string> = {
+  recharge: 'This page focuses on cooling stability after refrigerant recharge.',
+  leak: 'This page focuses on isolating leak paths and confirming the source.',
+  diagnostic: 'This page focuses on accurate testing and root-cause confirmation first.',
+  cleaning: 'This page focuses on airflow quality and cycle efficiency improvement.',
+  replacement: 'This page focuses on part compatibility and post-install performance tuning.',
+  general: 'This page focuses on practical execution steps for this specific service.',
+};
+
+const serviceFamilyCueAr: Record<string, string> = {
+  recharge: 'تعبئة الفريون',
+  leak: 'كشف التسريب',
+  diagnostic: 'الفحص التشخيصي',
+  cleaning: 'تنظيف دورة المكيف',
+  replacement: 'تبديل المكونات',
+  general: 'تنفيذ الخدمة',
+};
+
+const serviceFamilyCueEn: Record<string, string> = {
+  recharge: 'refrigerant recharge',
+  leak: 'leak detection',
+  diagnostic: 'diagnostic inspection',
+  cleaning: 'AC system cleaning',
+  replacement: 'component replacement',
+  general: 'service execution',
+};
+
+const serviceLeadAr = serviceFamilyLeadAr[serviceFamily];
+const serviceLeadEn = serviceFamilyLeadEn[serviceFamily];
+const serviceCueAr = serviceFamilyCueAr[serviceFamily];
+const serviceCueEn = serviceFamilyCueEn[serviceFamily];
+const firstProcessStep = processSteps[0] ?? (isAr ? 'فحص أولي للنظام' : 'Initial system inspection');
+
+const generatedServiceFaqs = [
+  {
+    questionAr: `ما الخطوة الأهم في ${serviceCueAr} ضمن خدمة ${serviceName}؟`,
+    questionEn: `What is the key step in ${serviceCueEn} for ${serviceName}?`,
+    answerAr: `${serviceLeadAr} غالباً تبدأ العملية بـ: ${firstProcessStep}، ثم يتم استكمال بقية الخطوات وفق نتيجة الفحص الفني.`,
+    answerEn: `${serviceLeadEn} The workflow usually starts with: ${firstProcessStep}, then the remaining steps are completed based on inspection findings.`,
+  },
+  {
+    questionAr: `هل تختلف مدة ${serviceName} حسب نوع الحالة؟`,
+    questionEn: `Does ${serviceName} duration change by case type?`,
+    answerAr: `نعم، المدة الأساسية تقارب ${service.durationMinutes} دقيقة، وقد تزيد أو تقل حسب حالة النظام بعد الفحص التشخيصي.`,
+    answerEn: `Yes. The baseline duration is about ${service.durationMinutes} minutes, and it may increase or decrease depending on system condition after diagnosis.`,
+  },
+  {
+    questionAr: `ما الأجزاء المرتبطة غالباً بخدمة ${serviceName}؟`,
+    questionEn: `Which components are commonly associated with ${serviceName}?`,
+    answerAr: involvedPartNames.length > 0
+      ? `${serviceLeadAr} ويتم التركيز عادةً على أجزاء مثل: ${involvedPartNames.slice(0, 4).join('، ')} وفقاً لنتيجة الفحص.`
+      : `${serviceLeadAr} يتم تحديد الأجزاء المستهدفة بعد التشخيص الأولي وفق حالة السيارة.`,
+    answerEn: involvedPartNames.length > 0
+      ? `${serviceLeadEn} Inspection commonly focuses on components such as ${involvedPartNames.slice(0, 4).join(', ')}, based on findings.`
+      : `${serviceLeadEn} Target components are defined after initial diagnosis based on vehicle condition.`,
+  },
+];
+
+const mergedServiceFaqs = [...service.faqs, ...generatedServiceFaqs].filter((faq, index, arr) => {
+  const key = isAr ? faq.questionAr.trim() : faq.questionEn.trim();
+  return arr.findIndex((item) => (isAr ? item.questionAr.trim() : item.questionEn.trim()) === key) === index;
+});
+
+const servicePrimaryTextLength =
+  pageSummary.length +
+  processSteps.join(' ').length +
+  involvedPartNames.join(' ').length;
+
+const serviceKeyBlockCount = [
+  processSteps.length >= 3,
+  involvedPartNames.length >= 1,
+  topCities.length >= 1,
+].filter(Boolean).length;
+
+const serviceLinkHubCount = serviceSpecificLinks.length + diagnosisSupportLinks.length + intentHubLinks.length;
+
+const noindexThinService = shouldNoindexThinContent({
+  primaryTextLength: servicePrimaryTextLength,
+  faqCount: mergedServiceFaqs.length,
+  keyBlockCount: serviceKeyBlockCount,
+  linkHubCount: serviceLinkHubCount,
+});
 
 // Service JSON-LD schema
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
+  name: serviceName,
+  description: pageSummary,
+  url: Astro.url.href,
   serviceType: serviceName,
   provider: {
     '@type': 'AutoRepair',
@@ -102,25 +230,63 @@ const serviceSchema = {
     url: Astro.site?.origin ?? 'https://autosaveks.com',
   },
   areaServed: {
-    '@type': 'Country',
-    name: 'Saudi Arabia',
+    '@type': 'City',
+    name: isAr ? 'الرياض' : 'Riyadh',
   },
+  offers: {
+    '@type': 'Offer',
+    availability: 'https://schema.org/InStock',
+    category: isAr ? 'خدمة حسب الفحص' : 'Service after inspection',
+  },
+  additionalProperty: [
+    {
+      '@type': 'PropertyValue',
+      name: isAr ? 'المدة التقديرية' : 'Estimated Duration',
+      value: isAr ? `${service.durationMinutes} دقيقة` : `${service.durationMinutes} minutes`,
+    },
+    {
+      '@type': 'PropertyValue',
+      name: isAr ? 'مكونات مرتبطة بالخدمة' : 'Related Components',
+      value: involvedPartNames.slice(0, 4).join(', '),
+    },
+  ],
 };
 ---
 
 <PageLayout
   title={pageTitle}
-  description={pageDescription}
+  description={metaDescription}
   lang={lang}
   keywords={isAr ? service.keywordsAr : service.keywordsEn}
+  noindex={noindexThinService}
 >
   <ProgrammaticHero
     eyebrow={isAr ? 'خدماتنا' : 'Our Services'}
     title={serviceName}
-    description={pageDescription}
+    description={pageSummary}
     lang={lang}
     breadcrumbs={breadcrumbs}
   />
+
+  <section class="bg-secondary/40 py-20 lg:py-28" data-animate="fade-in-up">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <h2 class="font-display text-2xl font-bold text-foreground sm:text-3xl">
+        {isAr ? `ماذا تشمل خدمة ${serviceName}؟` : `What Does ${serviceName} Include?`}
+      </h2>
+      <p class="mt-4 text-muted-foreground">
+        {isAr
+          ? `هذه الصفحة مخصصة لخدمة ${serviceName} فقط، وتتضمن خطوات التنفيذ، المدة المتوقعة، وأهم المكونات المرتبطة بالخدمة لسيارات الرياض.`
+          : `This page is dedicated to ${serviceName} only, including execution steps, expected duration, and the key components involved for Riyadh vehicles.`}
+      </p>
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+        {(isAr ? service.processStepsAr : service.processStepsEn).slice(0, 4).map((step) => (
+          <li class="rounded-lg border border-border bg-card p-4 text-sm text-foreground shadow-sm">
+            {step}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
   {/* Process steps */}
   <section class="py-20 lg:py-28" data-animate="fade-in-up">
@@ -180,9 +346,9 @@ const serviceSchema = {
   )}
 
   {/* FAQ */}
-  {service.faqs.length > 0 && (
+  {mergedServiceFaqs.length > 0 && (
     <FAQSection
-      faqs={service.faqs}
+      faqs={mergedServiceFaqs}
       lang={lang}
       title={isAr
         ? `أسئلة شائعة عن ${serviceName}`
@@ -191,9 +357,33 @@ const serviceSchema = {
   )}
 
   {/* Related links */}
-  {allRelatedLinks.length > 0 && (
+  {serviceSpecificLinks.length > 0 && (
     <div class="bg-secondary/40">
-      <RelatedLinks links={allRelatedLinks} lang={lang} />
+      <RelatedLinks
+        links={serviceSpecificLinks}
+        lang={lang}
+        title={isAr ? `روابط مرتبطة بخدمة ${serviceName}` : `${serviceName} Related Links`}
+      />
+    </div>
+  )}
+
+  {diagnosisSupportLinks.length > 0 && (
+    <div class="bg-secondary/40">
+      <RelatedLinks
+        links={diagnosisSupportLinks}
+        lang={lang}
+        title={isAr ? 'روابط دعم التشخيص والصيانة' : 'Diagnosis & Maintenance Support Links'}
+      />
+    </div>
+  )}
+
+  {intentHubLinks.length > 0 && (
+    <div>
+      <RelatedLinks
+        links={intentHubLinks}
+        lang={lang}
+        title={isAr ? 'روابط الحجز والمسارات الأساسية' : 'Booking & Core Intent Hubs'}
+      />
     </div>
   )}
 

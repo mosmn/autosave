@@ -30,6 +30,8 @@ export interface City {
   }[];
 }
 
+export const INDEXABLE_CITY_SLUGS = ['riyadh'] as const;
+
 export const cities: City[] = [
   {
     slug: 'riyadh',
@@ -521,4 +523,12 @@ export function getAllCitySlugs(): string[] {
  */
 export function getTopCities(count: number = 5): City[] {
   return cities.slice(0, count);
+}
+
+export function getIndexableCities(): City[] {
+  return cities.filter((city) => INDEXABLE_CITY_SLUGS.includes(city.slug as (typeof INDEXABLE_CITY_SLUGS)[number]));
+}
+
+export function isIndexableCitySlug(slug: string): boolean {
+  return INDEXABLE_CITY_SLUGS.includes(slug as (typeof INDEXABLE_CITY_SLUGS)[number]);
 }

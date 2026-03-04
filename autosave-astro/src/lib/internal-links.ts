@@ -4,7 +4,7 @@
  */
 import type { Language } from './i18n';
 import { services, getServiceBySlug } from '../data/services';
-import { cities, getCityBySlug } from '../data/cities';
+import { getCityBySlug, getIndexableCities } from '../data/cities';
 import { components, getComponentBySlug } from '../data/components';
 import { symptoms, getSymptomBySlug } from '../data/symptoms';
 import { carBrands, getBrandBySlug } from '../data/car-brands';
@@ -32,7 +32,7 @@ export function getRelatedCities(
   lang: Language,
   limit: number = 5
 ): InternalLink[] {
-  return cities
+  return getIndexableCities()
     .filter((c) => c.slug !== currentSlug)
     .slice(0, limit)
     .map((c) => ({
@@ -197,9 +197,10 @@ export function getCrossLinks(
 ): InternalLink[] {
   const prefix = langPrefix(lang);
   const links: InternalLink[] = [];
+  const indexableCities = getIndexableCities();
 
   // Top 2 cities
-  cities.slice(0, 2).forEach((c) =>
+  indexableCities.slice(0, 2).forEach((c) =>
     links.push({
       title: lang === 'ar' ? `خدمة مكيف في ${c.nameAr}` : `AC Service in ${c.nameEn}`,
       href: `${prefix}/services/${c.slug}/`,
