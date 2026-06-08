@@ -1,6 +1,9 @@
 import type { Language } from './i18n';
 
-export const WHATSAPP_NUMBER = '966537133080';
+//export const WHATSAPP_NUMBER = '966537133080';
+
+/*
+export const WHATSAPP_NUMBER = '';
 export const DROP_OFF_CALENDLY_URL = 'https://calendly.com/autosave45/30min';
 
 const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -26,11 +29,41 @@ export function getPickupReturnMessage(lang: Language): string {
 }
 
 export function getGeneralContactWhatsAppUrl(lang: Language): string {
-  return getWhatsAppUrl(getContactInquiryMessage(lang));
+  return getWhatsAppComposeUrl(getContactInquiryMessage(lang));
 }
 
 export function getPickupReturnWhatsAppUrl(lang: Language): string {
-  return getWhatsAppUrl(getPickupReturnMessage(lang));
+  return getWhatsAppComposeUrl(getPickupReturnMessage(lang));
 }
 
-export const WHATSAPP_DISPLAY_NUMBER = '+966 53 713 3080';
+export function getWhatsAppComposeUrl(message?: string): string {
+  const base = `https://wa.me/`;
+  if (!message) return base;
+  return `${base}?text=${encodeURIComponent(message)}`;
+}
+
+export const WHATSAPP_DISPLAY_NUMBER = '';
+*/
+
+// TEMPORARY COMING SOON MODE
+export const WHATSAPP_DISPLAY_NUMBER = '';
+
+export const WHATSAPP_MESSAGE = {
+  ar: 'هناك تحديث قادم قريباً وسنعود للتواصل معكم قريباً.',
+  en: 'There is an update coming soon and we will be back in touch with you soon.',
+};
+
+export function getWhatsAppComposeUrl(
+  message: string = `${WHATSAPP_MESSAGE.en}\n\n${WHATSAPP_MESSAGE.ar}`
+): string {
+  return `https://wa.me/?text=${encodeURIComponent(message)}`;
+}
+
+// Keep compatibility with existing imports
+export function getGeneralContactWhatsAppUrl(_: Language): string {
+  return getWhatsAppComposeUrl();
+}
+
+export function getPickupReturnWhatsAppUrl(_: Language): string {
+  return getWhatsAppComposeUrl();
+}

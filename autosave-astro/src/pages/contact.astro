@@ -2,7 +2,7 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import { getContentByLanguage } from '../lib/content';
 import ComingSoonLink from '../components/ComingSoonLink.astro';
-import { DROP_OFF_CALENDLY_URL, getGeneralContactWhatsAppUrl, getPickupReturnWhatsAppUrl, WHATSAPP_DISPLAY_NUMBER } from '../lib/whatsapp';
+import { DROP_OFF_CALENDLY_URL, getGeneralContactWhatsAppUrl, getPickupReturnWhatsAppUrl } from '../lib/whatsapp';
 
 const lang = 'ar' as const;
 const content = getContentByLanguage(lang);
@@ -162,7 +162,7 @@ const aiContextLinks = [
                 </div>
                 <div>
                   <div class="text-sm font-medium">{contact.phoneLabel}</div>
-                  <a href={generalWhatsappUrl} target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-primary transition-colors">{WHATSAPP_DISPLAY_NUMBER}</a>
+                  <a href={generalWhatsappUrl} target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-primary transition-colors">{contact.openWhatsapp}</a>
                 </div>
               </div>
               <div class="flex items-start gap-3">

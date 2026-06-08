@@ -1,7 +1,8 @@
+
 ---
 import type { Language } from '../lib/i18n';
 import { getContentByLanguage } from '../lib/content';
-import { getWhatsAppUrl } from '../lib/whatsapp';
+import { getWhatsAppComposeUrl } from '../lib/whatsapp';
 
 interface Props {
   lang: Language;
@@ -9,7 +10,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const content = getContentByLanguage(lang);
-const whatsappUrl = getWhatsAppUrl();
+const whatsappUrl = getWhatsAppComposeUrl();
 ---
 
 <a

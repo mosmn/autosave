@@ -1,14 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLocalizedPath } from '../../lib/i18n';
+import { getWhatsAppComposeUrl } from '../../lib/whatsapp';
 
 const lang = 'en' as const;
 const pagePath = '/car-sunroof-solutions';
 const alternatePath = getLocalizedPath(pagePath, 'ar');
-const SUNROOF_WHATSAPP_NUMBER = '966500393753';
-const buildSunroofWhatsAppUrl = (message: string) =>
-  `https://wa.me/${SUNROOF_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-const whatsappUrl = buildSunroofWhatsAppUrl('Hello, I need car sunroof solutions for my vehicle model in Riyadh.');
+const whatsappUrl = getWhatsAppComposeUrl('Hello, I need car sunroof solutions for my vehicle model in Riyadh.');
 
 const keywords = [
   'car sunroof solutions',

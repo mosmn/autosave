@@ -4,7 +4,7 @@
  * Used at the bottom of every programmatic SEO page.
  */
 import type { Language } from '../../lib/i18n';
-import { getGeneralContactWhatsAppUrl, getWhatsAppUrl } from '../../lib/whatsapp';
+import { getGeneralContactWhatsAppUrl, getWhatsAppComposeUrl } from '../../lib/whatsapp';
 
 interface Props {
   lang: Language;
@@ -32,7 +32,7 @@ const defaultMessage =
   message ??
   (lang === 'ar' ? 'السلام عليكم، أريد حجز موعد لصيانة مكيف سيارتي' : 'Hi, I would like to book a car AC repair appointment');
 
-const whatsappUrl = getWhatsAppUrl(defaultMessage);
+const whatsappUrl = getWhatsAppComposeUrl(defaultMessage);
 const contactWhatsAppUrl = getGeneralContactWhatsAppUrl(lang);
 ---
 

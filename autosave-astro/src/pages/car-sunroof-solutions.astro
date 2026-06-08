@@ -1,14 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getLocalizedPath } from '../lib/i18n';
+import { getWhatsAppComposeUrl } from '../lib/whatsapp';
 
 const lang = 'ar' as const;
 const pagePath = '/car-sunroof-solutions';
 const alternatePath = getLocalizedPath(pagePath, 'en');
-const SUNROOF_WHATSAPP_NUMBER = '966500393753';
-const buildSunroofWhatsAppUrl = (message: string) =>
-  `https://wa.me/${SUNROOF_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-const whatsappUrl = buildSunroofWhatsAppUrl('مرحباً، أحتاج خدمة حلول فتحة سقف السيارة لجميع الأنواع والموديلات.');
+const whatsappUrl = getWhatsAppComposeUrl('مرحباً، أحتاج خدمة حلول فتحة سقف السيارة لجميع الأنواع والموديلات.');
 
 const keywords = [
   'حلول فتحات سقف السيارات',
