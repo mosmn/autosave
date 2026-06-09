@@ -47,6 +47,7 @@ export const WHATSAPP_DISPLAY_NUMBER = '';
 
 // TEMPORARY COMING SOON MODE
 export const WHATSAPP_DISPLAY_NUMBER = '';
+export const DROP_OFF_CALENDLY_URL = '';
 
 export const WHATSAPP_MESSAGE = {
   ar: 'هناك تحديث قادم قريباً وسنعود للتواصل معكم قريباً.',
