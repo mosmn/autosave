@@ -1,7 +1,7 @@
 ---
 import type { Language } from '../../lib/i18n';
 import ComingSoonLink from '../ComingSoonLink.astro';
-import { DROP_OFF_CALENDLY_URL, getGeneralContactWhatsAppUrl, getPickupReturnWhatsAppUrl } from '../../lib/whatsapp';
+import { getDropOffWhatsAppUrl, getGeneralContactWhatsAppUrl, getPickupReturnWhatsAppUrl } from '../../lib/whatsapp';
 
 interface Props {
   content: {
@@ -24,12 +24,13 @@ interface Props {
 
 const { content, lang } = Astro.props;
 const contactWhatsAppUrl = getGeneralContactWhatsAppUrl(lang);
+const dropOffBookingUrl = getDropOffWhatsAppUrl(lang);
 const pickupBookingUrl = getPickupReturnWhatsAppUrl(lang);
 
 function getPlanCtaUrl(planName: string): string {
   const name = planName.toLowerCase();
   if (name.includes('drop') || planName.includes('التسليم')) {
-    return DROP_OFF_CALENDLY_URL;
+    return dropOffBookingUrl;
   }
 
   if (name.includes('pickup') || planName.includes('استلام') || planName.includes('إرجاع')) {

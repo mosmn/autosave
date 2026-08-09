@@ -6,10 +6,11 @@ import ComingSoonLink from '../../components/ComingSoonLink.astro';
 import FAQSchema from '../../components/FAQSchema.astro';
 import { services } from '../../data/services';
 import { components as acComponents } from '../../data/components';
-import { DROP_OFF_CALENDLY_URL, getGeneralContactWhatsAppUrl, getPickupReturnWhatsAppUrl } from '../../lib/whatsapp';
+import { getDropOffWhatsAppUrl, getGeneralContactWhatsAppUrl, getPickupReturnWhatsAppUrl } from '../../lib/whatsapp';
 
 const lang = 'en' as const;
 const content = getContentByLanguage(lang);
+const dropOffBookingUrl = getDropOffWhatsAppUrl(lang);
 const pickupBookingUrl = getPickupReturnWhatsAppUrl(lang);
 const contactWhatsAppUrl = getGeneralContactWhatsAppUrl(lang);
 const pricingPageUrl = 'https://autosaveks.com/en/pricing';
@@ -136,7 +137,7 @@ const pricingFaqs = [
           </div>
           <div class="mt-8">
             <ComingSoonLink
-              href={DROP_OFF_CALENDLY_URL}
+              href={dropOffBookingUrl}
               lang={lang}
               target="_blank"
               rel="noopener noreferrer"
