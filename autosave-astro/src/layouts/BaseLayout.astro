@@ -130,5 +130,100 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
       })();
     </script>
+
+    {/* Tawk.to Live Chat — Arabic pages only */}
+    {lang === 'ar' && (
+      <>
+        {/* Start of Tawk.to Script */}
+        <script is:inline>
+          var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+          (function(){
+          var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+          s1.async=true;
+          s1.src='https://embed.tawk.to/6a87fbb8f23b8e344b486556/1k0hiuiuh';
+          s1.charset='UTF-8';
+          s1.setAttribute('crossorigin','*');
+          s0.parentNode.insertBefore(s1,s0);
+          })();
+        </script>
+        <!-- End of Tawk.to Script -->
+
+        {/* WhatsApp → Tawk.to interception + localStorage chat save */}
+        <script is:inline>
+          (function() {
+            var STORAGE_INTENT_KEY = 'autosave_chat_intent';
+            var STORAGE_HISTORY_KEY = 'autosave_chat_history';
+
+            function openTawkWidget() {
+              if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
+                window.Tawk_API.maximize();
+                return;
+              }
+              var retries = 0;
+              var timer = setInterval(function() {
+                retries++;
+                if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
+                  window.Tawk_API.maximize();
+                  clearInterval(timer);
+                } else if (retries >= 15) {
+                  clearInterval(timer);
+                }
+              }, 300);
+            }
+
+            function saveChatIntent(message) {
+              try {
+                var data = {
+                  intent: 'whatsapp_redirect',
+                  message: message || '',
+                  pageUrl: window.location.href,
+                  pageTitle: document.title,
+                  timestamp: new Date().toISOString()
+                };
+                localStorage.setItem(STORAGE_INTENT_KEY, JSON.stringify(data));
+                var history = JSON.parse(localStorage.getItem(STORAGE_HISTORY_KEY) || '[]');
+                history.push(data);
+                if (history.length > 50) history = history.slice(-50);
+                localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(history));
+              } catch (e) {}
+            }
+
+            function extractMessageFromHref(href) {
+              try {
+                var url = new URL(href, window.location.origin);
+                return url.searchParams.get('text') || '';
+              } catch (e) {
+                return '';
+              }
+            }
+
+            function isWhatsAppLink(a) {
+              var href = (a.getAttribute('href') || '').toLowerCase();
+              return href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp.com') !== -1 || href.indexOf('api.whatsapp') !== -1;
+            }
+
+            // Intercept every WhatsApp <a> link across the site and open Tawk.to instead,
+            // saving the chat intent to localStorage. The floating button has its own handler.
+            document.addEventListener('click', function(e) {
+              var el = e.target;
+              while (el && el !== document) {
+                if (el.id === 'whatsapp-float-btn') {
+                  // Handled by WhatsAppFloat inline script — do not double-handle.
+                  return;
+                }
+                if (el.tagName === 'A' && isWhatsAppLink(el)) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  saveChatIntent(extractMessageFromHref(el.getAttribute('href') || ''));
+                  openTawkWidget();
+                  return;
+                }
+                el = el.parentElement;
+              }
+            });
+          })();
+        </script>
+      </>
+    )}
   </body>
 </html>
