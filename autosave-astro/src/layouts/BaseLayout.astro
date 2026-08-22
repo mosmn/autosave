@@ -154,21 +154,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var STORAGE_INTENT_KEY = 'autosave_chat_intent';
             var STORAGE_HISTORY_KEY = 'autosave_chat_history';
 
-            function openTawkWidget() {
-              if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
-                window.Tawk_API.maximize();
-                return;
-              }
-              var retries = 0;
-              var timer = setInterval(function() {
-                retries++;
-                if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
-                  window.Tawk_API.maximize();
-                  clearInterval(timer);
-                } else if (retries >= 15) {
-                  clearInterval(timer);
-                }
-              }, 300);
+            // Redirect Arabic-page buttons to the full Tawk.to chat page instead of
+            // maximizing the embedded widget.
+            var TAWK_CHAT_URL = 'https://tawk.to/chat/6a87fbb8f23b8e344b486556/1k0hiuiuh?layout=modern';
+
+            function redirectToTawkChat() {
+              window.open(TAWK_CHAT_URL, '_blank', 'noopener,noreferrer');
             }
 
             function saveChatIntent(message) {
@@ -202,8 +193,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               return href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp.com') !== -1 || href.indexOf('api.whatsapp') !== -1;
             }
 
-            // Intercept every WhatsApp <a> link across the site and open Tawk.to instead,
-            // saving the chat intent to localStorage. The floating button has its own handler.
+            // Intercept every WhatsApp <a> link across the Arabic pages and redirect
+            // to the full Tawk.to chat page instead, saving the chat intent to localStorage.
             document.addEventListener('click', function(e) {
               var el = e.target;
               while (el && el !== document) {
@@ -215,7 +206,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   e.preventDefault();
                   e.stopPropagation();
                   saveChatIntent(extractMessageFromHref(el.getAttribute('href') || ''));
-                  openTawkWidget();
+                  redirectToTawkChat();
                   return;
                 }
                 el = el.parentElement;
