@@ -34,6 +34,6 @@ const { title, description, lang, ogImage, ogType, keywords, noindex } = Astro.p
   <SiteHeader lang={lang} slot="header" />
   <slot />
   <SiteFooter lang={lang} slot="footer" />
-  {/* WhatsApp float icon shows on English pages only; Arabic pages use the Tawk.to bubble */}
-  {lang !== 'ar' && <WhatsAppFloat lang={lang} />}
+      {/* WhatsApp float icon — always shown (English + Arabic) */}
+  <WhatsAppFloat lang={lang} />
 </BaseLayout>

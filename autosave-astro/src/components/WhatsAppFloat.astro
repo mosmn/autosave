@@ -2,6 +2,7 @@
 ---
 import type { Language } from '../lib/i18n';
 import { getContentByLanguage } from '../lib/content';
+import { ARABIC_GREETING, prependArabicGreeting, getWhatsAppComposeUrl } from '../lib/whatsapp';
 
 interface Props {
   lang: Language;
@@ -11,14 +12,17 @@ const { lang } = Astro.props;
 const content = getContentByLanguage(lang);
 const isAr = lang === 'ar';
 
-const chatAriaLabel = isAr ? 'فتح المحادثة' : 'Open chat';
+const chatAriaLabel = isAr ? 'افتح الدردشة على واتساب' : 'Open chat on WhatsApp';
+
+// Pre-compute the Arabic WhatsApp URL with the greeting baked in
+const arabicWhatsAppUrl = getWhatsAppComposeUrl(prependArabicGreeting());
 ---
 
 <button
   type="button"
   id="whatsapp-float-btn"
-  data-tawk-open="true"
   data-whatsapp-fallback="https://wa.me/966537133080"
+  data-whatsapp-ar={isAr ? arabicWhatsAppUrl : undefined}
   aria-label={chatAriaLabel}
   class="whatsapp-pulse whatsapp-entrance fixed bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-[#25D366]/25 transition-transform hover:scale-110"
   style={isAr ? 'inset-inline-start: 1.5rem;' : 'inset-inline-start: auto; inset-inline-end: 1.5rem;'}
@@ -28,7 +32,7 @@ const chatAriaLabel = isAr ? 'فتح المحادثة' : 'Open chat';
   </svg>
 </button>
 
-<script is:inline define:vars={{ isAr }}>
+<script is:inline define:vars={{ isAr, arabicWhatsAppUrl }}>
   (function() {
     var STORAGE_INTENT_KEY = 'autosave_chat_intent';
     var STORAGE_HISTORY_KEY = 'autosave_chat_history';
@@ -50,33 +54,16 @@ const chatAriaLabel = isAr ? 'فتح المحادثة' : 'Open chat';
       } catch (e) {}
     }
 
-    function openTawkWidget() {
-      if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
-        window.Tawk_API.maximize();
-        return;
-      }
-      var retries = 0;
-      var timer = setInterval(function() {
-        retries++;
-        if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
-          window.Tawk_API.maximize();
-          clearInterval(timer);
-        } else if (retries >= 15) {
-          clearInterval(timer);
-        }
-      }, 300);
-    }
-
     document.addEventListener('click', function(e) {
       var el = e.target;
       while (el && el !== document) {
         if (el.id === 'whatsapp-float-btn') {
           e.preventDefault();
           e.stopPropagation();
-          saveChatIntent('');
-          if (isAr) {
-            // Arabic page → open Tawk.to widget (openTawkWidget has a retry loop)
-            openTawkWidget();
+                    if (isAr) {
+            // Arabic page → redirect to WhatsApp with the greeting as the message
+            saveChatIntent('السلام عليكم ورحمه الله وبركاته');
+            window.open(arabicWhatsAppUrl, '_blank', 'noopener,noreferrer');
           } else {
             // English page → fallback to WhatsApp
             window.open(el.getAttribute('data-whatsapp-fallback') || 'https://wa.me/966537133080', '_blank', 'noopener,noreferrer');

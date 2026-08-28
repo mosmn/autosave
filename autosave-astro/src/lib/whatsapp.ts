@@ -3,6 +3,26 @@ import type { Language } from './i18n';
 export const WHATSAPP_NUMBER = '966537133080';
 export const WHATSAPP_DISPLAY_NUMBER = '+966 53 713 3080';
 
+/** Formal Arabic greeting prepended to every WhatsApp message on Arabic pages. */
+export const ARABIC_GREETING = 'السلام عليكم ورحمه الله وبركاته';
+
+/**
+ * Prepends the Arabic greeting to a message.
+ * - If the message already starts with "السلام عليكم", the short form is
+ *   upgraded to the full greeting (السلام عليكم ورحمه الله وبركاته).
+ * - If the message is empty, only the greeting is returned.
+ */
+export function prependArabicGreeting(message?: string): string {
+  if (!message) {
+    return ARABIC_GREETING;
+  }
+  var shortGreeting = /^السلام عليكم/;
+  if (shortGreeting.test(message)) {
+    return message.replace(shortGreeting, ARABIC_GREETING);
+  }
+  return ARABIC_GREETING + '\n' + message;
+}
+
 const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 export function getWhatsAppComposeUrl(message?: string): string {
