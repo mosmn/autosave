@@ -1,14 +1,7 @@
 ---
 /**
- * BlogPostContent — renders parsed markdown-like blog content with
- * semantic HTML. Replaces the duplicated parseLine() + rendering logic
- * from both [slug].astro pages.
- *
- * Fixes vs. old implementation:
- *   - Bullet items render as <ul><li> instead of <div> with decorative spans
- *   - Numbered items render as <ol><li> instead of <div>
- *   - Table rows are rendered as <table> instead of silently dropped
- *   - Inline links in content are preserved (markdown [text](url) syntax)
+ * BlogPostContent — renders parsed markdown blog content with
+ * semantic HTML, supporting headings, lists, tables, links, and bold text.
  */
 
 interface Props {
@@ -22,59 +15,87 @@ const sanitizeMoney = (text: string) =>
     .replace(/\$\s*\d[\d,]*(?:\s*-\s*\$?\d[\d,]*)?/g, 'on request')
     .replace(/\d[\d,]*(?:\s*-\s*\d[\d,]*)?\s*(?:\+)?\s*(?:SAR|ريال(?:\s+سعودي)?|ر\.س)/gi, 'after inspection');
 
-const safeContent = sanitizeMoney(content);
+const safeContent = sanitizeMoney(content || '');
+
+// Formats inline markdown: [links](url), **bold**, `code`
+function formatInline(rawText: string): string {
+  if (!rawText) return '';
+
+  let formatted = rawText;
+
+  // Convert markdown links: [text](url)
+  formatted = formatted.replace(
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,
+    (_, text, url) => {
+      const isExternal = url.startsWith('http');
+      const targetAttr = isExternal ? ' target="_blank" rel="noopener"' : '';
+      return `<a href="${url}" class="text-primary font-medium underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-colors"${targetAttr}>${text}</a>`;
+    }
+  );
+
+  // Convert bold: **text**
+  formatted = formatted.replace(
+    /\*\*([^*]+)\*\*/g,
+    '<strong class="text-[var(--color-foreground)] font-semibold">$1</strong>'
+  );
+
+  // Convert inline code: `code`
+  formatted = formatted.replace(
+    /`([^`]+)`/g,
+    '<code class="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-foreground">$1</code>'
+  );
+
+  return formatted;
+}
 
 // Parse raw content lines
 const contentLines = safeContent
   .split('\n')
-  .filter((line: string) => line.trim())
-  .map((line: string) => line.trim());
+  .map((line: string) => line.trim())
+  .filter((line: string) => Boolean(line));
 
 // Typed parsed line
 interface ParsedLine {
   type: string;
   text?: string;
-  boldText?: string;
-  rest?: string;
   num?: string;
-  key?: string;
-  value?: string;
   cells?: string[];
 }
 
 function parseLine(line: string): ParsedLine {
-  if (line.startsWith('## ')) return { type: 'h2', text: line.replace('## ', '') };
-  if (line.startsWith('### ')) return { type: 'h3', text: line.replace('### ', '') };
-  if (line.startsWith('**') && line.endsWith('**'))
-    return { type: 'bold-block', text: line.replace(/\*\*/g, '') };
-  if (line.startsWith('- **') || line.startsWith('- ')) {
-    const boldMatch = line.match(/^- \*\*(.+?)\*\*(.*)$/);
-    if (boldMatch) return { type: 'bullet-bold', boldText: boldMatch[1], rest: boldMatch[2] };
-    return { type: 'bullet', text: line.replace(/^- /, '') };
+  if (line.startsWith('## ')) return { type: 'h2', text: line.replace('## ', '').trim() };
+  if (line.startsWith('### ')) return { type: 'h3', text: line.replace('### ', '').trim() };
+  if (line.startsWith('#### ')) return { type: 'h4', text: line.replace('#### ', '').trim() };
+
+  // Bullet items
+  if (line.startsWith('- ') || line.startsWith('* ')) {
+    return { type: 'bullet', text: line.replace(/^[-*]\s+/, '').trim() };
   }
-  if (line.match(/^\d+\.\s\*\*/)) {
-    const match = line.match(/^\d+\.\s\*\*(.+?)\*\*\s*[—-]?\s*(.*)$/);
-    const num = line.match(/^(\d+)/)?.[1];
-    if (match) return { type: 'numbered', num, boldText: match[1], rest: match[2] };
+
+  // Numbered list items
+  const numMatch = line.match(/^(\d+)\.\s+(.*)$/);
+  if (numMatch) {
+    return { type: 'numbered', num: numMatch[1], text: numMatch[2].trim() };
   }
-  // Table rows — extract cells
-  if (line.startsWith('| ') && line.endsWith(' |')) {
-    // Skip separator rows like |---|---|
-    if (line.match(/^\|[\s-:|]+\|$/)) return { type: 'table-separator' };
+
+  // Table rows
+  if (line.startsWith('|') && line.endsWith('|')) {
+    // Check if separator row like |---|---|
+    if (line.match(/^\|[\s\-:|]+\|$/)) {
+      return { type: 'table-separator' };
+    }
     const cells = line
       .split('|')
       .slice(1, -1)
       .map((c: string) => c.trim());
     return { type: 'table-row', cells };
   }
-  if (line.startsWith('**') && line.includes(':**')) {
-    const match = line.match(/^\*\*(.+?):\*\*\s*(.*)$/);
-    if (match) return { type: 'key-value', key: match[1], value: match[2] };
+
+  // Standalone bold heading line: **Title**
+  if (line.startsWith('**') && line.endsWith('**') && !line.slice(2, -2).includes('**')) {
+    return { type: 'bold-block', text: line.slice(2, -2).trim() };
   }
-  if (line.startsWith('**') && !line.endsWith('**')) {
-    const match = line.match(/^\*\*(.+?)\*\*\s*(.*)$/);
-    if (match) return { type: 'inline-bold', boldText: match[1], rest: match[2] };
-  }
+
   return { type: 'paragraph', text: line };
 }
 
@@ -90,9 +111,9 @@ const groupedBlocks: GroupedBlock[] = [];
 let i = 0;
 while (i < parsedLines.length) {
   const line = parsedLines[i];
-  if (line.type === 'bullet' || line.type === 'bullet-bold') {
+  if (line.type === 'bullet') {
     const items: ParsedLine[] = [];
-    while (i < parsedLines.length && (parsedLines[i].type === 'bullet' || parsedLines[i].type === 'bullet-bold')) {
+    while (i < parsedLines.length && parsedLines[i].type === 'bullet') {
       items.push(parsedLines[i]);
       i++;
     }
@@ -106,7 +127,10 @@ while (i < parsedLines.length) {
     groupedBlocks.push({ type: 'numbered-list', items });
   } else if (line.type === 'table-row' || line.type === 'table-separator') {
     const items: ParsedLine[] = [];
-    while (i < parsedLines.length && (parsedLines[i].type === 'table-row' || parsedLines[i].type === 'table-separator')) {
+    while (
+      i < parsedLines.length &&
+      (parsedLines[i].type === 'table-row' || parsedLines[i].type === 'table-separator')
+    ) {
       items.push(parsedLines[i]);
       i++;
     }
@@ -122,15 +146,11 @@ while (i < parsedLines.length) {
   {groupedBlocks.map((block) => {
     if (block.type === 'bullet-list') {
       return (
-        <ul class="mt-4 space-y-2 text-muted-foreground list-none ps-0">
+        <ul class="mt-4 mb-6 space-y-2 text-muted-foreground list-none ps-0">
           {block.items.map((item) => (
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true"></span>
-              {item.type === 'bullet-bold' ? (
-                <span class="leading-relaxed"><strong class="text-[var(--color-foreground)]">{item.boldText}</strong>{item.rest}</span>
-              ) : (
-                <span class="leading-relaxed">{item.text}</span>
-              )}
+              <span class="leading-relaxed" set:html={formatInline(item.text || '')} />
             </li>
           ))}
         </ul>
@@ -139,11 +159,13 @@ while (i < parsedLines.length) {
 
     if (block.type === 'numbered-list') {
       return (
-        <ol class="mt-4 space-y-3 text-muted-foreground list-none ps-0" role="list">
+        <ol class="mt-4 mb-6 space-y-3 text-muted-foreground list-none ps-0" role="list">
           {block.items.map((item) => (
             <li class="flex gap-3">
-              <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary" aria-hidden="true">{item.num}</span>
-              <span class="leading-relaxed"><strong class="text-[var(--color-foreground)]">{item.boldText}</strong>{item.rest ? ` — ${item.rest}` : ''}</span>
+              <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary" aria-hidden="true">
+                {item.num}
+              </span>
+              <span class="leading-relaxed" set:html={formatInline(item.text || '')} />
             </li>
           ))}
         </ol>
@@ -156,12 +178,12 @@ while (i < parsedLines.length) {
       const headerRow = dataRows[0];
       const bodyRows = dataRows.slice(1);
       return (
-        <div class="mt-6 mb-4 overflow-x-auto rounded-lg border border-border">
+        <div class="mt-6 mb-8 overflow-x-auto rounded-lg border border-border">
           <table class="w-full text-sm">
             <thead class="bg-secondary text-foreground">
               <tr>
                 {headerRow.cells?.map((cell) => (
-                  <th class="px-4 py-3 text-start font-semibold">{cell}</th>
+                  <th class="px-4 py-3 text-start font-semibold" set:html={formatInline(cell)} />
                 ))}
               </tr>
             </thead>
@@ -169,7 +191,7 @@ while (i < parsedLines.length) {
               {bodyRows.map((row, idx) => (
                 <tr class={idx % 2 === 1 ? 'bg-secondary/40' : ''}>
                   {row.cells?.map((cell) => (
-                    <td class="px-4 py-3 border-t border-border">{cell}</td>
+                    <td class="px-4 py-3 border-t border-border" set:html={formatInline(cell)} />
                   ))}
                 </tr>
               ))}
@@ -181,20 +203,20 @@ while (i < parsedLines.length) {
 
     // Single items
     const item = block.items[0];
-    if (item.type === 'h2') return <h2 class="text-2xl font-bold font-display mt-8 mb-4">{item.text}</h2>;
-    if (item.type === 'h3') return <h3 class="text-xl font-semibold mt-6 mb-3">{item.text}</h3>;
-    if (item.type === 'bold-block') return <p class="font-semibold mt-4">{item.text}</p>;
-    if (item.type === 'key-value') return (
-      <p class="mt-3 leading-relaxed text-muted-foreground">
-        <strong class="text-[var(--color-foreground)]">{item.key}:</strong> {item.value}
-      </p>
-    );
-    if (item.type === 'inline-bold') return (
-      <p class="mt-3 leading-relaxed text-muted-foreground">
-        <strong class="text-[var(--color-foreground)]">{item.boldText}</strong> {item.rest}
-      </p>
-    );
+    if (item.type === 'h2') {
+      return <h2 class="text-2xl font-bold font-display mt-10 mb-4" set:html={formatInline(item.text || '')} />;
+    }
+    if (item.type === 'h3') {
+      return <h3 class="text-xl font-semibold mt-8 mb-3" set:html={formatInline(item.text || '')} />;
+    }
+    if (item.type === 'h4') {
+      return <h4 class="text-lg font-semibold mt-6 mb-2" set:html={formatInline(item.text || '')} />;
+    }
+    if (item.type === 'bold-block') {
+      return <p class="font-semibold text-[var(--color-foreground)] mt-4 mb-2" set:html={formatInline(item.text || '')} />;
+    }
     if (item.type === 'table-separator') return null;
-    return <p class="text-muted-foreground leading-relaxed mb-4">{item.text}</p>;
+
+    return <p class="text-muted-foreground leading-relaxed mb-4" set:html={formatInline(item.text || '')} />;
   })}
 </div>
