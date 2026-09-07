@@ -1,0 +1,302 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import FreonCalculatorWidget from '@/components/tools/FreonCalculatorWidget.astro';
+import FreonSchema from '@/components/tools/FreonSchema.astro';
+import {
+  getAllFreonSpecs,
+  getFreonSpecsByBrand,
+  type FreonVehicleSpec,
+  type FreonGenerationSpec,
+} from '@/data/freon-specs';
+import { WHATSAPP_NUMBER } from '@/lib/whatsapp';
+
+export function getStaticPaths() {
+  const specs = getAllFreonSpecs();
+  return specs.map((spec: FreonVehicleSpec) => ({
+    params: { brand: spec.brandSlug, model: spec.modelSlug },
+    props: { spec },
+  }));
+}
+
+type Props = {
+  spec: FreonVehicleSpec;
+};
+
+const { spec } = Astro.props as Props;
+const lang = 'en' as const;
+const site = Astro.site?.origin ?? 'https://autosaveks.com';
+
+const title = `${spec.brandNameEn} ${spec.modelNameEn} AC Freon Capacity & Oil Spec Guide | Auto Save KSA`;
+const description = `OEM refrigerant capacity specs for ${spec.brandNameEn} ${spec.modelNameEn} in grams, gas code (${spec.defaultGeneration.refrigerantType}), and compressor PAG oil for all generations (${spec.defaultGeneration.years}). Digital scale recharge in Riyadh.`;
+const keywords = [
+  `${spec.brandNameEn} ${spec.modelNameEn} freon capacity`,
+  `${spec.modelNameEn} freon grams`,
+  `${spec.brandNameEn} ${spec.modelNameEn} refrigerant type`,
+  `${spec.modelNameEn} ac compressor oil`,
+  `${spec.modelNameEn} dual ac capacity`,
+  `car ac repair riyadh ${spec.modelNameEn}`,
+  'precision scale freon recharge riyadh',
+];
+
+const breadcrumbs = [
+  { name: 'Home', url: `${site}/en/` },
+  { name: 'Tools', url: `${site}/en/tools/` },
+  { name: 'Freon Capacity Lookup', url: `${site}/en/tools/freon-capacity/` },
+  { name: spec.brandNameEn, url: `${site}/en/car-ac/${spec.brandSlug}/` },
+  { name: `${spec.brandNameEn} ${spec.modelNameEn}`, url: `${site}/en/tools/freon-capacity/${spec.brandSlug}/${spec.modelSlug}/` },
+];
+
+const relatedBrandSpecs = getFreonSpecsByBrand(spec.brandSlug).filter((s: FreonVehicleSpec) => s.modelSlug !== spec.modelSlug);
+
+const defaultGen = spec.defaultGeneration;
+const whatsappMsg = `Hello Auto Save KSA, I would like to book a precision digital scale Freon recharge and inspection for my ${spec.brandNameEn} ${spec.modelNameEn} (${defaultGen.years}) in Riyadh.`;
+---
+
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
+  <FreonSchema
+    name={title}
+    description={description}
+    url={`${site}/en/tools/freon-capacity/${spec.brandSlug}/${spec.modelSlug}/`}
+    breadcrumbs={breadcrumbs}
+    faqs={spec.faqs.map((f) => ({ question: f.questionEn, answer: f.answerEn }))}
+    lang={lang}
+  />
+
+  {/* Hero Section */}
+  <section class="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-10 lg:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Breadcrumbs */}
+      <nav class="mb-6 flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground" aria-label="Breadcrumbs">
+        <a href="/en/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/en/tools/" class="hover:text-primary transition-colors">Tools</a>
+        <span>/</span>
+        <a href="/en/tools/freon-capacity/" class="hover:text-primary transition-colors">Freon Capacity Lookup</a>
+        <span>/</span>
+        <a href={`/en/car-ac/${spec.brandSlug}/`} class="hover:text-primary transition-colors">{spec.brandNameEn}</a>
+        <span>/</span>
+        <span class="text-foreground">{spec.modelNameEn}</span>
+      </nav>
+
+      <div class="grid gap-8 lg:grid-cols-12 items-start">
+        {/* Main Title & Key Highlight Card */}
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary mb-3">
+            <span>Verified OEM Data</span>
+            <span class="size-1 rounded-full bg-primary"></span>
+            <span>{spec.category.toUpperCase()}</span>
+          </div>
+          <h1 class="text-3xl font-extrabold tracking-tight font-display text-foreground sm:text-4xl lg:text-5xl leading-tight">
+            {spec.brandNameEn} {spec.modelNameEn} Freon Capacity & Compressor Oil Specs
+          </h1>
+          <p class="mt-4 text-base text-muted-foreground sm:text-lg leading-relaxed">
+            Exact refrigerant charge specifications for <strong class="text-foreground">{spec.brandNameEn} {spec.modelNameEn}</strong> in grams, specifying gas code, compressor lubricant requirements, and operating pressures for the Saudi Arabian climate.
+          </p>
+
+          {/* Quick Specs Callout Box */}
+          <div class="mt-6 rounded-2xl border border-primary/20 bg-card p-5 sm:p-6 shadow-sm">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">
+              Latest Generation Specifications ({defaultGen.years})
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div class="rounded-xl bg-secondary/50 p-3 text-center border border-border">
+                <span class="text-xs text-muted-foreground block font-medium">Refrigerant (Single AC)</span>
+                <span class="text-2xl font-extrabold text-primary font-display block mt-1">{defaultGen.capacityGrams} g</span>
+                <span class="text-[11px] text-muted-foreground">± {defaultGen.toleranceGrams} grams</span>
+              </div>
+              {defaultGen.capacityGramsDualAc && (
+                <div class="rounded-xl bg-secondary/50 p-3 text-center border border-border">
+                  <span class="text-xs text-muted-foreground block font-medium">Dual AC (Rear Cabin)</span>
+                  <span class="text-2xl font-extrabold text-foreground font-display block mt-1">{defaultGen.capacityGramsDualAc} g</span>
+                  <span class="text-[11px] text-muted-foreground">Rear lines included</span>
+                </div>
+              )}
+              <div class="rounded-xl bg-secondary/50 p-3 text-center border border-border">
+                <span class="text-xs text-muted-foreground block font-medium">Refrigerant Code</span>
+                <span class="text-lg font-bold text-foreground block mt-1.5">{defaultGen.refrigerantType}</span>
+                <span class="text-[11px] text-muted-foreground">100% Virgin Gas</span>
+              </div>
+              <div class="rounded-xl bg-secondary/50 p-3 text-center border border-border col-span-2 sm:col-span-1">
+                <span class="text-xs text-muted-foreground block font-medium">Compressor Lubricant</span>
+                <span class="text-sm font-bold text-foreground block mt-1.5 truncate">{defaultGen.oilType}</span>
+                <span class="text-[11px] text-muted-foreground">{defaultGen.oilCapacityMl} ml</span>
+              </div>
+            </div>
+
+            {defaultGen.notesEn && (
+              <div class="mt-4 rounded-lg bg-primary/5 p-3 text-xs text-foreground/90 border border-primary/10">
+                <strong class="text-primary font-semibold">Technical Note:</strong> {defaultGen.notesEn}
+              </div>
+            )}
+
+            <div class="mt-5 flex flex-wrap items-center gap-3">
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMsg)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-bold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+              >
+                <svg class="size-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z" />
+                </svg>
+                <span>Book Precision Recharge for {spec.modelNameEn}</span>
+              </a>
+              <a
+                href={`/en/car-ac/${spec.brandSlug}/${spec.modelSlug}/`}
+                class="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-4 py-3 text-xs font-semibold text-foreground hover:bg-secondary transition"
+              >
+                <span>Full {spec.modelNameEn} Repair Guide</span>
+                <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Interactive Widget Preloaded */}
+        <div class="lg:col-span-5">
+          <FreonCalculatorWidget lang={lang} initialBrand={spec.brandSlug} initialModel={spec.modelSlug} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Generations Specs Table */}
+  <section class="py-12 border-t border-border">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold font-display text-foreground sm:text-3xl">
+          {spec.brandNameEn} {spec.modelNameEn} Freon Capacity by Year
+        </h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          Historical changes in charge weight and oil types across generations:
+        </p>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-border bg-card shadow-sm">
+        <table class="w-full text-start text-sm">
+          <thead class="border-b border-border bg-secondary/50 text-xs font-bold text-foreground uppercase">
+            <tr>
+              <th scope="col" class="px-4 py-3.5 text-start">Years / Gen</th>
+              <th scope="col" class="px-4 py-3.5 text-center">Refrigerant</th>
+              <th scope="col" class="px-4 py-3.5 text-center">Single AC (g)</th>
+              {spec.generations.some((g: FreonGenerationSpec) => g.capacityGramsDualAc) && (
+                <th scope="col" class="px-4 py-3.5 text-center">Dual AC (g)</th>
+              )}
+              <th scope="col" class="px-4 py-3.5 text-start">Oil Specification</th>
+              <th scope="col" class="px-4 py-3.5 text-center">Summer PSI Benchmark</th>
+              <th scope="col" class="px-4 py-3.5 text-start">Notes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border font-medium">
+            {spec.generations.map((gen: FreonGenerationSpec) => (
+              <tr class="hover:bg-secondary/30 transition-colors">
+                <td class="px-4 py-3.5 font-bold text-foreground whitespace-nowrap">{gen.years}</td>
+                <td class="px-4 py-3.5 text-center">
+                  <span class={`inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${gen.refrigerantType === 'R1234yf' ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400' : 'bg-primary/15 text-primary'}`}>
+                    {gen.refrigerantType}
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 text-center font-mono font-bold text-primary">
+                  {gen.capacityGrams} g
+                  <span class="block text-[11px] font-normal text-muted-foreground">± {gen.toleranceGrams}g</span>
+                </td>
+                {spec.generations.some((g: FreonGenerationSpec) => g.capacityGramsDualAc) && (
+                  <td class="px-4 py-3.5 text-center font-mono font-bold text-foreground">
+                    {gen.capacityGramsDualAc ? `${gen.capacityGramsDualAc} g` : '-'}
+                  </td>
+                )}
+                <td class="px-4 py-3.5 text-xs text-muted-foreground">
+                  <span class="font-semibold text-foreground block">{gen.oilType}</span>
+                  <span>{gen.oilCapacityMl} ml</span>
+                </td>
+                <td class="px-4 py-3.5 text-center text-xs text-muted-foreground font-mono">
+                  <span class="block text-foreground font-bold">{gen.lowPressurePsiSummer}</span>
+                  <span>High: {gen.highPressurePsiSummer}</span>
+                </td>
+                <td class="px-4 py-3.5 text-xs text-muted-foreground max-w-xs">
+                  {gen.notesEn ?? 'Standard scale charging'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* Deep Technical Overview & Common Issues */}
+  <section class="py-12 bg-secondary/20 border-t border-border">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-10">
+      <div>
+        <h2 class="text-2xl font-bold font-display text-foreground sm:text-3xl">
+          {spec.brandNameEn} {spec.modelNameEn} AC Performance in Saudi Summer
+        </h2>
+        <p class="mt-4 text-base text-muted-foreground leading-relaxed">
+          {spec.acSystemOverviewEn}
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-border bg-card p-6 sm:p-8">
+        <h3 class="text-xl font-bold font-display text-foreground mb-4">
+          Known {spec.brandNameEn} {spec.modelNameEn} Climate Issues:
+        </h3>
+        <ul class="space-y-3">
+          {spec.commonAcIssuesEn.map((issue: string) => (
+            <li class="flex items-start gap-3 text-sm text-muted-foreground">
+              <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-rose-500/10 text-rose-600 mt-0.5 font-bold text-xs">
+                !
+              </span>
+              <span class="leading-relaxed">{issue}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Model FAQs */}
+      {spec.faqs.length > 0 && (
+        <div>
+          <h2 class="text-2xl font-bold font-display text-foreground sm:text-3xl mb-6">
+            Frequently Asked Questions: {spec.brandNameEn} {spec.modelNameEn} AC
+          </h2>
+          <div class="space-y-4">
+            {spec.faqs.map((faq) => (
+              <div class="rounded-xl border border-border bg-card p-5">
+                <h3 class="font-bold text-foreground text-base sm:text-lg">{faq.questionEn}</h3>
+                <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{faq.answerEn}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  {/* Related Models from the same Brand */}
+  {relatedBrandSpecs.length > 0 && (
+    <section class="py-12 border-t border-border">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xl font-bold font-display text-foreground sm:text-2xl mb-6">
+          Other {spec.brandNameEn} Models
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          {relatedBrandSpecs.map((rel: FreonVehicleSpec) => (
+            <a
+              href={`/en/tools/freon-capacity/${rel.brandSlug}/${rel.modelSlug}/`}
+              class="rounded-xl border border-border bg-card p-4 transition hover:border-primary hover:bg-primary/5 group"
+            >
+              <span class="text-xs text-muted-foreground block">{rel.brandNameEn}</span>
+              <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors block mt-0.5">
+                {rel.modelNameEn}
+              </span>
+              <span class="text-[11px] text-primary font-mono block mt-2">
+                {rel.defaultGeneration.capacityGrams} g ({rel.defaultGeneration.refrigerantType})
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</PageLayout>

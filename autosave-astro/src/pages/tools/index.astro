@@ -1,0 +1,214 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import FreonSchema from '../../components/tools/FreonSchema.astro';
+
+const lang = 'ar' as const;
+const site = Astro.site?.origin ?? 'https://autosaveks.com';
+
+const title = 'أدوات وحاسبات صيانة وتكييف السيارات المجانية | اوتو سيف الرياض';
+const description =
+  'مجموعة أدوات تفاعلية مجانية لملاك السيارات وفنيي التكييف في السعودية: حاسبة كمية فريون السيارات، فاحص زيت الكمبروسر، وتشخيص أعطال المكيف بدقة.';
+const keywords = [
+  'أدوات صيانة السيارات',
+  'حاسبة فريون السيارات',
+  'جدول كمية فريون المكيف',
+  'فحص مكيف السيارة',
+  'تشخيص اعطال المكيف',
+  'كمية فريون السيارات بالجرام',
+  'ورشة سيارات الرياض',
+];
+
+const breadcrumbs = [
+  { name: 'الرئيسية', url: `${site}/` },
+  { name: 'الأدوات المجانية', url: `${site}/tools/` },
+];
+
+const tools = [
+  {
+    id: 'freon-capacity',
+    title: 'حاسبة وجدول كمية فريون وزيت كمبروسر السيارات',
+    badge: 'متاحة الآن - مجانية',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    description:
+      'دليل رقمي شامل ومفصل لكميات فريون مكيف السيارات بالجرام، نوع الغاز (R134a / R1234yf)، نوع ولزوجة زيت الكمبروسر، وضغط الغاز المثالي في حرارة صيف الرياض.',
+    href: '/tools/freon-capacity/',
+    iconPath: 'M13 10V3L4 14h7v7l9-11h-7z',
+    popularQueries: ['كمية فريون كامري', 'كم جرام فريون لاندكروزر', 'نوع زيت كمبروسر المكيف', 'جدول فريون السيارات'],
+  },
+  {
+    id: 'ac-diagnostic',
+    title: 'أداة الفحص والتشخيص الذكي لأعطال مكيف السيارة',
+    badge: 'متاحة الآن - مجانية',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    description:
+      'فحص تفاعلي ذكي يشخص سبب ضعف التبريد، خروج هواء حار عند التوقف، الأصوات الغريبة، أو الروائح الكريهة مع تحديد القطع المشتبه بها وتكلفة الإصلاح.',
+    href: '/tools/ac-diagnostic/',
+    iconPath: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+    popularQueries: ['المكيف يبرد في الخط ويوقف بالزحمة', 'مكيف السيارة جهة بارد وجهة حار', 'صوت ونه مع المكيف'],
+  },
+  {
+    id: 'repair-cost',
+    title: 'حاسبة تكلفة إصلاح مكيف السيارة والتقسيط (تمارا وتابي)',
+    badge: 'متاحة الآن - مجانية',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    description:
+      'احسب التكلفة التقديرية لتغيير الكمبروسر، الثلاجة، الرديتر، أو تعبئة الفريون لسيارتك مع خيارات التقسيط على 4 دفعات ميسرة بدون فوائد.',
+    href: '/tools/repair-cost-calculator/',
+    iconPath: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+    popularQueries: ['سعر تغيير كمبروسر المكيف', 'تقسيط صيانة سيارات تابي', 'تكلفة فحص مكيف السيارة بالرياض'],
+  },
+  {
+    id: 'obd2-codes',
+    title: 'مترجم ودليل أكواد ورموز أعطال تكييف السيارة OBD-II',
+    badge: 'متاحة الآن - مجانية',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    description:
+      'فسر رموز وأكواد كمبيوتر المكيف (B-Codes & P-Codes) واعرف ما إذا كان الكود عطلاً حقيقياً في الحساس أم قراءة طبيعية في الظل قبل دفع تكاليف فحص غير ضرورية.',
+    href: '/tools/obd2/',
+    iconPath: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+    popularQueries: ['كود عطل B1421 تويوتا', 'كود حساس المكيف P0532', 'رموز اعطال المكيف'],
+  },
+  {
+    id: 'fuel-cost',
+    title: 'حاسبة استهلاك مكيف السيارة للبنزين والتكلفة بالريال',
+    badge: 'متاحة الآن - مجانية',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    description:
+      'احسب كم يستهلك مكيف سيارتك بنزين شهرياً بالريال السعودي وفق أسعار أرامكو (91 و 95)، وتعرف على حسم الجدل العلمي: هل فتح النوافذ يوفر بنزين أكثر من المكيف؟',
+    href: '/tools/fuel-cost-calculator/',
+    iconPath: 'M13 10V3L4 14h7v7l9-11h-7z',
+    popularQueries: ['كم يصرف المكيف بنزين', 'هل فتح الشبابيك يوفر بنزين', 'صرفية مكيف السيارة بالريال'],
+  },
+];
+---
+
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
+  <FreonSchema
+    name={title}
+    description={description}
+    url={`${site}/tools/`}
+    breadcrumbs={breadcrumbs}
+    lang={lang}
+  />
+
+  {/* Hero Section */}
+  <section class="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-14 lg:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-4 py-1.5 text-xs font-bold text-primary uppercase tracking-wide">
+          مركز أدوات السيارات الذكية
+        </span>
+        <h1 class="mt-4 text-3xl font-extrabold tracking-tight font-display text-foreground sm:text-5xl">
+          أدوات وحاسبات مكيف السيارة المجانية
+        </h1>
+        <p class="mt-4 text-base text-muted-foreground sm:text-lg">
+          وفرنا لك في <strong class="text-foreground">أوتو سيف</strong> أدوات رقمية دقيقة تم تطويرها وفق مواصفات السيارات المصدرة لدول الخليج والمناخ السعودي الحار، لتشخيص وصيانة مكيف سيارتك بأعلى كفاءة.
+        </p>
+      </div>
+
+      {/* Tools Cards Grid */}
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
+        {tools.map((tool) => (
+          <div class="relative flex flex-col justify-between rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm transition hover:border-primary/40 hover:shadow-md">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${tool.badgeColor}`}>
+                  {tool.badge}
+                </span>
+                <div class="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d={tool.iconPath} />
+                  </svg>
+                </div>
+              </div>
+
+              <h2 class="mt-4 text-xl font-bold font-display text-foreground sm:text-2xl">
+                <a href={tool.href} class="hover:text-primary transition-colors">
+                  {tool.title}
+                </a>
+              </h2>
+
+              <p class="mt-3 text-sm text-muted-foreground leading-relaxed">
+                {tool.description}
+              </p>
+
+              <div class="mt-5">
+                <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">عمليات البحث الأكثر شيوعاً:</p>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  {tool.popularQueries.map((query) => (
+                    <span class="rounded-md bg-secondary/80 px-2 py-1 text-[11px] text-foreground font-medium">
+                      {query}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-border flex items-center justify-between">
+              <a
+                href={tool.href}
+                class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+              >
+                <span>فتح الأداة الآن</span>
+                <svg class="size-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+              <span class="text-xs font-medium text-muted-foreground">100% مجاناً</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Why Auto Save Trust Section */}
+  <section class="py-14 border-t border-border bg-secondary/30">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold font-display text-foreground sm:text-3xl">لماذا تثق ببيانات ورشة أوتو سيف؟</h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          نحن لا نعتمد على التقديرات العشوائية، بل نطبق المعايير الهندسية المعتمدة لدى وكالات السيارات في الرياض.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-3">
+        <div class="rounded-xl border border-border bg-card p-6 text-center">
+          <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 class="mt-4 font-bold text-foreground">شحن فريون بميزان إلكتروني</h3>
+          <p class="mt-2 text-xs text-muted-foreground">
+            تعبئة دقيقة بالجرام طبقاً لكتالوج الصانع لحماية الكمبروسر من الضغط الزائد وضمان أقصى برودة.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card p-6 text-center">
+          <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h3 class="mt-4 font-bold text-foreground">فحص تسريب ليزر دقيق</h3>
+          <p class="mt-2 text-xs text-muted-foreground">
+            كشف دقيق لأصغر تهريبات الفريون في الرديتر والمواسير بدون فك الطبلون أو إتلاف الديكورات.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card p-6 text-center">
+          <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="mt-4 font-bold text-foreground">تقسيط مع تابي وتمارا</h3>
+          <p class="mt-2 text-xs text-muted-foreground">
+            إمكانية تقسيط تكلفة تصليح المكيف وقطع الغيار الأصلية على 4 دفعات بدون فوائد أو رسوم خفية.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,150 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import RepairCostCalculatorWidget from '../../../components/tools/RepairCostCalculatorWidget.astro';
+import FreonSchema from '../../../components/tools/FreonSchema.astro';
+import { serviceJobs, vehicleTiers } from '../../../data/repair-pricing';
+import { WHATSAPP_NUMBER } from '../../../lib/whatsapp';
+
+const lang = 'ar' as const;
+const site = Astro.site?.origin ?? 'https://autosaveks.com';
+
+const title = 'حاسبة تكلفة إصلاح مكيف السيارة والتقسيط (تمارا وتابي) | اوتو سيف';
+const description =
+  'احسب التكلفة التقديرية لإصلاح مكيف سيارتك في الرياض: أسعار تغيير الكمبروسر، الثلاجة، والرديتر وتعبئة الفريون، مع خطة تقسيط الفاتورة على 4 دفعات بدون فوائد عبر تابي وتمارا.';
+const keywords = [
+  'كم سعر تغيير كمبروسر المكيف',
+  'تكلفة تصليح مكيف السيارة الرياض',
+  'سعر تعبئة فريون السيارة',
+  'تقسيط صيانة سيارات تابي',
+  'ورشة تقسيط تمارا الرياض',
+  'سعر تغيير ثلاجة مكيف السيارة',
+  'كم يكلف فحص مكيف السيارة',
+  'صيانة مكيفات سيارات بالتقسيط',
+];
+
+const breadcrumbs = [
+  { name: 'الرئيسية', url: `${site}/` },
+  { name: 'الأدوات', url: `${site}/tools/` },
+  { name: 'حاسبة تكلفة الإصلاح والتقسيط', url: `${site}/tools/repair-cost-calculator/` },
+];
+
+const faqs = [
+  {
+    question: 'كيف يعمل تقسيط صيانة مكيف السيارة عبر تابي وتمارا في أوتو سيف؟',
+    answer:
+      'يمكنك تقسيط إجمالي فاتورة الإصلاح وقطع الغيار الأصلية على 4 دفعات متساوية بدون أي فوائد أو رسوم إضافية. تدفع الدفعة الأولى عند استلام السيارة، وتدفع الدفعات الثلاث المتبقية شهرياً عبر تطبيق تابي أو تمارا.',
+  },
+  {
+    question: 'ما هي شروط الاستفادة من تقسيط تابي وتمارا لصيانة السيارات؟',
+    answer:
+      'كل ما تحتاجه هو رقم جوال مسجل بهويتك الوطنية أو الإقامة وبطاقة بنكية (مدى أو فيزا أو ماستركارد). الموافقة فورية خلال ثوانٍ معدودة داخل الورشة دون الحاجة لخطاب تعريف بالراتب.',
+  },
+  {
+    question: 'ما الذي يحدد تكلفة تغيير كمبروسر مكيف السيارة في السعودية؟',
+    answer:
+      'تتفاوت التكلفة بناءً على فئة السيارة (السيدان أقل تكلفة من الجيوب والسيارات الأوروبية)، ونوعية القطعة المختارة (مورد أصلي دينسو ياباني أم وكالة رسمية)، ومدى حاجة دورة التكييف للغسيل الكيميائي من برادة الحديد لتأمين الضمان.',
+  },
+  {
+    question: 'هل يشمل السعر التقديري أجور اليد والفريون والضريبة؟',
+    answer:
+      'نعم، الأرقام المحسوبة في الأداة أعلاه تشمل التكلفة الإجمالية التقديرية (قطع الغيار + أجور العمل الفني + غاز الفريون والزيت وضريبة القيمة المضافة 15%).',
+  },
+];
+---
+
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
+  <FreonSchema
+    name={title}
+    description={description}
+    url={`${site}/tools/repair-cost-calculator/`}
+    breadcrumbs={breadcrumbs}
+    faqs={faqs}
+    lang={lang}
+  />
+
+  {/* Hero Section */}
+  <section class="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-10 lg:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Breadcrumbs */}
+      <nav class="mb-6 flex items-center gap-2 text-xs font-medium text-muted-foreground" aria-label="Breadcrumbs">
+        <a href="/" class="hover:text-primary transition-colors">الرئيسية</a>
+        <span>/</span>
+        <a href="/tools/" class="hover:text-primary transition-colors">الأدوات</a>
+        <span>/</span>
+        <span class="text-foreground">حاسبة تكلفة الإصلاح والتقسيط</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary mb-3">
+          <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          حاسبة الأسعار والتقسيط المباشر
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight font-display text-foreground sm:text-4xl lg:text-5xl">
+          حاسبة تكلفة إصلاح مكيف السيارة والتقسيط (تمارا وتابي)
+        </h1>
+        <p class="mt-4 text-base text-muted-foreground sm:text-lg leading-relaxed">
+          تعرف على التكلفة الحقيقية لخدمات مكيف سيارتك في سوق الرياض، وقسط إجمالي الفاتورة على 4 دفعات شهرية ميسرة بدون فوائد أو رسوم مخفية.
+        </p>
+      </div>
+
+      {/* The Calculator Widget */}
+      <div class="mt-8">
+        <RepairCostCalculatorWidget lang={lang} />
+      </div>
+    </div>
+  </section>
+
+  {/* Services & Price Guide Grid */}
+  <section class="py-12 border-t border-border bg-secondary/20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 max-w-2xl">
+        <h2 class="text-2xl font-bold font-display text-foreground sm:text-3xl">
+          دليل أسعار خدمات تكييف السيارات في أوتو سيف
+        </h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          نقدم أسعاراً تنافسية معتمدة مع ضمان حقيقي على كافة الإصلاحات وقطع الغيار:
+        </p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {serviceJobs.map((job) => (
+          <div class="rounded-xl border border-border bg-card p-5 shadow-sm transition hover:border-primary/40">
+            <h3 class="font-bold text-foreground text-base">{job.nameAr}</h3>
+            <p class="mt-2 text-xs text-muted-foreground leading-relaxed">
+              {job.descriptionAr}
+            </p>
+            <div class="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
+              <span class="text-primary font-bold">{job.warrantyAr}</span>
+              <span class="text-muted-foreground">{job.durationHoursAr}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* FAQs */}
+  <section class="py-14 border-t border-border">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold font-display text-foreground sm:text-3xl">
+          الأسئلة الشائعة حول أسعار الإصلاح وتقسيط تمارا وتابي
+        </h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          كل ما تحتاج معرفته عن طرق السداد والضمان المالي:
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <div class="rounded-xl border border-border bg-card p-5">
+            <h3 class="font-bold text-foreground text-base sm:text-lg">{faq.question}</h3>
+            <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

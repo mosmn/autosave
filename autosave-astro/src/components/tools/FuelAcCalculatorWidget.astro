@@ -1,0 +1,349 @@
+---
+import {
+  SAUDI_FUEL_PRICES,
+  ENGINE_CATEGORIES,
+  calculateAcFuelCost,
+} from '../../data/fuel-ac-calculator';
+
+interface Props {
+  lang?: 'ar' | 'en';
+}
+
+const { lang = 'ar' } = Astro.props;
+const isAr = lang === 'ar';
+
+// Default calculation for initial SSR render
+const initialResult = calculateAcFuelCost({
+  engineId: '4cyl',
+  fuelId: '91',
+  dailyKm: 50,
+  cityPercentage: 60,
+});
+---
+
+<div class="w-full max-w-5xl mx-auto" id="fuel-ac-calculator-widget">
+  {/* Calculator Container Card */}
+  <div class="rounded-3xl border border-border/80 bg-card p-6 sm:p-10 shadow-xl">
+    {/* Header */}
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        {isAr ? 'حاسبة استهلاك الوقود لمكيف السيارة' : 'Car AC Fuel Consumption & Cost Calculator'}
+      </span>
+      <h2 class="mt-3 text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+        {isAr ? 'كم يستهلك مكيف سيارتك بنزين شهرياً بالريال السعودي؟' : 'How Much Fuel Does Your AC Burn Monthly in SAR?'}
+      </h2>
+      <p class="mt-2 text-sm text-muted-foreground">
+        {isAr
+          ? 'احسب التكلفة الإضافية لتشغيل المكيف في حرارة صيف الرياض وفق أسعار الوقود الرسمية المعتمدة لشركة أرامكو السعودية.'
+          : 'Calculate extra fuel cost from running your AC in Saudi summer heat using official Saudi Aramco fuel tariffs.'}
+      </p>
+    </div>
+
+    {/* Interactive Form Grid */}
+    <div class="mt-8 grid gap-8 lg:grid-cols-12">
+      {/* Left / Input Controls (7 cols) */}
+      <div class="lg:col-span-7 space-y-6">
+        {/* 1. Engine Cylinder Selector */}
+        <div>
+          <label class="block text-sm font-bold text-foreground mb-2">
+            1. {isAr ? 'اختر حجم ومحرك سيارتك:' : 'Select Your Engine Size:'}
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            {Object.values(ENGINE_CATEGORIES).map((engine, idx) => (
+              <label class="relative flex flex-col p-3.5 rounded-2xl border cursor-pointer transition-all border-border bg-background hover:border-primary/50 [&:has(input:checked)]:border-primary [&:has(input:checked)]:bg-primary/5 [&:has(input:checked)]:ring-1 [&:has(input:checked)]:ring-primary">
+                <input
+                  type="radio"
+                  name="calc-engine"
+                  value={engine.id}
+                  checked={idx === 0}
+                  class="sr-only"
+                />
+                <span class="text-xs font-bold text-foreground">
+                  {isAr ? engine.nameAr : engine.nameEn}
+                </span>
+                <span class="mt-1 text-[11px] text-muted-foreground line-clamp-1">
+                  {isAr ? engine.examplesAr : engine.examplesEn}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* 2. Fuel Grade Selector */}
+        <div>
+          <label class="block text-sm font-bold text-foreground mb-2">
+            2. {isAr ? 'نوع الوقود وسعره الحالي بالسعودية:' : 'Select Fuel Grade (Official Saudi Aramco Price):'}
+          </label>
+          <div class="grid grid-cols-3 gap-2.5">
+            {Object.values(SAUDI_FUEL_PRICES).map((fuel, idx) => (
+              <label class="relative flex flex-col items-center justify-center p-3 rounded-2xl border cursor-pointer text-center transition-all border-border bg-background hover:border-primary/50 [&:has(input:checked)]:border-primary [&:has(input:checked)]:bg-primary/5 [&:has(input:checked)]:ring-1 [&:has(input:checked)]:ring-primary">
+                <input
+                  type="radio"
+                  name="calc-fuel"
+                  value={fuel.id}
+                  checked={idx === 0}
+                  class="sr-only"
+                />
+                <span class="text-xs font-bold text-foreground">
+                  {isAr ? fuel.nameAr : fuel.nameEn}
+                </span>
+                <span class="mt-1 font-mono text-xs font-bold text-primary">
+                  {fuel.pricePerLiterSAR} {isAr ? 'ريال/لتر' : 'SAR/L'}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. Daily Driving Distance Slider */}
+        <div class="rounded-2xl border border-border bg-background/50 p-4">
+          <div class="flex items-center justify-between text-sm mb-2">
+            <span class="font-bold text-foreground">
+              3. {isAr ? 'المسافة اليومية المقطوعة بالسيارة:' : 'Daily Commute Distance:'}
+            </span>
+            <span class="font-mono font-bold text-primary text-base">
+              <span id="display-daily-km">50</span> {isAr ? 'كم / يوم' : 'km / day'}
+            </span>
+          </div>
+          <input
+            type="range"
+            id="calc-daily-km"
+            min="10"
+            max="200"
+            step="5"
+            value="50"
+            class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+          />
+          <div class="flex justify-between text-[11px] text-muted-foreground mt-1.5">
+            <span>10 {isAr ? 'كم' : 'km'}</span>
+            <span>50 {isAr ? 'كم (المتوسط)' : 'km (Average)'}</span>
+            <span>100 {isAr ? 'كم' : 'km'}</span>
+            <span>200 {isAr ? 'كم' : 'km'}</span>
+          </div>
+        </div>
+
+        {/* 4. Traffic & City vs Highway Environment */}
+        <div class="rounded-2xl border border-border bg-background/50 p-4">
+          <div class="flex items-center justify-between text-sm mb-2">
+            <span class="font-bold text-foreground">
+              4. {isAr ? 'طبيعة المشاوير (زحمة ووقوف vs خط سريع):' : 'Driving Route (Traffic vs Highway):'}
+            </span>
+            <span class="font-mono font-bold text-primary text-xs">
+              <span id="display-city-pct">60</span>% {isAr ? 'زحمة' : 'City'} / <span id="display-hwy-pct">40</span>% {isAr ? 'خط' : 'Highway'}
+            </span>
+          </div>
+          <input
+            type="range"
+            id="calc-traffic-ratio"
+            min="0"
+            max="100"
+            step="10"
+            value="60"
+            class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+          />
+          <div class="flex justify-between text-[11px] text-muted-foreground mt-1.5">
+            <span>{isAr ? '100% خط سريع مفتوح' : '100% Highway'}</span>
+            <span>{isAr ? 'مختلط (60/40)' : 'Mixed (60/40)'}</span>
+            <span>{isAr ? '100% زحمة وتوقف وإشارات' : '100% City / Stop-and-Go'}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Right / Results & Analytics Display (5 cols) */}
+      <div class="lg:col-span-5 flex flex-col justify-between rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/5 via-card to-card p-6 sm:p-7 shadow-lg">
+        <div>
+          <div class="flex items-center justify-between pb-3 border-b border-border">
+            <span class="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              {isAr ? 'نتيجة الفاتورة التقديرية' : 'Estimated Cost Breakdown'}
+            </span>
+            <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-bold text-primary">
+              {isAr ? 'صيف الرياض 45°C' : 'Riyadh Summer 45°C'}
+            </span>
+          </div>
+
+          {/* Big Highlight: Monthly Extra Cost */}
+          <div class="mt-5 text-center">
+            <div class="text-xs text-muted-foreground">
+              {isAr ? 'التكلفة الإضافية الشهرية للمكيف' : 'Extra Monthly AC Fuel Cost'}
+            </div>
+            <div class="mt-1 flex items-baseline justify-center gap-1">
+              <span id="res-monthly-cost" class="font-display text-4xl sm:text-5xl font-black text-primary">
+                {initialResult.acExtraMonthlyCostSAR}
+              </span>
+              <span class="text-sm font-bold text-foreground">{isAr ? 'ريال / شهر' : 'SAR / mo'}</span>
+            </div>
+            <div class="mt-1 text-xs text-muted-foreground">
+              {isAr ? 'تستهلك حوالي' : 'Consumes approx'}{' '}
+              <strong id="res-monthly-liters" class="text-foreground">{initialResult.acExtraMonthlyLiters}</strong>{' '}
+              {isAr ? 'لتر بنزين إضافي شهرياً' : 'extra liters/month'}
+            </div>
+          </div>
+
+          {/* Breakdown Items */}
+          <div class="mt-6 space-y-3 text-xs">
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-background border border-border">
+              <span class="text-muted-foreground">{isAr ? 'التكلفة السنوية الإضافية:' : 'Annual Extra AC Cost:'}</span>
+              <span class="font-mono font-bold text-foreground">
+                <span id="res-annual-cost">{initialResult.acExtraAnnualCostSAR}</span> {isAr ? 'ريال' : 'SAR'}
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-background border border-border">
+              <span class="text-muted-foreground">{isAr ? 'تكلفة الوقوف ساعة بالزحمة مع المكيف:' : 'Cost per 1 Hour Idling in Traffic:'}</span>
+              <span class="font-mono font-bold text-amber-600 dark:text-amber-400">
+                <span id="res-idle-hourly">{initialResult.idleCostPerHourSAR}</span> {isAr ? 'ريال / ساعة' : 'SAR / hour'}
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-background border border-border">
+              <span class="text-muted-foreground">{isAr ? 'نسبة استهلاك المكيف من إجمالي البنزين:' : 'AC Share of Total Fuel Tank:'}</span>
+              <span class="font-mono font-bold text-foreground">
+                <span id="res-share-pct">{initialResult.acCostSharePercentage}</span>%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* WhatsApp Call to Action */}
+        <div class="mt-6 pt-4 border-t border-border">
+          <p class="text-[11px] text-muted-foreground text-center mb-3">
+            {isAr
+              ? 'هل يثقل المكيف عزم السيارة ويزيد صرفية البنزين أكثر من الطبيعي؟ افحص بلف وكمبروسر المكيف في أوتو سيف.'
+              : 'Does your AC heavily bog down engine power and waste fuel? Inspect your compressor and control valve at Auto Save.'}
+          </p>
+          <a
+            id="fuel-wa-btn"
+            href="https://wa.me/966537133080?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%20%D9%88%D8%B1%D8%AD%D9%85%D9%87%20%D8%A7%D9%84%D9%84%D9%87%20%D9%88%D8%A8%D8%B1%D9%83%D8%A7%D8%AA%D9%87%D8%8C%20%D8%A3%D8%B4%D8%B9%D8%B1%20%D8%A8%D8%AB%D9%82%D9%84%20%D9%81%D9%8A%20%D8%B9%D8%B2%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9%20%D9%88%D8%B2%D9%8A%D8%A7%D8%AF%D8%A9%20%D8%B5%D8%B1%D9%81%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A8%D9%86%D8%B2%D9%8A%D9%86%20%D8%B9%D9%86%D8%AF%20%D8%AA%D8%B4%D8%BA%D9%8A%D9%84%20%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AD%D8%AC%D8%B2%20%D9%85%D9%88%D8%B9%D8%AF%20%D9%81%D8%AD%D8%B5%20%D9%83%D9%81%D8%A7%D8%A1%D8%A9%20%D8%A7%D9%84%D8%AA%D9%83%D9%8A%D9%8A%D9%81%20%D8%A8%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 py-3 px-4 text-xs font-bold text-white shadow-md hover:bg-emerald-700 transition-colors text-center"
+          >
+            <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z" />
+            </svg>
+            {isAr ? 'حجز فحص كفاءة كمبروسر المكيف' : 'Book AC Compressor Inspection'}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {/* Section 2: Myth-Buster (Highway AC vs Windows Open) */}
+    <div class="mt-10 rounded-2xl bg-gradient-to-r from-blue-500/10 via-primary/10 to-transparent border border-blue-500/20 p-6">
+      <div class="flex items-start gap-3.5">
+        <div class="p-2.5 rounded-xl bg-blue-500/20 text-blue-600 dark:text-blue-400 shrink-0">
+          <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-foreground">
+            {isAr ? 'حسم الجدل العلمي: هل فتح النوافذ بالخط السريع يوفر بنزين مقارنة بالمكيف؟' : 'The Scientific Verdict: Open Windows vs. AC at Highway Speed'}
+          </h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            {isAr
+              ? initialResult.highwayVerdictAr
+              : initialResult.highwayVerdictEn}
+          </p>
+          <div class="mt-3 grid grid-cols-2 gap-3 max-w-md text-xs font-semibold">
+            <div class="rounded-lg bg-background p-2.5 border border-border text-center">
+              <span class="text-muted-foreground block text-[11px]">{isAr ? 'زيادة استهلاك المكيف بالخط:' : 'AC Highway Penalty:'}</span>
+              <span class="text-emerald-600 dark:text-emerald-400 font-bold text-sm">+4% إلى +5% فقط</span>
+            </div>
+            <div class="rounded-lg bg-background p-2.5 border border-border text-center">
+              <span class="text-muted-foreground block text-[11px]">{isAr ? 'زيادة فتح النوافذ على 120 كم:' : 'Open Windows Penalty @ 120km:'}</span>
+              <span class="text-rose-600 dark:text-rose-400 font-bold text-sm">+12% إلى +15% (مقاومة هواء)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Section 3: 5 Tips to Reduce AC Fuel Consumption */}
+    <div class="mt-8">
+      <h3 class="text-lg font-bold text-foreground font-display mb-4">
+        {isAr ? '💡 5 نصائح لخفض استهلاك مكيف سيارتك للوقود بنسبة تصل إلى 25% بالرياض:' : '💡 5 Ways to Cut AC Fuel Consumption by up to 25%:'}
+      </h3>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {(isAr ? initialResult.savingsTipsAr : initialResult.savingsTipsEn).map((tip, idx) => (
+          <div class="flex items-start gap-2.5 rounded-xl border border-border bg-card p-3.5 text-xs text-muted-foreground leading-relaxed">
+            <span class="size-5 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0 text-[11px]">
+              {idx + 1}
+            </span>
+            <span>{tip}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    SAUDI_FUEL_PRICES,
+    ENGINE_CATEGORIES,
+    calculateAcFuelCost,
+  } from '../../data/fuel-ac-calculator';
+
+  function initFuelCalculator() {
+    const engineRadios = document.querySelectorAll<HTMLInputElement>('input[name="calc-engine"]');
+    const fuelRadios = document.querySelectorAll<HTMLInputElement>('input[name="calc-fuel"]');
+    const dailyKmInput = document.getElementById('calc-daily-km') as HTMLInputElement | null;
+    const trafficInput = document.getElementById('calc-traffic-ratio') as HTMLInputElement | null;
+
+    const displayKm = document.getElementById('display-daily-km');
+    const displayCityPct = document.getElementById('display-city-pct');
+    const displayHwyPct = document.getElementById('display-hwy-pct');
+
+    const resMonthlyCost = document.getElementById('res-monthly-cost');
+    const resMonthlyLiters = document.getElementById('res-monthly-liters');
+    const resAnnualCost = document.getElementById('res-annual-cost');
+    const resIdleHourly = document.getElementById('res-idle-hourly');
+    const resSharePct = document.getElementById('res-share-pct');
+
+    if (!dailyKmInput || !trafficInput) return;
+
+    function recalculate() {
+      let engineId: '4cyl' | '6cyl' | '8cyl' = '4cyl';
+      engineRadios.forEach((r) => {
+        if (r.checked) engineId = r.value as any;
+      });
+
+      let fuelId: '91' | '95' | 'diesel' = '91';
+      fuelRadios.forEach((r) => {
+        if (r.checked) fuelId = r.value as any;
+      });
+
+      const dailyKm = Number(dailyKmInput?.value || 50);
+      const cityPct = Number(trafficInput?.value || 60);
+      const hwyPct = 100 - cityPct;
+
+      if (displayKm) displayKm.textContent = String(dailyKm);
+      if (displayCityPct) displayCityPct.textContent = String(cityPct);
+      if (displayHwyPct) displayHwyPct.textContent = String(hwyPct);
+
+      const result = calculateAcFuelCost({
+        engineId,
+        fuelId,
+        dailyKm,
+        cityPercentage: cityPct,
+      });
+
+      if (resMonthlyCost) resMonthlyCost.textContent = String(result.acExtraMonthlyCostSAR);
+      if (resMonthlyLiters) resMonthlyLiters.textContent = String(result.acExtraMonthlyLiters);
+      if (resAnnualCost) resAnnualCost.textContent = String(result.acExtraAnnualCostSAR);
+      if (resIdleHourly) resIdleHourly.textContent = String(result.idleCostPerHourSAR);
+      if (resSharePct) resSharePct.textContent = String(result.acCostSharePercentage);
+    }
+
+    engineRadios.forEach((r) => r.addEventListener('change', recalculate));
+    fuelRadios.forEach((r) => r.addEventListener('change', recalculate));
+    dailyKmInput.addEventListener('input', recalculate);
+    trafficInput.addEventListener('input', recalculate);
+  }
+
+  initFuelCalculator();
+  document.addEventListener('astro:page-load', initFuelCalculator);
+</script>

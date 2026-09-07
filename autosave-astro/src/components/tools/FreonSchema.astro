@@ -1,0 +1,79 @@
+---
+/**
+ * FreonSchema — JSON-LD structured data for Freon Tool & Model Pages.
+ * Outputs WebApplication, BreadcrumbList, and FAQPage schemas.
+ */
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  name: string;
+  description: string;
+  url: string;
+  breadcrumbs: BreadcrumbItem[];
+  faqs?: FAQItem[];
+  lang: 'ar' | 'en';
+}
+
+const { name, description, url, breadcrumbs, faqs, lang } = Astro.props;
+
+const webAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name,
+  description,
+  url,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'All',
+  inLanguage: lang === 'ar' ? 'ar-SA' : 'en-US',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'SAR',
+  },
+  provider: {
+    '@type': 'AutoRepair',
+    name: lang === 'ar' ? 'أوتو سيف لصيانة مكيفات السيارات' : 'Auto Save Car AC Repair',
+    url: 'https://autosaveks.com',
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((crumb, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: crumb.name,
+    item: crumb.url,
+  })),
+};
+
+const faqSchema =
+  faqs && faqs.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      }
+    : null;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}

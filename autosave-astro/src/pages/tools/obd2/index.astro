@@ -1,0 +1,204 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import OBDCodeLookupWidget from '../../../components/tools/OBDCodeLookupWidget.astro';
+import FreonSchema from '../../../components/tools/FreonSchema.astro';
+import { getAllOBDCodes } from '../../../data/obd-codes';
+import { WHATSAPP_NUMBER } from '../../../lib/whatsapp';
+
+const lang = 'ar' as const;
+const site = Astro.site?.origin ?? 'https://autosaveks.com';
+const allCodes = getAllOBDCodes();
+
+const title = 'دليل ومترجم أكواد أعطال تكييف السيارة OBD-II | اوتو سيف الرياض';
+const description =
+  'فسر رموز وأكواد كمبيوتر مكيف السيارة (B-Codes و P-Codes): كود B1421 تويوتا، حساس الفريون P0532، بوابات التكييف B1441، وتعرف على الأكواد الطبيعية في الظل قبل دفع تكاليف فحص غير ضرورية.';
+const keywords = [
+  'اكواد اعطال مكيف السيارة',
+  'كود B1421 تويوتا',
+  'كود B1422 لكزس',
+  'كود P0532 فريون المكيف',
+  'كود B1441 بوابة المكيف',
+  'فحص كمبيوتر مكيف السيارة بالرياض',
+  'حساس الشمس تويوتا كامري',
+  'رموز اعطال التكييف',
+];
+
+const breadcrumbs = [
+  { name: 'الرئيسية', url: `${site}/` },
+  { name: 'الأدوات', url: `${site}/tools/` },
+  { name: 'دليل أكواد أعطال التكييف OBD-II', url: `${site}/tools/obd2/` },
+];
+
+const faqs = [
+  {
+    question: 'هل كود B1421 في تويوتا ولكزس يعني أن المكيف خربان؟',
+    answer:
+      'لا على الإطلاق! في 95% من الحالات، ظهور كود B1421 يعني أن السيارة تم فحصها داخل ورشة مظللة أو في الليل أو تحت مظلة. حساس ضوء الشمس أعلى الطبلون يحتاج أشعة شمس مباشرة ليختفي الكود. إذا كان المكيف يبرد فلا تدفع أي مبالغ لتغيير هذا الحساس.',
+  },
+  {
+    question: 'ما الفرق بين أكواد P وأكواد B في تكييف السيارة؟',
+    answer:
+      'أكواد P (Powertrain) ترتبط بكمبيوتر المحرك ومسؤولة عن منظومة الضغط وحماية الكمبروسر وحساس الفريون (مثل P0530 و P0532). بينما أكواد B (Body) تخص كمبيوتر التكييف الداخلي (A/C Amplifier) ومسؤولة عن الحساسات الداخلية وسيرفوهات بوابات الهواء وتوزيع الحرارة (مثل B1421 و B1441).',
+  },
+  {
+    question: 'كيف أفحص أكواد مكيف تويوتا ولكزس بدون جهاز فحص كمبيوتر؟',
+    answer:
+      'في معظم موديلات تويوتا ولكزس المزودة بمكيف أوتوماتيكي، يمكنك الدخول في وضع الفحص الذاتي بالضغط باستمرار على زري (AUTO) و (Recirculation) معاً أثناء تشغيل السويتش (دون تشغيل المحرك). ستومض شاشة المكيف وتعرض لك الأكواد المخزنة مباشرة.',
+  },
+  {
+    question: 'لماذا تومض لمبة زر A/C في سيارات تويوتا؟',
+    answer:
+      'وميض لمبة A/C يشير فوراً إلى تفعيل كود الحماية B1422 (Compressor Lock)، حيث اكتشف كمبيوتر السيارة أن بكرة الكمبروسر تقفل أو تنزلق مقارنة بدوران المحرك، فيقوم بفصل الكلتش تلقائياً لمنع احتراق أو قطع سير المحرك.',
+  },
+];
+---
+
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
+  <FreonSchema
+    name={title}
+    description={description}
+    url={`${site}/tools/obd2/`}
+    breadcrumbs={breadcrumbs}
+    faqs={faqs}
+    lang={lang}
+  />
+
+  {/* Hero Section */}
+  <section class="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-10 lg:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Breadcrumbs */}
+      <nav class="mb-6 flex items-center gap-2 text-xs font-medium text-muted-foreground" aria-label="Breadcrumbs">
+        <a href="/" class="hover:text-primary transition-colors">الرئيسية</a>
+        <span>/</span>
+        <a href="/tools/" class="hover:text-primary transition-colors">الأدوات</a>
+        <span>/</span>
+        <span class="text-foreground">أكواد أعطال التكييف OBD-II</span>
+      </nav>
+
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-4 py-1.5 text-xs font-bold text-primary uppercase tracking-wide">
+          مترجم أكواد التكييف الإلكتروني
+        </span>
+        <h1 class="mt-4 text-3xl font-extrabold tracking-tight font-display text-foreground sm:text-5xl">
+          دليل ومترجم أكواد أعطال مكيف السيارة
+        </h1>
+        <p class="mt-4 text-base text-muted-foreground sm:text-lg leading-relaxed">
+          هل قمت بفحص سيارتك بجهاز OBD-II وظهرت لك رموز غامضة؟ يوفر لك مركز <strong class="text-foreground">أوتو سيف</strong> قاعدة بيانات تقنية متكاملة لتفسير أعطال تكييف السيارات (تويوتا، لكزس، نيسان، فورد، جمس)، مع تمييز القراءات الطبيعية في الظل والأعطال الحقيقية.
+        </p>
+      </div>
+
+      {/* Main Interactive OBD Lookup Widget */}
+      <OBDCodeLookupWidget lang={lang} />
+    </div>
+  </section>
+
+  {/* Technical Guide Section */}
+  <section class="py-14 bg-card border-y border-border">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          ما الذي تحتاج معرفته قبل فحص مكيف سيارتك بالكمبيوتر؟
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-muted-foreground">
+          الكثير من السائقين يقعون ضحية لتغيير قطع سليمة وتكاليف غير مبررة بسبب عدم فهم كيفية قراءة كمبيوتر التكييف. إليك أهم الحقائق التقنية:
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Card 1 */}
+        <div class="rounded-2xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-lg mb-4">
+            ☀️
+          </div>
+          <h3 class="text-lg font-bold text-foreground">فخ حساس الشمس (B1421 / B1424)</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            في سيارات تويوتا ولكزس، حساس الشمس (Solar Sensor) يقيس ضوء الشمس المباشر لزيادة سرعة المروحة تلقائياً في النهار. إذا فحصت السيارة داخل جراج أو ورشة مظللة سيعطي الكود كأمر طبيعي جداً وليس عطلاً!
+          </p>
+        </div>
+
+        {/* Card 2 */}
+        <div class="rounded-2xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-lg mb-4">
+            ⚡
+          </div>
+          <h3 class="text-lg font-bold text-foreground">أكواد P مقابل أكواد B</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            أكواد <strong>P-Codes</strong> (مثل P0532 و P0533) تضيء لمبة المكينة وتتعلق بحساس ضغط الفريون وسلامة المحرك. أما أكواد <strong>B-Codes</strong> فتخص الراحة الداخلية وبوابات توزيع الهواء وسيرفوهات الطبلون.
+          </p>
+        </div>
+
+        {/* Card 3 */}
+        <div class="rounded-2xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-lg mb-4">
+            🔧
+          </div>
+          <h3 class="text-lg font-bold text-foreground">طقطقة الطبلون ليست فريون</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            أكواد مثل <strong>B1441</strong> و <strong>B1245</strong> تعني تآكل مسننات سيرفو موتر بوابة الهواء (Blend Door) المسؤولة عن دمج الهواء الحار والبارد، ولا تفيد معها إطلاقاً تعبئة الفريون.
+          </p>
+        </div>
+      </div>
+
+      {/* Toyota Self Diagnostic Hack */}
+      <div class="mt-10 rounded-3xl bg-gradient-to-r from-primary/15 via-background to-background border border-primary/30 p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-primary">
+              طريقة احترافية مجانية
+            </span>
+            <h3 class="mt-2 text-xl sm:text-2xl font-bold text-foreground">
+              كيف تفحص مكيف تويوتا ولكزس ذاتياً بدون جهاز فحص خارجي؟
+            </h3>
+            <ol class="mt-3 text-xs sm:text-sm text-muted-foreground space-y-1.5 list-decimal list-inside">
+              <li>أطفئ محرك السيارة بالكامل وضع السويتش على وضع OFF.</li>
+              <li>اضغط باستمرار على زري <strong>AUTO</strong> وزر <strong>تدوير الهواء (Recirculation)</strong> في لوحة المكيف معاً.</li>
+              <li>أثناء الضغط على الزرين، شغل السويتش إلى وضع ON (تشغيل الكهرباء دون تشغيل المكينة).</li>
+              <li>ستبدأ شاشة المكيف في الوميض ثم تعرض أكواد الأعطال المخزنة على شاشة عرض درجة الحرارة تباعاً.</li>
+            </ol>
+          </div>
+
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%2C%20%D9%82%D9%85%D8%AA%20%D8%A8%D8%A7%D9%84%D9%81%D8%AD%D8%B5%20%D8%A7%D9%84%D8%B0%D8%A7%D8%AA%D9%8A%20%D9%84%D9%85%D9%83%D9%8A%D9%81%20%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A%20%D9%88%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D9%85%D8%B3%D8%A7%D8%B9%D8%AF%D8%A9%20%D9%81%D9%86%D9%8A%20%D8%A3%D9%88%D8%AA%D9%88%20%D8%B3%D9%8A%D9%81.`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="shrink-0 inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md hover:bg-emerald-700 transition-colors"
+          >
+            تواصل مع فني تكييف أوتو سيف
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ Section */}
+  <section class="py-14 bg-background">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          الأسئلة الشائعة حول أكواد كمبيوتر مكيف السيارة
+        </h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          إجابات مهندسي التكييف في مركز أوتو سيف بالرياض على أكثر الاستفسارات تكراراً
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <details class="group rounded-2xl border border-border bg-card p-5 transition-all open:border-primary/40 open:shadow-sm">
+            <summary class="flex cursor-pointer items-center justify-between font-bold text-foreground text-sm sm:text-base">
+              <span>{faq.question}</span>
+              <span class="text-primary transition group-open:rotate-180">
+                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed pt-2 border-t border-border">
+              {faq.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

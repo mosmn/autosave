@@ -192,9 +192,14 @@ function normalizeTitle(title: string, lang: Language): string {
     normalized = trimToWordBoundary(normalized, TITLE_MAX_LENGTH);
   }
 
+  normalized = normalized.replace(/[\s|:;,-]+$/, '').trim();
+  normalized = stripDanglingConnector(normalized, lang);
+  normalized = normalized.replace(/[\s|:;,-]+$/, '').trim();
+
   if (normalized.length < 30 && !normalized.includes('|')) {
     const suffix = lang === 'ar' ? ' | خدمة مكيف السيارة' : ' | Car AC Service';
     normalized = trimToWordBoundary(`${normalized}${suffix}`, TITLE_MAX_LENGTH);
+    normalized = normalized.replace(/[\s|:;,-]+$/, '').trim();
   }
 
   return normalized;

@@ -1,0 +1,174 @@
+---
+import PageLayout from '../../../../layouts/PageLayout.astro';
+import FuelAcCalculatorWidget from '../../../../components/tools/FuelAcCalculatorWidget.astro';
+import FreonSchema from '../../../../components/tools/FreonSchema.astro';
+import { SAUDI_FUEL_PRICES } from '../../../../data/fuel-ac-calculator';
+import { WHATSAPP_NUMBER } from '../../../../lib/whatsapp';
+
+const lang = 'en' as const;
+const site = Astro.site?.origin ?? 'https://autosaveks.com';
+
+const title = 'Car AC Fuel Consumption & Cost Calculator in Saudi Arabia | Auto Save';
+const description =
+  'Calculate how much fuel your car AC uses per month in Saudi Riyals based on official Saudi Aramco petrol prices (91 & 95). Settle the myth: does opening windows on the highway save fuel over AC?';
+const keywords = [
+  'car ac fuel consumption calculator',
+  'how much fuel does car ac use',
+  'ac vs open windows fuel economy',
+  'saudi petrol prices ac cost',
+  'car ac heavy engine drag',
+  'save petrol in saudi summer',
+  'car repair riyadh',
+];
+
+const breadcrumbs = [
+  { name: 'Home', url: `${site}/en/` },
+  { name: 'Tools', url: `${site}/en/tools/` },
+  { name: 'Car AC Fuel Cost Calculator', url: `${site}/en/tools/fuel-cost-calculator/` },
+];
+
+const faqs = [
+  {
+    question: 'How much extra fuel does car AC burn in Saudi Arabia?',
+    answer:
+      'In stop-and-go city traffic, car AC increases fuel consumption by 10% to 20% (approx 35 to 95 SAR per month depending on engine cylinder count and petrol grade 91 vs 95). On open highways, the extra fuel burn drops to only 4% to 5%.',
+  },
+  {
+    question: 'Does opening windows at 120 km/h save more fuel than running the AC?',
+    answer:
+      'Scientifically and experimentally: No! Driving with windows open above 85 km/h disrupts vehicle aerodynamics and spikes aerodynamic drag by 12% to 15%, consuming more fuel than running the AC compressor with closed windows.',
+  },
+  {
+    question: 'Why does my car feel noticeably sluggish when the AC is on?',
+    answer:
+      'If your car experiences heavy engine bogging, excessive head pressure is likely overloading the compressor. Common causes include a dirt-encrusted condenser face, failing radiator cooling fans, or a sticky electronic control valve.',
+  },
+  {
+    question: 'What is the most effective way to cut AC fuel burn in Riyadh summer?',
+    answer:
+      'Always switch on Cabin Recirculation mode. Cooling pre-chilled cabin air reduces compressor workload by up to 30% compared to conditioning 48°C outdoor ambient air.',
+  },
+];
+---
+
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
+  <FreonSchema
+    name={title}
+    description={description}
+    url={`${site}/en/tools/fuel-cost-calculator/`}
+    breadcrumbs={breadcrumbs}
+    faqs={faqs}
+    lang={lang}
+  />
+
+  {/* Hero Section */}
+  <section class="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-10 lg:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Breadcrumbs */}
+      <nav class="mb-6 flex items-center gap-2 text-xs font-medium text-muted-foreground" aria-label="Breadcrumbs">
+        <a href="/en/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/en/tools/" class="hover:text-primary transition-colors">Tools</a>
+        <span>/</span>
+        <span class="text-foreground">Car AC Fuel Cost Calculator</span>
+      </nav>
+
+      {/* Hero Heading */}
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-4 py-1.5 text-xs font-bold text-primary uppercase tracking-wide">
+          Energy Efficiency & Fuel Cost Estimator
+        </span>
+        <h1 class="mt-4 text-3xl font-extrabold tracking-tight font-display text-foreground sm:text-5xl">
+          Car AC Fuel Consumption & Cost Calculator
+        </h1>
+        <p class="mt-4 text-base text-muted-foreground sm:text-lg leading-relaxed">
+          Calculate the extra fuel cost of running your car AC in extreme Saudi heat based on official Saudi Aramco petrol tariffs, and settle the highway open windows debate.
+        </p>
+      </div>
+
+      {/* Calculator Widget */}
+      <FuelAcCalculatorWidget lang={lang} />
+    </div>
+  </section>
+
+  {/* Deep Dive Scientific Section */}
+  <section class="py-14 bg-card border-y border-border">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          The Engineering Physics: How AC Strains Engine Fuel Economy
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+          Understanding compressor thermodynamics helps you optimize driving habits, save thousands of riyals annually, and extend compressor longevity.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-8 md:grid-cols-3">
+        {/* Pillar 1 */}
+        <div class="rounded-3xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xl mb-4">
+            ⚙️
+          </div>
+          <h3 class="text-lg font-bold text-foreground">Parasitic Mechanical Drag</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            The AC compressor is a high-displacement mechanical pump driven directly by the serpentine belt. It pulls <strong>4 to 7 horsepower (3 to 5 kW)</strong> from the engine crank, prompting the ECU to inject additional fuel to maintain stable idle RPM.
+          </p>
+        </div>
+
+        {/* Pillar 2 */}
+        <div class="rounded-3xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-xl mb-4">
+            🔥
+          </div>
+          <h3 class="text-lg font-bold text-foreground">Riyadh Heat Wave Load (45°C - 50°C)</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            In mild weather, the compressor cycles off periodically. In Riyadh summer heat, the compressor runs at <strong>100% continuous duty cycle</strong>. High condenser head pressures exceeding 250-300 PSI double mechanical resistance, maximizing fuel burn in idling traffic.
+          </p>
+        </div>
+
+        {/* Pillar 3 */}
+        <div class="rounded-3xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-xl mb-4">
+            🌪️
+          </div>
+          <h3 class="text-lg font-bold text-foreground">Aerodynamic Drag Equation</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            Society of Automotive Engineers (SAE) wind tunnel research shows aerodynamic drag quadruples as speed doubles. Rolling windows down at 120 km/h turns the cabin into an air parachute, inflicting a <strong>12% to 15% drag penalty</strong> compared to just <strong>4.5%</strong> for AC.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ Section */}
+  <section class="py-14 bg-background">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          Frequently Asked Questions on Car AC Fuel Consumption
+        </h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          Scientific facts and advice from Auto Save automotive cooling engineers in Riyadh
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <details class="group rounded-2xl border border-border bg-card p-5 transition-all open:border-primary/40 open:shadow-sm">
+            <summary class="flex cursor-pointer items-center justify-between font-bold text-foreground text-sm sm:text-base">
+              <span>{faq.question}</span>
+              <span class="text-primary transition group-open:rotate-180">
+                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed pt-2 border-t border-border">
+              {faq.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

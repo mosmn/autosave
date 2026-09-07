@@ -2,6 +2,7 @@ export const arContent = {
   header: {
     nav: [
       { name: "الرئيسية", href: "/" },
+      { name: "حاسبة الفريون والأدوات", href: "/tools/freon-capacity" },
       { name: "عن اوتو سيف", href: "/about" },
       { name: "أسعار خدمات المكيف", href: "/pricing" },
       { name: "مدونة وأدلة المكيف", href: "/blog" },
@@ -55,14 +56,17 @@ export const arContent = {
         ],
       },
       resources: {
-        title: "المعرفة",
+        title: "المعرفة والأدوات",
         links: [
+          { name: "حاسبة وجدول فريون السيارات", href: "/tools/freon-capacity" },
+          { name: "التشخيص الذكي لأعطال المكيف", href: "/tools/ac-diagnostic" },
+          { name: "حاسبة تكلفة الإصلاح والتقسيط", href: "/tools/repair-cost-calculator" },
+          { name: "أكواد أعطال التكييف OBD-II", href: "/tools/obd2" },
+          { name: "حاسبة استهلاك المكيف للبنزين", href: "/tools/fuel-cost-calculator" },
+          { name: "مركز أدوات السيارات المجانية", href: "/tools" },
           { name: "المكيف لا يبرد؟", href: "/blog/car-ac-not-cooling-causes-fixes" },
           { name: "أصوات غريبة من المكيف", href: "/blog/car-ac-making-strange-noises-what-they-mean" },
           { name: "كشف تسريب فريون", href: "/services/leak-detection" },
-          { name: "خدمات الرياض", href: "/services/riyadh" },
-          { name: "دليل الصيف", href: "/blog/prepare-car-ac-for-summer-heat" },
-          { name: "بنفسك أم فني؟", href: "/blog/diy-vs-professional-car-ac-repair" },
           { name: "كل المقالات", href: "/blog" },
         ],
       },

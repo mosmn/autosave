@@ -1,0 +1,174 @@
+---
+import PageLayout from '../../../../layouts/PageLayout.astro';
+import OBDCodeLookupWidget from '../../../../components/tools/OBDCodeLookupWidget.astro';
+import FreonSchema from '../../../../components/tools/FreonSchema.astro';
+import { getAllOBDCodes } from '../../../../data/obd-codes';
+import { WHATSAPP_NUMBER } from '../../../../lib/whatsapp';
+
+const lang = 'en' as const;
+const site = Astro.site?.origin ?? 'https://autosaveks.com';
+const allCodes = getAllOBDCodes();
+
+const title = 'Car AC & Climate Control OBD-II Fault Code Lookup | Auto Save Riyadh';
+const description =
+  'Decode automotive climate control fault codes (B-Codes and P-Codes): Toyota B1421 solar sensor, P0532 freon pressure sensor, B1441 blend door motor, and learn how to identify false alarm codes in shade before paying for repairs.';
+const keywords = [
+  'car ac trouble codes',
+  'toyota b1421 code',
+  'lexus b1422 compressor lock',
+  'p0532 ac pressure sensor code',
+  'b1441 air mix door motor',
+  'car climate diagnostic riyadh',
+  'obd2 hvac codes',
+];
+
+const breadcrumbs = [
+  { name: 'Home', url: `${site}/en/` },
+  { name: 'Tools', url: `${site}/en/tools/` },
+  { name: 'OBD-II Climate Code Lookup', url: `${site}/en/tools/obd2/` },
+];
+
+const faqs = [
+  {
+    question: 'Does Toyota / Lexus trouble code B1421 mean my AC is broken?',
+    answer:
+      'Not at all! In 95% of cases, code B1421 simply indicates the vehicle was scanned indoors inside a workshop, under a shaded canopy, or at night. The passenger dashboard solar sensor requires direct sunlight to register and clear. If your AC blows cold air, never pay to replace this sensor!',
+  },
+  {
+    question: 'What is the difference between P-Codes and B-Codes in automotive AC systems?',
+    answer:
+      'P-Codes (Powertrain) are managed by the engine control unit (PCM/ECM) and oversee critical safety items like refrigerant pressure transducers and compressor clutch cutoff (e.g., P0530, P0532). B-Codes (Body) are handled by the climate control amplifier and govern interior comfort, air mix actuators, and cabin solar sensors (e.g., B1421, B1441).',
+  },
+  {
+    question: 'How do you trigger Toyota & Lexus self-diagnosis without an OBD scanner?',
+    answer:
+      'Turn the ignition switch OFF. Hold down both the AUTO and RECIRCULATION buttons simultaneously on the climate control panel, then turn the ignition ON (engine off). The panel lights will blink and automatically flash two-digit DTC fault codes on the digital temperature display.',
+  },
+  {
+    question: 'Why is the A/C button light flashing in Toyota vehicles?',
+    answer:
+      'A flashing A/C light is an urgent alert indicating trouble code B1422 (Compressor Revolution / Lock Sensor). The ECU detected a speed difference between the engine crank pulley and compressor hub and automatically disengaged the compressor clutch to prevent belt snap.',
+  },
+];
+---
+
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
+  <FreonSchema
+    name={title}
+    description={description}
+    url={`${site}/en/tools/obd2/`}
+    breadcrumbs={breadcrumbs}
+    faqs={faqs}
+    lang={lang}
+  />
+
+  {/* Hero Section */}
+  <section class="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-10 lg:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Breadcrumbs */}
+      <nav class="mb-6 flex items-center gap-2 text-xs font-medium text-muted-foreground" aria-label="Breadcrumbs">
+        <a href="/en/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/en/tools/" class="hover:text-primary transition-colors">Tools</a>
+        <span>/</span>
+        <span class="text-foreground">OBD-II Climate Code Lookup</span>
+      </nav>
+
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-4 py-1.5 text-xs font-bold text-primary uppercase tracking-wide">
+          Automotive HVAC Code Diagnostic Tool
+        </span>
+        <h1 class="mt-4 text-3xl font-extrabold tracking-tight font-display text-foreground sm:text-5xl">
+          Car AC & Climate Control OBD-II Fault Code Lookup
+        </h1>
+        <p class="mt-4 text-base text-muted-foreground sm:text-lg leading-relaxed">
+          Did your OBD-II scanner throw cryptic climate control codes? <strong class="text-foreground">Auto Save</strong> provides a comprehensive technical database for diagnosing AC faults across Toyota, Lexus, Nissan, Ford, and GM vehicles, helping you differentiate harmless shadow readings from real mechanical failures.
+        </p>
+      </div>
+
+      {/* Main Interactive OBD Lookup Widget */}
+      <OBDCodeLookupWidget lang={lang} />
+    </div>
+  </section>
+
+  {/* Technical Guide Section */}
+  <section class="py-14 bg-card border-y border-border">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          Key Facts Before Scanning Your Car AC System
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-muted-foreground">
+          Many drivers waste hundreds of riyals replacing healthy sensors because generic repair shops misinterpret shadow readings. Keep these rules in mind:
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Card 1 */}
+        <div class="rounded-2xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-lg mb-4">
+            ☀️
+          </div>
+          <h3 class="text-lg font-bold text-foreground">The Solar Sensor Trap (B1421 / B1424)</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            In Toyota and Lexus models, the solar sensor requires direct high-lux daylight to register. Scanning inside an indoor workshop or shaded bay always triggers B1421 as an active code, which is 100% normal.
+          </p>
+        </div>
+
+        {/* Card 2 */}
+        <div class="rounded-2xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-lg mb-4">
+            ⚡
+          </div>
+          <h3 class="text-lg font-bold text-foreground">P-Codes vs. B-Codes</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <strong>P-Codes</strong> illuminate the Check Engine light and protect the compressor from dry seizure. <strong>B-Codes</strong> originate from the climate amplifier and govern blend actuators, temperature doors, and cabin sensors.
+          </p>
+        </div>
+
+        {/* Card 3 */}
+        <div class="rounded-2xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-lg mb-4">
+            🔧
+          </div>
+          <h3 class="text-lg font-bold text-foreground">Dashboard Clicking Is Not Freon</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            Trouble codes like <strong>B1441</strong> or <strong>B1245</strong> indicate stripped plastic gears inside the blend door actuator. Topping off refrigerant will never solve temperature split problems.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ Section */}
+  <section class="py-14 bg-background">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          Frequently Asked Questions About Car AC Trouble Codes
+        </h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          Expert insights from Auto Save automotive air conditioning specialists in Riyadh
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <details class="group rounded-2xl border border-border bg-card p-5 transition-all open:border-primary/40 open:shadow-sm">
+            <summary class="flex cursor-pointer items-center justify-between font-bold text-foreground text-sm sm:text-base">
+              <span>{faq.question}</span>
+              <span class="text-primary transition group-open:rotate-180">
+                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed pt-2 border-t border-border">
+              {faq.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

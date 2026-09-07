@@ -1,0 +1,355 @@
+---
+import { getAllOBDCodes } from '../../data/obd-codes';
+
+interface Props {
+  lang?: 'ar' | 'en';
+}
+
+const { lang = 'ar' } = Astro.props;
+const isAr = lang === 'ar';
+const allCodes = getAllOBDCodes();
+const prefix = isAr ? '' : '/en';
+---
+
+<div class="w-full max-w-5xl mx-auto" id="obd-lookup-widget">
+  {/* Search & Filter Header Bar */}
+  <div class="rounded-3xl border border-border/80 bg-card p-6 sm:p-8 shadow-xl">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+        {isAr ? 'قاعدة بيانات أكواد مكيف السيارة OBD-II' : 'OBD-II Car AC Diagnostic Database'}
+      </span>
+      <h2 class="mt-3 text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+        {isAr ? 'ابحث عن رمز عطل المكيف (B-Codes & P-Codes)' : 'Search HVAC Trouble Codes (B-Codes & P-Codes)'}
+      </h2>
+      <p class="mt-2 text-sm text-muted-foreground">
+        {isAr
+          ? 'اكتب كود العطل الظاهر بجهاز الفحص (مثل B1421 أو P0532) أو اختر من التصنيفات السريعة أدناه لتفسير العطل بدقة وتجنب تكاليف الصيانة الوهمية.'
+          : 'Enter your OBD-II scan code (e.g., B1421 or P0532) or select a category below to decode symptoms and verify false alarms.'}
+      </p>
+    </div>
+
+    {/* Search Input Box */}
+    <div class="mt-6 relative max-w-xl mx-auto">
+      <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none text-muted-foreground">
+        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <input
+        type="text"
+        id="obd-search-input"
+        placeholder={isAr ? 'ابحث برمز الكود (مثال: B1421, P0532, B1441) أو نوع السيارة...' : 'Search code (e.g., B1421, P0532, Toyota, Ford)...'}
+        class="w-full ps-11 pe-10 py-3.5 rounded-2xl border border-input bg-background/80 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-base font-mono"
+        autocomplete="off"
+      />
+      <button
+        type="button"
+        id="obd-search-clear"
+        class="hidden absolute inset-y-0 end-0 pe-3 flex items-center text-muted-foreground hover:text-foreground"
+        aria-label="Clear search"
+      >
+        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    {/* Filter Pills */}
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-2">
+      <button
+        type="button"
+        data-filter="all"
+        class="obd-filter-btn active rounded-full px-3.5 py-1.5 text-xs font-semibold border border-primary bg-primary text-primary-foreground transition-all"
+      >
+        {isAr ? 'جميع الأكواد' : 'All Codes'}
+      </button>
+      <button
+        type="button"
+        data-filter="false-alarm"
+        class="obd-filter-btn rounded-full px-3.5 py-1.5 text-xs font-semibold border border-border bg-card text-muted-foreground hover:text-foreground transition-all flex items-center gap-1"
+      >
+        <span class="size-2 rounded-full bg-amber-500 inline-block"></span>
+        {isAr ? 'أكواد وهمية بالظل (B1421)' : 'False Alarms in Shade'}
+      </button>
+      <button
+        type="button"
+        data-filter="pressure"
+        class="obd-filter-btn rounded-full px-3.5 py-1.5 text-xs font-semibold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"
+      >
+        {isAr ? 'حساسات ضغط الفريون (P0530-P0534)' : 'Freon Pressure Sensors'}
+      </button>
+      <button
+        type="button"
+        data-filter="motor"
+        class="obd-filter-btn rounded-full px-3.5 py-1.5 text-xs font-semibold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"
+      >
+        {isAr ? 'بوابات الهواء والطقطقة (B1441/B1442)' : 'Blend & Recirculation Actuators'}
+      </button>
+      <button
+        type="button"
+        data-filter="compressor"
+        class="obd-filter-btn rounded-full px-3.5 py-1.5 text-xs font-semibold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"
+      >
+        {isAr ? 'الكمبروسر والكلتش (B1422/P0645)' : 'Compressor & Relays'}
+      </button>
+    </div>
+  </div>
+
+  {/* Results Count Banner */}
+  <div class="mt-6 flex items-center justify-between px-2 text-xs text-muted-foreground">
+    <div id="results-count-text">
+      {isAr ? `عرض ${allCodes.length} رمز عطل لتكييف السيارة` : `Showing ${allCodes.length} climate control codes`}
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="size-2 rounded-full bg-emerald-500"></span>
+      <span>{isAr ? 'محدثة لصيف السعودية 2026' : 'Updated for Saudi Summer 2026'}</span>
+    </div>
+  </div>
+
+  {/* Codes Cards Grid */}
+  <div class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" id="obd-cards-container">
+    {allCodes.map((item) => {
+      const codeHref = `${prefix}/tools/obd2/${item.code.toLowerCase()}/`;
+      const waMsg = encodeURIComponent(
+        isAr
+          ? `السلام عليكم ورحمه الله وبركاته، قمت بفحص سيارتي وظهر لي كود العطل [${item.code}] (${item.titleAr}). أود حجز موعد لفحص وتصليح مكيف السيارة في فرعكم بالرياض.`
+          : `Hello, my car scanned trouble code [${item.code}] (${item.titleEn}). I would like to book an AC inspection and repair appointment at your Riyadh branch.`
+      );
+      const waUrl = `https://wa.me/966537133080?text=${waMsg}`;
+
+      const severityColor =
+        item.severity === 'critical'
+          ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/30'
+          : item.severity === 'high'
+          ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30'
+          : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30';
+
+      const severityText =
+        item.severity === 'critical'
+          ? isAr ? 'خطر حرج' : 'Critical Risk'
+          : item.severity === 'high'
+          ? isAr ? 'عطل مؤثر' : 'High Impact'
+          : isAr ? 'تأثير بسيط' : 'Low Severity';
+
+      return (
+        <div
+          class="obd-code-card rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm hover:border-primary/40 hover:shadow-md transition-all flex flex-col justify-between"
+          data-code={item.code.toLowerCase()}
+          data-brands={item.commonBrands.join(' ').toLowerCase()}
+          data-category={item.category}
+          data-false-alarm={item.isFalseAlarmInShade ? 'true' : 'false'}
+          data-text={`${item.code} ${item.titleAr} ${item.titleEn} ${item.descriptionAr} ${item.descriptionEn}`.toLowerCase()}
+        >
+          <div>
+            {/* Top Bar: Code + Severity */}
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-mono text-xl sm:text-2xl font-black text-primary tracking-wider">
+                {item.code}
+              </span>
+              <div class="flex items-center gap-1.5">
+                {item.isFalseAlarmInShade && (
+                  <span class="inline-flex items-center rounded-md bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    {isAr ? 'طبيعي بالظل ⚠️' : 'Normal in Shade ⚠️'}
+                  </span>
+                )}
+                <span class={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold border ${severityColor}`}>
+                  {severityText}
+                </span>
+              </div>
+            </div>
+
+            {/* Brands Tags */}
+            <div class="mt-2.5 flex flex-wrap gap-1">
+              {item.commonBrands.map((b) => (
+                <span class="text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded">
+                  {b}
+                </span>
+              ))}
+            </div>
+
+            {/* Title & Description */}
+            <h3 class="mt-3 text-base font-bold text-foreground line-clamp-2">
+              <a href={codeHref} class="hover:text-primary transition-colors">
+                {isAr ? item.titleAr : item.titleEn}
+              </a>
+            </h3>
+
+            <p class="mt-2 text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+              {isAr ? item.descriptionAr : item.descriptionEn}
+            </p>
+
+            {/* False Alarm Alert callout if present */}
+            {item.isFalseAlarmInShade && (
+              <div class="mt-3 rounded-xl bg-amber-500/10 border border-amber-500/20 p-2.5 text-[11px] text-amber-900 dark:text-amber-200">
+                <strong>{isAr ? 'لا تستعجل بالتغيير:' : 'False Alarm Warning:'}</strong>{' '}
+                {isAr
+                  ? 'يظهر الكود طبيعياً عند الفحص داخل الورشة المظللة أو ليلاً.'
+                  : 'Reads as an active fault when scanned indoors or at night.'}
+              </div>
+            )}
+
+            {/* Cost Estimate */}
+            <div class="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
+              <span class="text-muted-foreground">{isAr ? 'التكلفة التقديرية:' : 'Est. Repair Cost:'}</span>
+              <span class="font-bold text-foreground">
+                {item.estimatedRepairCostSAR.min === 0
+                  ? isAr ? '0 ريال (طبيعي) - ' + item.estimatedRepairCostSAR.max + ' ريال' : '0 - ' + item.estimatedRepairCostSAR.max + ' SAR'
+                  : `${item.estimatedRepairCostSAR.min} - ${item.estimatedRepairCostSAR.max} ${isAr ? 'ريال' : 'SAR'}`}
+              </span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div class="mt-5 grid grid-cols-2 gap-2 pt-2">
+            <a
+              href={codeHref}
+              class="inline-flex items-center justify-center rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground hover:bg-muted hover:text-primary transition-colors text-center"
+            >
+              {isAr ? 'شرح الكود كاملاً' : 'Full Details'}
+            </a>
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-600 text-white px-3 py-2 text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm"
+            >
+              <svg class="size-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z" />
+              </svg>
+              {isAr ? 'حجز فحص' : 'Book Test'}
+            </a>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  {/* Empty State when search returns 0 */}
+  <div id="obd-empty-state" class="hidden text-center py-16 px-4">
+    <div class="mx-auto size-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground mb-4">
+      <svg class="size-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <h4 class="text-lg font-bold text-foreground">
+      {isAr ? 'لم نعثر على كود مطابق لبحثك' : 'No matching fault code found'}
+    </h4>
+    <p class="mt-1 text-sm text-muted-foreground max-w-md mx-auto">
+      {isAr
+        ? 'هل ظهر لك كود مختلف؟ يمكنك إرسال صورة شاشة الفحص لفني أوتو سيف مباشرة عبر واتساب لتفسيره مجاناً.'
+        : 'Did you get a different code? Send a screenshot of your scanner to Auto Save technicians on WhatsApp for a free interpretation.'}
+    </p>
+    <a
+      href="https://wa.me/966537133080?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D9%81%D8%AD%D8%B5%D8%AA%20%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A%20%D9%88%D8%B8%D9%87%D8%B1%20%D9%84%D9%8A%20%D9%83%D9%88%D8%AF%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%20%D8%A8%D8%A7%D9%84%D9%82%D8%A7%D8%A6%D9%85%D8%A9"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-colors"
+    >
+      {isAr ? 'استفسر من فني أوتو سيف عبر واتساب' : 'Ask an Auto Save Mechanic via WhatsApp'}
+    </a>
+  </div>
+</div>
+
+<script>
+  function initOBDLookup() {
+    const input = document.getElementById('obd-search-input') as HTMLInputElement | null;
+    const clearBtn = document.getElementById('obd-search-clear');
+    const filterBtns = document.querySelectorAll<HTMLButtonElement>('.obd-filter-btn');
+    const cards = document.querySelectorAll<HTMLElement>('.obd-code-card');
+    const emptyState = document.getElementById('obd-empty-state');
+    const countText = document.getElementById('results-count-text');
+
+    if (!input || !cards.length) return;
+
+    let activeFilter = 'all';
+
+    function filterCards() {
+      const query = input?.value.trim().toLowerCase() || '';
+      let visibleCount = 0;
+
+      if (clearBtn) {
+        if (query.length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+
+      cards.forEach((card) => {
+        const text = card.dataset.text || '';
+        const category = card.dataset.category || '';
+        const falseAlarm = card.dataset.falseAlarm === 'true';
+
+        let matchesSearch = true;
+        if (query.length > 0) {
+          matchesSearch = text.includes(query);
+        }
+
+        let matchesFilter = true;
+        if (activeFilter === 'false-alarm') {
+          matchesFilter = falseAlarm;
+        } else if (activeFilter === 'pressure') {
+          matchesFilter = category === 'pressure';
+        } else if (activeFilter === 'motor') {
+          matchesFilter = category === 'motor';
+        } else if (activeFilter === 'compressor') {
+          matchesFilter = category === 'compressor' || category === 'relay';
+        }
+
+        if (matchesSearch && matchesFilter) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (emptyState) {
+        if (visibleCount === 0) {
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+        }
+      }
+
+      if (countText) {
+        const isArabic = document.documentElement.lang !== 'en';
+        countText.textContent = isArabic
+          ? `عرض ${visibleCount} رمز عطل مطابقة`
+          : `Showing ${visibleCount} matching trouble codes`;
+      }
+    }
+
+    input.addEventListener('input', filterCards);
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        input.focus();
+        filterCards();
+      });
+    }
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach((b) => {
+          b.classList.remove('active', 'border-primary', 'bg-primary', 'text-primary-foreground');
+          b.classList.add('border-border', 'bg-card', 'text-muted-foreground');
+        });
+
+        btn.classList.add('active', 'border-primary', 'bg-primary', 'text-primary-foreground');
+        btn.classList.remove('border-border', 'bg-card', 'text-muted-foreground');
+
+        activeFilter = btn.dataset.filter || 'all';
+        filterCards();
+      });
+    });
+  }
+
+  // Initialize on load & page navigation
+  initOBDLookup();
+  document.addEventListener('astro:page-load', initOBDLookup);
+</script>

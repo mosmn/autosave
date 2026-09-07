@@ -1,0 +1,201 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import FuelAcCalculatorWidget from '../../../components/tools/FuelAcCalculatorWidget.astro';
+import FreonSchema from '../../../components/tools/FreonSchema.astro';
+import { SAUDI_FUEL_PRICES } from '../../../data/fuel-ac-calculator';
+import { WHATSAPP_NUMBER } from '../../../lib/whatsapp';
+
+const lang = 'ar' as const;
+const site = Astro.site?.origin ?? 'https://autosaveks.com';
+
+const title = 'حاسبة استهلاك مكيف السيارة للبنزين والتكلفة بالريال | اوتو سيف الرياض';
+const description =
+  'احسب كم يستهلك مكيف سيارتك بنزين شهرياً بالريال السعودي وفق أسعار أرامكو (91 و 95). تعرف على التكلفة في زحمة الرياض، وحسم الجدل: هل فتح النوافذ بالخط يوفر بنزين أكثر من المكيف؟';
+const keywords = [
+  'كم يستهلك مكيف السيارة بنزين',
+  'صرفية المكيف للبنزين',
+  'المكيف يثقل عزم السيارة ويزيد الصرفية',
+  'هل فتح النوافذ يوفر بنزين',
+  'حاسبة استهلاك وقود مكيف السيارة',
+  'اسعار البنزين السعودية 2026',
+  'توفير بنزين السيارة في الصيف',
+  'ورشة تكييف سيارات الرياض',
+];
+
+const breadcrumbs = [
+  { name: 'الرئيسية', url: `${site}/` },
+  { name: 'الأدوات', url: `${site}/tools/` },
+  { name: 'حاسبة استهلاك مكيف السيارة للبنزين', url: `${site}/tools/fuel-cost-calculator/` },
+];
+
+const faqs = [
+  {
+    question: 'كم يستهلك مكيف السيارة بنزين إضافي في المتوسط بالسعودية؟',
+    answer:
+      'يستهلك المكيف في المتوسط ما بين 8% إلى 20% وقود إضافي في القيادة داخل المدينة والزحمة (ما يعادل 35 إلى 95 ريال شهرياً حسب حجم المحرك ونوع البنزين 91 أو 95). بينما في الخطوط السريعة ينخفض الاستهلاك الإضافي إلى 4% إلى 5% فقط.',
+  },
+  {
+    question: 'هل فتح النوافذ على سرعة 120 كم/ساعة يوفر بنزين مقارنة بالمكيف؟',
+    answer:
+      'علمياً وتجريبياً: لا! فتح النوافذ على سرعات أعلى من 85 كم/ساعة يكسر انسيابية السيارة الهوائية (Aerodynamics) ويزيد مقاومة السحب بنسبة 12% إلى 15%، وهو ما يستهلك وقوداً أكثر مما يستهلكه تشغيل المكيف.',
+  },
+  {
+    question: 'لماذا يثقل عزم السيارة وتزيد صرفية البنزين بشكل مبالغ فيه مع المكيف؟',
+    answer:
+      'إذا شعرت أن السيارة أصبحت ثقيلة جداً عند تشغيل المكيف، فالسبب غالباً هو ارتفاع ضغط الفريون في خط الضغط العالي بسبب اتساخ رديتر المكيف الخارجي، أو تعطل مروحة التبريد، أو تلف بلف الكمبروسر، مما يجبر المحرك على بذل جهد مضاعف لتدوير الكمبروسر.',
+  },
+  {
+    question: 'كيف أوفر استهلاك بنزين مكيف السيارة في صيف الرياض الحار؟',
+    answer:
+      'أهم 3 خطوات: 1) تشغيل وضع تدوير الهواء الداخلي (Recirculation) لتخفيف جهد الكمبروسر بنسبة 30%، 2) تنظيف رديتر المكيف بالماء المضغوط لإزالة رمال الصيف وتخفيض الضغط، 3) ركن السيارة في الظل واستخدام شماسة الزجاج لتقليل حرارة المقصورة الأولية.',
+  },
+];
+---
+
+<PageLayout title={title} description={description} lang={lang} keywords={keywords}>
+  <FreonSchema
+    name={title}
+    description={description}
+    url={`${site}/tools/fuel-cost-calculator/`}
+    breadcrumbs={breadcrumbs}
+    faqs={faqs}
+    lang={lang}
+  />
+
+  {/* Hero Section */}
+  <section class="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-10 lg:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Breadcrumbs */}
+      <nav class="mb-6 flex items-center gap-2 text-xs font-medium text-muted-foreground" aria-label="Breadcrumbs">
+        <a href="/" class="hover:text-primary transition-colors">الرئيسية</a>
+        <span>/</span>
+        <a href="/tools/" class="hover:text-primary transition-colors">الأدوات</a>
+        <span>/</span>
+        <span class="text-foreground">حاسبة استهلاك مكيف السيارة للوقود</span>
+      </nav>
+
+      {/* Hero Heading */}
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-4 py-1.5 text-xs font-bold text-primary uppercase tracking-wide">
+          حاسبة كفاءة الطاقة وتكلفة التكييف
+        </span>
+        <h1 class="mt-4 text-3xl font-extrabold tracking-tight font-display text-foreground sm:text-5xl">
+          حاسبة استهلاك مكيف السيارة للبنزين والتكلفة بالريال
+        </h1>
+        <p class="mt-4 text-base text-muted-foreground sm:text-lg leading-relaxed">
+          احسب التكلفة الإضافية لتشغيل مكيف سيارتك في حرارة الصيف وفق أسعار أرامكو الرسمية، واكتشف هل فتح النوافذ بالخط السريع يوفر بنزيناً مقارنة بالمكيف.
+        </p>
+      </div>
+
+      {/* Calculator Widget */}
+      <FuelAcCalculatorWidget lang={lang} />
+    </div>
+  </section>
+
+  {/* Deep Dive Scientific Section */}
+  <section class="py-14 bg-card border-y border-border">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          الفيزياء والميكانيكا: كيف يؤثر مكيف السيارة على استهلاك الوقود؟
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+          فهم كيفية عمل كمبروسر المكيف يساعدك على توفير آلاف الريالات سنوياً في فاتورة بنزين سيارتك وإطالة عمر منظومة التكييف.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-8 md:grid-cols-3">
+        {/* Pillar 1 */}
+        <div class="rounded-3xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xl mb-4">
+            ⚙️
+          </div>
+          <h3 class="text-lg font-bold text-foreground">الحمل الطفيلي للكمبروسر (Parasitic Drag)</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            كمبروسر المكيف ليس جهازاً كهربائياً بسيطاً، بل هو مضخة ميكانيكية ضخمة متصلة مباشرة بسير عمود الكرنك للمحرك. عند تشغيله، يسحب الكمبروسر ما بين <strong>4 إلى 7 أحصنة ميكانيكية</strong> (3 إلى 5 كيلوواط) من عزم المحرك، مما يجبر كمبيوتر المحرك على زيادة حقن البنزين لتعويض الحمل والحفاظ على استقرار دوران المحرك.
+          </p>
+        </div>
+
+        {/* Pillar 2 */}
+        <div class="rounded-3xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-xl mb-4">
+            🔥
+          </div>
+          <h3 class="text-lg font-bold text-foreground">تأثير حرارة الرياض (45°C - 50°C)</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            في درجات الحرارة المعتدلة، يفصل الكمبروسر دورياً عند الوصول للبرودة المطلوبة. لكن في صيف الرياض الحارق، يعمل الكمبروسر بنسبة <strong>100% مستمرة (Duty Cycle)</strong>، ويرتفع ضغط الغاز داخل رديتر المكيف إلى أكثر من 250-300 PSI، مما يضاعف المقاومة الميكانيكية ويزيد حرق الوقود عند التوقف في الإشارات والزحمة.
+          </p>
+        </div>
+
+        {/* Pillar 3 */}
+        <div class="rounded-3xl border border-border bg-background p-6 shadow-sm">
+          <div class="size-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-xl mb-4">
+            🌪️
+          </div>
+          <h3 class="text-lg font-bold text-foreground">معادلة السرعة والديناميكا الهوائية</h3>
+          <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            أثبتت جمعية مهندسي السيارات الأمريكية (SAE) أن مقاومة الهواء تتضاعف أربع مرات كلما تضاعفت سرعة السيارة. فتح النوافذ على سرعة 120 كم/ساعة يحول السيارة لمظلة هبوط هوائية، مما يستهلك بنزيناً إضافياً بنسبة تصل إلى <strong>15%</strong>، في حين أن المكيف مع نوافذ مغلقة يستهلك <strong>4.5% فقط</strong>.
+          </p>
+        </div>
+      </div>
+
+      {/* Workshop Inspection Banner */}
+      <div class="mt-12 rounded-3xl bg-gradient-to-r from-primary/15 via-background to-background border border-primary/30 p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-primary">
+              خدمة فحص كفاءة المكيف بالرياض
+            </span>
+            <h3 class="mt-2 text-xl sm:text-2xl font-bold text-foreground">
+              هل تشعر بضعف عزم السيارة وزيادة ملحوظة في صرفية الوقود؟
+            </h3>
+            <p class="mt-2 text-xs sm:text-sm text-muted-foreground max-w-2xl leading-relaxed">
+              تراكم الأوساخ على رديتر المكيف أو انسداد فلتر الفريون يرفع الضغط الهيدروليكي للكمبروسر إلى مستويات خطيرة تثقل المحرك. تفضل بزيارة فرعنا بالرياض لفحص ضغط الفريون وتنظيف الدورة بأحدث الأجهزة الإلكترونية.
+            </p>
+          </div>
+
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%2C%20%D8%A3%D8%B4%D8%B9%D8%B1%20%D8%A8%D8%AB%D9%82%D9%84%20%D9%81%D9%8A%20%D8%B9%D8%B2%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9%20%D9%85%D8%B9%20%D8%AA%D8%B4%D8%BA%D9%8A%D9%84%20%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81%20%D9%88%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AD%D8%AC%D8%B2%20%D9%85%D9%88%D8%B9%D8%AF%20%D9%81%D8%AD%D8%B5%20%D9%81%D9%8A%20%D8%A3%D9%88%D8%AA%D9%88%20%D8%B3%D9%8A%D9%81.`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="shrink-0 inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md hover:bg-emerald-700 transition-colors"
+          >
+            حجز موعد فحص دورة التكييف
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ Section */}
+  <section class="py-14 bg-background">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display">
+          الأسئلة الشائعة حول استهلاك مكيف السيارة للوقود
+        </h2>
+        <p class="mt-2 text-sm text-muted-foreground">
+          حقائق علمية وإجابات متخصصة من خبراء صيانة وتكييف السيارات في أوتو سيف
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <details class="group rounded-2xl border border-border bg-card p-5 transition-all open:border-primary/40 open:shadow-sm">
+            <summary class="flex cursor-pointer items-center justify-between font-bold text-foreground text-sm sm:text-base">
+              <span>{faq.question}</span>
+              <span class="text-primary transition group-open:rotate-180">
+                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed pt-2 border-t border-border">
+              {faq.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,343 @@
+---
+/**
+ * RepairCostCalculatorWidget — Interactive cost estimator
+ * for car AC maintenance and Tabby/Tamara 4-month installments in KSA.
+ */
+import {
+  vehicleTiers,
+  serviceJobs,
+  type VehicleTierId,
+  type PartsTierId,
+} from '../../data/repair-pricing';
+import type { Language } from '../../lib/i18n';
+import { WHATSAPP_NUMBER } from '../../lib/whatsapp';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const isAr = lang === 'ar';
+---
+
+<div
+  class="w-full rounded-2xl border border-primary/20 bg-card p-5 sm:p-8 shadow-xl"
+  id="repair-cost-widget"
+  data-lang={lang}
+  data-tiers={JSON.stringify(vehicleTiers)}
+  data-services={JSON.stringify(serviceJobs)}
+  data-whatsapp={WHATSAPP_NUMBER}
+>
+  <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-5">
+    <div>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+        <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {isAr ? 'حاسبة التكلفة والتقسيط' : 'Cost & Installment Estimator'}
+      </span>
+      <h3 class="mt-2 text-xl font-bold tracking-tight font-display text-foreground sm:text-2xl">
+        {isAr ? 'احسب تكلفة صيانة مكيف سيارتك وقسطها على 4 دفعات' : 'Estimate AC Repair Cost & Split Over 4 Payments'}
+      </h3>
+      <p class="mt-1 text-xs sm:text-sm text-muted-foreground">
+        {isAr
+          ? 'اختر فئة سيارتك ونوع الخدمة للحصول على تسعيرة تقديرية شفافة وخيارات التقسيط بدون فوائد عبر تمارا وتابي'
+          : 'Select your vehicle class and service to see transparent repair costs and zero-interest 4-month payment plans.'}
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 text-xs font-medium text-muted-foreground bg-secondary/50 rounded-lg px-3 py-2 self-start">
+      <span class="size-2 rounded-full bg-emerald-500"></span>
+      {isAr ? 'معتمدة لأسعار الرياض 2026' : 'Riyadh 2026 Market Rates'}
+    </div>
+  </div>
+
+  {/* Selectors Form */}
+  <div class="grid gap-4 sm:grid-cols-3">
+    {/* 1. Vehicle Tier */}
+    <div>
+      <label for="calc-veh-tier" class="block text-xs font-bold text-foreground mb-1.5 uppercase tracking-wider">
+        {isAr ? '1. فئة ونوع السيارة' : '1. Vehicle Category'}
+      </label>
+      <div class="relative">
+        <select
+          id="calc-veh-tier"
+          class="w-full appearance-none rounded-xl border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        >
+          {vehicleTiers.map((tier) => (
+            <option value={tier.id}>
+              {isAr ? tier.nameAr : tier.nameEn}
+            </option>
+          ))}
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3 text-muted-foreground">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+      <span id="calc-veh-examples" class="text-[11px] text-muted-foreground block mt-1 truncate"></span>
+    </div>
+
+    {/* 2. Service Job */}
+    <div>
+      <label for="calc-job" class="block text-xs font-bold text-foreground mb-1.5 uppercase tracking-wider">
+        {isAr ? '2. خدمة الصيانة أو القطعة' : '2. Repair Service'}
+      </label>
+      <div class="relative">
+        <select
+          id="calc-job"
+          class="w-full appearance-none rounded-xl border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        >
+          {serviceJobs.map((job) => (
+            <option value={job.id}>
+              {isAr ? job.nameAr : job.nameEn}
+            </option>
+          ))}
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3 text-muted-foreground">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+      <span id="calc-job-duration" class="text-[11px] text-muted-foreground block mt-1 truncate"></span>
+    </div>
+
+    {/* 3. Parts Tier */}
+    <div>
+      <label for="calc-parts-tier" class="block text-xs font-bold text-foreground mb-1.5 uppercase tracking-wider">
+        {isAr ? '3. نوع قطع الغيار' : '3. Parts Preference'}
+      </label>
+      <div class="relative">
+        <select
+          id="calc-parts-tier"
+          class="w-full appearance-none rounded-xl border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        >
+          <option value="denso">{isAr ? 'دينسو معتمد (Denso OEM Supplier)' : 'Denso Certified OEM Supplier'}</option>
+          <option value="oem">{isAr ? 'وكالة رسمية أصلية (Genuine Dealership)' : 'Official Genuine Dealership'}</option>
+          <option value="aftermarket">{isAr ? 'بديل تجاري معتمد (Premium Aftermarket)' : 'Certified Premium Aftermarket'}</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3 text-muted-foreground">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+      <span class="text-[11px] text-muted-foreground block mt-1">
+        {isAr ? 'نوصي بـ دينسو لأفضل معادلة جودة وسعر' : 'Denso recommended for best value'}
+      </span>
+    </div>
+  </div>
+
+  {/* Real-time Calculation Result Box */}
+  <div class="mt-6 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-5 sm:p-7 border border-primary/20">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-primary">
+          {isAr ? 'التكلفة الإجمالية التقديرية (شامل أجور اليد والفريون)' : 'Estimated Total Cost (Labor & Gas Included)'}
+        </span>
+        <div class="mt-1 flex items-baseline gap-2">
+          <span id="price-total-range" class="text-3xl sm:text-4xl font-extrabold text-foreground font-display">
+            0 - 0
+          </span>
+          <span class="text-sm font-bold text-muted-foreground">{isAr ? 'ريال سعودي' : 'SAR'}</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span id="price-warranty-badge" class="rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 px-3.5 py-1 text-xs font-bold">
+          ضمان 6 أشهر
+        </span>
+      </div>
+    </div>
+
+    {/* Cost Breakdown Columns */}
+    <div class="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div class="rounded-xl border border-border bg-card p-3 sm:p-4 text-center">
+        <span class="text-xs text-muted-foreground font-medium block">
+          {isAr ? 'أجور شغل اليد والفحص' : 'Labor & Testing'}
+        </span>
+        <span id="price-labor" class="mt-1 text-lg sm:text-xl font-bold text-foreground block font-display">0 SAR</span>
+      </div>
+      <div class="rounded-xl border border-border bg-card p-3 sm:p-4 text-center">
+        <span class="text-xs text-muted-foreground font-medium block">
+          {isAr ? 'تكلفة القطع التقديرية' : 'Estimated Parts Cost'}
+        </span>
+        <span id="price-parts" class="mt-1 text-lg sm:text-xl font-bold text-foreground block font-display">0 SAR</span>
+      </div>
+      <div class="rounded-xl border border-border bg-card p-3 sm:p-4 text-center col-span-2 sm:col-span-1">
+        <span class="text-xs text-muted-foreground font-medium block">
+          {isAr ? 'وقت الإنجاز المتوقع' : 'Estimated Time'}
+        </span>
+        <span id="price-duration" class="mt-1 text-sm sm:text-base font-bold text-foreground block">-</span>
+      </div>
+    </div>
+
+    {/* Tabby & Tamara Installment Banner (Huge for Saudi Conversions) */}
+    <div class="mt-5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 sm:p-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex rounded bg-emerald-600 px-2 py-0.5 text-[11px] font-extrabold text-white uppercase tracking-wider">
+              تمارا و تابي
+            </span>
+            <span class="text-xs font-bold text-emerald-900 dark:text-emerald-300">
+              {isAr ? 'قسط فاتورة الصيانة على 4 دفعات بدون فوائد' : 'Split your repair into 4 interest-free payments'}
+            </span>
+          </div>
+          <p class="mt-1 text-xs text-muted-foreground">
+            {isAr
+              ? 'لا داعي لتأجيل صيانة مكيفك بسبب التكلفة؛ ادفع الربع الآن والباقي على 3 أشهر'
+              : 'Pay 25% today and split the rest over 3 months with 0% interest or hidden fees.'}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-card border border-emerald-500/20 px-4 py-2 text-center self-start sm:self-auto">
+          <span class="text-[11px] text-muted-foreground block font-medium">
+            {isAr ? 'القسط الشهري التقديري' : 'Monthly Payment'}
+          </span>
+          <span id="price-installment" class="text-lg sm:text-xl font-extrabold text-emerald-600 dark:text-emerald-400 font-display">
+            0 SAR / شهر
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {/* WhatsApp Lead Generation Button */}
+    <div class="mt-6 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
+      <span class="text-xs text-muted-foreground">
+        {isAr ? 'ضمان استرجاع فرق السعر خلال 48 ساعة' : 'Best Price Guarantee in Riyadh'}
+      </span>
+
+      <a
+        id="btn-whatsapp-quote"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-xs sm:text-sm font-bold text-primary-foreground shadow-md transition hover:bg-primary/90 active:scale-95"
+      >
+        <svg class="size-4 fill-current" viewBox="0 0 24 24">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z" />
+        </svg>
+        <span>{isAr ? 'طلب تسعيرة رسمية وحجز تقسيط بالرياض' : 'Request Official Quote & Installment Booking'}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initCostCalculator() {
+    const root = document.getElementById('repair-cost-widget');
+    if (!root) return;
+
+    const lang = root.dataset.lang || 'ar';
+    const isAr = lang === 'ar';
+    const rawTiers = root.dataset.tiers;
+    const rawServices = root.dataset.services;
+    const whatsapp = root.dataset.whatsapp || '966537133080';
+    if (!rawTiers || !rawServices) return;
+
+    const tiers = JSON.parse(rawTiers);
+    const services = JSON.parse(rawServices);
+
+    const vehSelect = document.getElementById('calc-veh-tier') as HTMLSelectElement;
+    const jobSelect = document.getElementById('calc-job') as HTMLSelectElement;
+    const partsSelect = document.getElementById('calc-parts-tier') as HTMLSelectElement;
+
+    const vehExamplesEl = document.getElementById('calc-veh-examples');
+    const jobDurationEl = document.getElementById('calc-job-duration');
+
+    const totalRangeEl = document.getElementById('price-total-range');
+    const warrantyBadgeEl = document.getElementById('price-warranty-badge');
+    const laborEl = document.getElementById('price-labor');
+    const partsEl = document.getElementById('price-parts');
+    const durationEl = document.getElementById('price-duration');
+    const installmentEl = document.getElementById('price-installment');
+    const waBtn = document.getElementById('btn-whatsapp-quote') as HTMLAnchorElement;
+
+    function recalculate() {
+      if (!vehSelect || !jobSelect || !partsSelect) return;
+
+      const vId = vehSelect.value;
+      const jId = jobSelect.value;
+      const pId = partsSelect.value;
+
+      const tier = tiers.find((t: any) => t.id === vId) ?? tiers[0];
+      const service = services.find((s: any) => s.id === jId) ?? services[0];
+
+      if (vehExamplesEl) {
+        vehExamplesEl.textContent = isAr ? tier.examplesAr : tier.examplesEn;
+      }
+
+      if (jobDurationEl) {
+        jobDurationEl.textContent = isAr ? service.durationHoursAr : service.durationHoursEn;
+      }
+
+      const pricing = service.partsPricing[vId] ?? service.partsPricing.sedan;
+
+      let pMin = pricing.partsMinSar;
+      let pMax = pricing.partsMaxSar;
+      if (pId === 'oem') {
+        pMin = Math.round(pMin * 1.35);
+        pMax = Math.round(pMax * 1.35);
+      } else if (pId === 'aftermarket') {
+        pMin = Math.round(pMin * 0.75);
+        pMax = Math.round(pMax * 0.75);
+      }
+
+      const labor = Math.round(service.baseLaborSar * pricing.laborFactor);
+      const totalMin = pMin + labor;
+      const totalMax = pMax + labor;
+
+      const instMin = Math.round(totalMin / 4);
+      const instMax = Math.round(totalMax / 4);
+
+      if (totalRangeEl) {
+        totalRangeEl.textContent = `${totalMin} - ${totalMax}`;
+      }
+
+      if (warrantyBadgeEl) {
+        warrantyBadgeEl.textContent = isAr ? service.warrantyAr : service.warrantyEn;
+      }
+
+      if (laborEl) {
+        laborEl.textContent = `${labor} ${isAr ? 'ريال' : 'SAR'}`;
+      }
+
+      if (partsEl) {
+        partsEl.textContent = `${pMin} - ${pMax} ${isAr ? 'ريال' : 'SAR'}`;
+      }
+
+      if (durationEl) {
+        durationEl.textContent = isAr ? service.durationHoursAr : service.durationHoursEn;
+      }
+
+      if (installmentEl) {
+        installmentEl.textContent = `${instMin} - ${instMax} ${isAr ? 'ريال / شهر' : 'SAR / mo'}`;
+      }
+
+      if (waBtn) {
+        const tierName = isAr ? tier.nameAr : tier.nameEn;
+        const jobName = isAr ? service.nameAr : service.nameEn;
+        const partsName = partsSelect.options[partsSelect.selectedIndex].text;
+
+        const msg = isAr
+          ? `السلام عليكم ورحمه الله وبركاته\nأود الحصول على تسعيرة رسمية وحجز موعد صيانة لسيارتي في ورشة أوتو سيف بالرياض:\n- فئة السيارة: ${tierName}\n- الخدمة المطلوبة: ${jobName}\n- نوع القطع: ${partsName}\n- التكلفة التقديرية: ${totalMin} - ${totalMax} ريال\n- هل يتوفر تقسيط تابي أو تمارا؟`
+          : `Hello Auto Save KSA,\nI would like an official quote and appointment at your Riyadh workshop:\n- Vehicle Class: ${tierName}\n- Service: ${jobName}\n- Parts: ${partsName}\n- Estimated Cost: ${totalMin} - ${totalMax} SAR\n- Do you offer Tabby/Tamara installments?`;
+
+        waBtn.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;
+      }
+    }
+
+    vehSelect.addEventListener('change', recalculate);
+    jobSelect.addEventListener('change', recalculate);
+    partsSelect.addEventListener('change', recalculate);
+
+    recalculate();
+  }
+
+  document.addEventListener('DOMContentLoaded', initCostCalculator);
+  document.addEventListener('astro:page-load', initCostCalculator);
+  initCostCalculator();
+</script>

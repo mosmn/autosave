@@ -2,6 +2,7 @@ export const enContent = {
   header: {
     nav: [
       { name: "Home", href: "/" },
+      { name: "Freon Calculator & Tools", href: "/tools/freon-capacity" },
       { name: "About Auto Save", href: "/about" },
       { name: "AC Service Pricing", href: "/pricing" },
       { name: "AC Blog & Guides", href: "/blog" },
@@ -55,14 +56,17 @@ export const enContent = {
         ],
       },
       resources: {
-        title: "Resources",
+        title: "Knowledge & Tools",
         links: [
+          { name: "Car AC Freon Capacity Chart", href: "/tools/freon-capacity" },
+          { name: "Smart AC Diagnostic Troubleshooter", href: "/tools/ac-diagnostic" },
+          { name: "Repair Cost & Installment Calculator", href: "/tools/repair-cost-calculator" },
+          { name: "OBD-II Climate Code Lookup", href: "/tools/obd2" },
+          { name: "Car AC Fuel Cost Calculator", href: "/tools/fuel-cost-calculator" },
+          { name: "Free Automotive Tools Hub", href: "/tools" },
           { name: "AC Not Cooling?", href: "/blog/car-ac-not-cooling-causes-fixes" },
           { name: "Strange AC Noises", href: "/blog/car-ac-making-strange-noises-what-they-mean" },
-          { name: "AC Leak Detection", href: "/services/leak-detection" },
-          { name: "Riyadh Services", href: "/services/riyadh" },
-          { name: "Summer AC Guide", href: "/blog/prepare-car-ac-for-summer-heat" },
-          { name: "DIY vs Professional", href: "/blog/diy-vs-professional-car-ac-repair" },
+          { name: "Freon Leak Detection", href: "/services/leak-detection" },
           { name: "All Articles", href: "/blog" },
         ],
       },
