@@ -2,8 +2,6 @@
 import type { Language } from '../lib/i18n';
 import { getContentByLanguage } from '../lib/content';
 import { getLocalizedPath, getAlternateLang } from '../lib/i18n';
-import { carBrands } from '../data/car-brands';
-import { services } from '../data/services';
 import { getCityBySlug } from '../data/cities';
 import ComingSoonLink from './ComingSoonLink.astro';
 
@@ -31,48 +29,111 @@ function resolveHeaderHref(href: string): string {
   return getLocalizedPath(href, lang);
 }
 
-const brandsWithModelPages = new Set(carBrands.filter((brand) => brand.popularity === 'high').map((brand) => brand.slug));
-const localizedBrandName = (nameAr: string, nameEn: string) => (lang === 'ar' ? nameAr : nameEn);
-const localizedServiceName = (nameAr: string, nameEn: string) => (lang === 'ar' ? nameAr : nameEn);
 const riyadh = getCityBySlug('riyadh');
-const riyadhNeighborhoods = riyadh?.neighborhoods ?? [];
-const servicesQuickLinks = [
-  { label: content.header.servicesMenu.pricingLinkLabel, href: '/pricing' },
-  { label: content.header.servicesMenu.riyadhLinkLabel, href: '/services/riyadh' },
-  { label: content.header.servicesMenu.contactLinkLabel, href: '/contact' },
+const riyadhNeighborhoods = riyadh?.neighborhoods?.slice(0, 6) ?? [];
+
+// Core featured services with curated micro-descriptions
+const featuredServices = [
+  {
+    slug: 'ac-recharge',
+    nameAr: 'تعبئة فريون مكيف السيارة',
+    nameEn: 'Car AC Freon Recharge',
+    descAr: 'تعبئة رقمية دقيقة لغاز R134a و R1234yf مع اختبار الضغط',
+    descEn: 'Digital precision R134a & R1234yf recharge with pressure test',
+    icon: 'recharge',
+  },
+  {
+    slug: 'compressor-replacement',
+    nameAr: 'تغيير كمبروسر المكيف',
+    nameEn: 'Compressor Replacement',
+    descAr: 'استبدال وضمان كمبروسرات أصلية لجميع فئات وموديلات السيارات',
+    descEn: 'OEM compressor replacement and warranty for all makes',
+    icon: 'compressor',
+  },
+  {
+    slug: 'leak-detection',
+    nameAr: 'كشف تهريب الفريون',
+    nameEn: 'AC Leak Detection',
+    descAr: 'فحص إلكتروني دقيق بالنيتروجين وأشعة UV لتحديد موقع التسريب',
+    descEn: 'Pinpoint electronic nitrogen and UV dye leak diagnostic',
+    icon: 'leak',
+  },
+  {
+    slug: 'ac-cleaning',
+    nameAr: 'تنظيف وتعقيم ثلاجة المكيف',
+    nameEn: 'Evaporator Cleaning',
+    descAr: 'إزالة الروائح الكريهة وتعقيم مجاري الهواء لبيئة صحية',
+    descEn: 'Odor removal and deep antibacterial air duct sanitization',
+    icon: 'clean',
+  },
+  {
+    slug: 'condenser-repair',
+    nameAr: 'إصلاح وتبديل رديتر المكيف',
+    nameEn: 'Condenser Repair & Swap',
+    descAr: 'استعادة كفاءة التبريد القصوى ومقاومة حرارة الصيف العالية',
+    descEn: 'Restoring cooling efficiency against extreme summer heat',
+    icon: 'condenser',
+  },
+  {
+    slug: 'full-ac-overhaul',
+    nameAr: 'توضيب وتجديد دورة المكيف',
+    nameEn: 'Complete System Overhaul',
+    descAr: 'تجديد شامل لشبكة التبريد وغسيل الدورة وتغيير البلف والمجفف',
+    descEn: 'Full cooling system flush, expansion valve & receiver refresh',
+    icon: 'overhaul',
+  },
 ];
 
-const carsQuickLinks = [
-  { label: content.header.carsMenu.blogLinkLabel, href: '/blog' },
-  { label: content.header.carsMenu.guidesLinkLabel, href: '/blog' },
-  { label: content.header.carsMenu.reportLinkLabel, href: '/contact' },
+// Top 12 popular car makes in Saudi Arabia
+const featuredBrands = [
+  { slug: 'toyota', nameAr: 'تويوتا', nameEn: 'Toyota' },
+  { slug: 'hyundai', nameAr: 'هيونداي', nameEn: 'Hyundai' },
+  { slug: 'nissan', nameAr: 'نيسان', nameEn: 'Nissan' },
+  { slug: 'ford', nameAr: 'فورد', nameEn: 'Ford' },
+  { slug: 'lexus', nameAr: 'لكزس', nameEn: 'Lexus' },
+  { slug: 'chevrolet', nameAr: 'شيفروليه', nameEn: 'Chevrolet' },
+  { slug: 'gmc', nameAr: 'جمس', nameEn: 'GMC' },
+  { slug: 'kia', nameAr: 'كيا', nameEn: 'Kia' },
+  { slug: 'mercedes', nameAr: 'مرسيدس', nameEn: 'Mercedes-Benz' },
+  { slug: 'bmw', nameAr: 'بي إم دبليو', nameEn: 'BMW' },
+  { slug: 'changan', nameAr: 'شانجان', nameEn: 'Changan' },
+  { slug: 'geely', nameAr: 'جيلي', nameEn: 'Geely' },
 ];
+
+const isCurrentRoute = (href: string) => {
+  const target = resolveHeaderHref(href);
+  if (target === '/' || target === '/en') {
+    return currentPath === target;
+  }
+  return currentPath.startsWith(target);
+};
 ---
 
-<header class="sticky top-0 z-50 w-full border-b-2 border-primary/15 bg-background/90 backdrop-blur-xl" data-site-header>
-  <div class="container mx-auto flex h-18 items-center justify-between px-4">
-    {/* Logo */}
-    <a href={getLocalizedPath('/', lang)} class="flex items-center gap-2.5">
+<header
+  class="sticky top-0 z-50 w-full border-b border-border/80 bg-background/90 backdrop-blur-xl transition-all duration-200"
+  data-site-header
+>
+  <div class="container mx-auto flex h-20 items-center justify-between px-4 lg:px-6">
+    {/* Brand Logo */}
+    <a
+      href={getLocalizedPath('/', lang)}
+      class="group flex items-center gap-2.5 transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
+      aria-label={lang === 'ar' ? 'اوتو سيف الرئيسية' : 'AUTO SAVE Home'}
+    >
       {lang === 'ar' ? (
-        <img src="/logo-ar.svg?v=3" alt="اوتو سيف" width="130" height="36" class="h-9 w-auto" />
+        <img src="/logo-ar.svg?v=3" alt="اوتو سيف" width="138" height="38" class="h-9 w-auto drop-shadow-sm" />
       ) : (
-        <img src="/logo.svg" alt="AUTO SAVE" width="130" height="36" class="h-9 w-auto" />
+        <img src="/logo.svg" alt="AUTO SAVE" width="138" height="38" class="h-9 w-auto drop-shadow-sm" />
       )}
     </a>
 
     {/* Desktop Navigation */}
-    <nav class="hidden md:flex items-center gap-6">
-      <a
-        href={resolveHeaderHref(content.header.nav[0].href)}
-        class="nav-link-hover text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-      >
-        {content.header.nav[0].name}
-      </a>
-
-      <div class="relative" data-menu-key="services">
+    <nav class="hidden lg:flex items-center gap-1 xl:gap-2 text-[14px]" aria-label="Main Navigation">
+      {/* Services Dropdown */}
+      <div class="relative group/menu" data-menu-key="services">
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 font-medium text-muted-foreground transition-all hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           aria-label={content.header.servicesMenu.trigger}
           aria-haspopup="true"
           aria-expanded="false"
@@ -81,11 +142,11 @@ const carsQuickLinks = [
         >
           <span>{content.header.servicesMenu.trigger}</span>
           <svg
-            class="size-4 transition-transform duration-200"
+            class="size-4 text-muted-foreground/70 transition-transform duration-200 group-hover/menu:text-primary"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            stroke-width="1.5"
+            stroke-width="1.75"
             aria-hidden="true"
             data-menu-chevron="services"
           >
@@ -96,71 +157,126 @@ const carsQuickLinks = [
         <div
           id="desktop-menu-services"
           data-menu-panel="services"
-          class="pointer-events-none invisible absolute start-0 top-full z-50 mt-3 w-[min(94vw,60rem)] rounded-2xl border border-border bg-card p-5 opacity-0 shadow-xl transition-all duration-200"
+          class="pointer-events-none invisible absolute start-0 top-full z-50 mt-2 w-[min(94vw,52rem)] rounded-2xl border border-border/80 bg-card/98 p-6 opacity-0 shadow-2xl backdrop-blur-2xl transition-all duration-200 transform translate-y-1"
         >
-          <div class="grid gap-5 lg:grid-cols-[2fr_1fr]">
-            <section>
-              <h2 class="font-display text-lg font-semibold text-foreground">{content.header.servicesMenu.title}</h2>
-              <p class="mt-1 text-sm text-muted-foreground">{content.header.servicesMenu.description}</p>
-              <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-primary">{content.header.servicesMenu.categoriesLabel}</p>
-
-              <div class="mt-3 grid max-h-[60vh] gap-2 overflow-y-auto pe-1">
-                {services.map((service) => (
-                  <details class="rounded-lg border border-border bg-background/60 p-3">
-                    <summary class="cursor-pointer list-none text-sm font-semibold text-foreground">
-                      <span>{localizedServiceName(service.nameAr, service.nameEn)}</span>
-                    </summary>
-                    <div class="mt-2 space-y-2 border-t border-border pt-2">
-                      <a
-                        href={getLocalizedPath(`/services/${service.slug}`, lang)}
-                        class="inline-flex rounded-md border border-primary/30 px-2.5 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/5"
-                      >
-                        {content.header.servicesMenu.viewServiceLabel}
-                      </a>
-
-                      {riyadhNeighborhoods.length > 0 && (
-                        <div>
-                          <p class="text-xs font-medium text-muted-foreground">{content.header.servicesMenu.areasLabel}</p>
-                          <div class="mt-2 flex flex-wrap gap-1.5">
-                            {riyadhNeighborhoods.slice(0, 6).map((neighborhood) => (
-                              <a
-                                href={getLocalizedPath(`/services/riyadh/${neighborhood.slug}`, lang)}
-                                class="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                              >
-                                {lang === 'ar' ? neighborhood.nameAr : neighborhood.nameEn}
-                              </a>
-                            ))}
-                          </div>
-                          <p class="mt-2 text-xs text-muted-foreground">{content.header.servicesMenu.neighborhoodsHintLabel}</p>
-                        </div>
-                      )}
-                    </div>
-                  </details>
-                ))}
+          <div class="grid gap-6 md:grid-cols-[1.6fr_1fr]">
+            {/* Core Services Column */}
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-border/60">
+                <span class="text-xs font-semibold uppercase tracking-wider text-primary">
+                  {content.header.servicesMenu.featuredLabel}
+                </span>
+                <a
+                  href={resolveHeaderHref('/pricing')}
+                  class="text-xs font-medium text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+                >
+                  <span>{content.header.servicesMenu.pricingLinkLabel}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
               </div>
-            </section>
 
-            <aside class="rounded-xl border border-border bg-secondary/35 p-4">
-              <h3 class="font-display text-base font-semibold text-foreground">{content.header.servicesMenu.quickLinksLabel}</h3>
-              <div class="mt-3 space-y-2">
-                {servicesQuickLinks.map((link) => (
+              <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {featuredServices.map((service) => (
                   <a
-                    href={resolveHeaderHref(link.href)}
-                    class="block rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                    href={getLocalizedPath(`/services/${service.slug}`, lang)}
+                    class="group flex flex-col p-2.5 rounded-xl border border-transparent hover:border-primary/20 hover:bg-secondary/40 transition-all"
                   >
-                    {link.label}
+                    <div class="flex items-center gap-2">
+                      <span class="size-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
+                        {service.icon === 'recharge' && (
+                          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3m15.364-6.364-12.728 12.728m12.728 0L5.636 5.636" />
+                          </svg>
+                        )}
+                        {service.icon === 'compressor' && (
+                          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                          </svg>
+                        )}
+                        {service.icon === 'leak' && (
+                          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                          </svg>
+                        )}
+                        {service.icon === 'clean' && (
+                          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                          </svg>
+                        )}
+                        {service.icon === 'condenser' && (
+                          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h12A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6ZM7.5 7.5v9M12 7.5v9M16.5 7.5v9" />
+                          </svg>
+                        )}
+                        {service.icon === 'overhaul' && (
+                          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.32l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.32 4.486c.047.58.024 1.193-.14 1.743" />
+                          </svg>
+                        )}
+                      </span>
+                      <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                        {lang === 'ar' ? service.nameAr : service.nameEn}
+                      </span>
+                    </div>
+                    <p class="mt-1 text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
+                      {lang === 'ar' ? service.descAr : service.descEn}
+                    </p>
                   </a>
                 ))}
+              </div>
+            </div>
+
+            {/* Riyadh Areas & Quick Links Column */}
+            <aside class="rounded-xl border border-border/80 bg-secondary/35 p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-primary">
+                  {content.header.servicesMenu.areasLabel}
+                </span>
+                <p class="mt-1 text-xs text-muted-foreground leading-relaxed">
+                  {content.header.servicesMenu.neighborhoodsHintLabel}
+                </p>
+
+                {riyadhNeighborhoods.length > 0 && (
+                  <div class="mt-3 flex flex-wrap gap-1.5">
+                    {riyadhNeighborhoods.map((n) => (
+                      <a
+                        href={getLocalizedPath(`/services/riyadh/${n.slug}`, lang)}
+                        class="rounded-md border border-border/80 bg-card/80 px-2 py-1 text-[11px] font-medium text-foreground hover:border-primary/50 hover:text-primary hover:bg-card transition-all"
+                      >
+                        {lang === 'ar' ? n.nameAr : n.nameEn}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-border/60 space-y-2">
+                <a
+                  href={getLocalizedPath('/services/riyadh', lang)}
+                  class="flex items-center justify-between text-xs font-semibold text-foreground hover:text-primary transition-colors"
+                >
+                  <span>{content.header.servicesMenu.riyadhLinkLabel}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+                <ComingSoonLink
+                  href={getLocalizedPath('/contact', lang)}
+                  lang={lang}
+                  class="flex items-center justify-between text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  <span>{content.header.servicesMenu.contactLinkLabel}</span>
+                  <span aria-hidden="true">→</span>
+                </ComingSoonLink>
               </div>
             </aside>
           </div>
         </div>
       </div>
 
-      <div class="relative" data-menu-key="cars">
+      {/* Cars Dropdown */}
+      <div class="relative group/menu" data-menu-key="cars">
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 font-medium text-muted-foreground transition-all hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           aria-label={content.header.carsMenu.trigger}
           aria-haspopup="true"
           aria-expanded="false"
@@ -169,11 +285,11 @@ const carsQuickLinks = [
         >
           <span>{content.header.carsMenu.trigger}</span>
           <svg
-            class="size-4 transition-transform duration-200"
+            class="size-4 text-muted-foreground/70 transition-transform duration-200 group-hover/menu:text-primary"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            stroke-width="1.5"
+            stroke-width="1.75"
             aria-hidden="true"
             data-menu-chevron="cars"
           >
@@ -184,284 +300,405 @@ const carsQuickLinks = [
         <div
           id="desktop-menu-cars"
           data-menu-panel="cars"
-          class="pointer-events-none invisible absolute start-0 top-full z-50 mt-3 w-[min(94vw,68rem)] rounded-2xl border border-border bg-card p-5 opacity-0 shadow-xl transition-all duration-200"
+          class="pointer-events-none invisible absolute start-0 top-full z-50 mt-2 w-[min(94vw,44rem)] rounded-2xl border border-border/80 bg-card/98 p-6 opacity-0 shadow-2xl backdrop-blur-2xl transition-all duration-200 transform translate-y-1"
         >
-          <div class="grid gap-5 lg:grid-cols-[2fr_1fr]">
-            <section>
-              <h2 class="font-display text-lg font-semibold text-foreground">{content.header.carsMenu.title}</h2>
-              <p class="mt-1 text-sm text-muted-foreground">{content.header.carsMenu.description}</p>
-              <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-primary">{content.header.carsMenu.categoriesLabel}</p>
+          <div class="flex items-center justify-between pb-3 border-b border-border/60">
+            <div>
+              <h3 class="text-sm font-semibold text-foreground font-display">
+                {content.header.carsMenu.title}
+              </h3>
+              <p class="text-xs text-muted-foreground mt-0.5">
+                {content.header.carsMenu.description}
+              </p>
+            </div>
+            <a
+              href={resolveHeaderHref('/tools/freon-capacity')}
+              class="text-xs font-medium text-primary hover:underline shrink-0 ms-3"
+            >
+              {lang === 'ar' ? 'جدول الفريون' : 'Freon Specs'} →
+            </a>
+          </div>
 
-              <div class="mt-3 grid max-h-[60vh] gap-2 overflow-y-auto pe-1">
-                {carBrands.map((brand) => (
-                  <details class="rounded-lg border border-border bg-background/60 p-3">
-                    <summary class="cursor-pointer list-none text-sm font-semibold text-foreground">
-                      <span>{localizedBrandName(brand.nameAr, brand.nameEn)}</span>
-                    </summary>
-                    <div class="mt-2 space-y-2 border-t border-border pt-2">
-                      <a
-                        href={getLocalizedPath(`/car-ac/${brand.slug}`, lang)}
-                        class="inline-flex rounded-md border border-primary/30 px-2.5 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/5"
-                      >
-                        {content.header.carsMenu.viewBrandLabel}
-                      </a>
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {featuredBrands.map((brand) => (
+              <a
+                href={getLocalizedPath(`/car-ac/${brand.slug}`, lang)}
+                class="group flex items-center justify-between p-2.5 rounded-xl border border-border/60 bg-background/50 hover:border-primary/40 hover:bg-secondary/40 transition-all"
+              >
+                <div class="flex items-center gap-2">
+                  <span class="size-6 rounded-md bg-secondary flex items-center justify-center text-[10px] font-bold text-muted-foreground group-hover:bg-primary group-hover:text-white transition-colors uppercase">
+                    {brand.slug.slice(0, 2)}
+                  </span>
+                  <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                    {lang === 'ar' ? brand.nameAr : brand.nameEn}
+                  </span>
+                </div>
+                <svg class="size-3.5 text-muted-foreground/50 group-hover:text-primary group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+              </a>
+            ))}
+          </div>
 
-                      {brandsWithModelPages.has(brand.slug) ? (
-                        <div>
-                          <p class="text-xs font-medium text-muted-foreground">{content.header.carsMenu.modelsLabel}</p>
-                          <div class="mt-2 flex flex-wrap gap-1.5">
-                            {brand.models.map((model) => (
-                              <a
-                                href={getLocalizedPath(`/car-ac/${brand.slug}/${model.slug}`, lang)}
-                                class="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                              >
-                                {localizedBrandName(model.nameAr, model.nameEn)}
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          <p class="text-xs font-medium text-muted-foreground">{content.header.carsMenu.modelsLabel}</p>
-                          <div class="mt-2 flex flex-wrap gap-1.5">
-                            {brand.models.map((model) => (
-                              <span class="rounded-md border border-border bg-card px-2 py-1 text-xs text-muted-foreground">
-                                {localizedBrandName(model.nameAr, model.nameEn)}
-                              </span>
-                            ))}
-                          </div>
-                          <p class="mt-2 text-xs text-muted-foreground">{content.header.carsMenu.noModelPagesLabel}</p>
-                        </div>
-                      )}
-                    </div>
-                  </details>
-                ))}
-              </div>
-            </section>
-
-            <aside class="rounded-xl border border-border bg-secondary/35 p-4">
-              <h3 class="font-display text-base font-semibold text-foreground">{content.header.carsMenu.quickLinksLabel}</h3>
-              <div class="mt-3 space-y-2">
-                {carsQuickLinks.map((link) => (
-                  <a
-                    href={resolveHeaderHref(link.href)}
-                    class="block rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </aside>
+          <div class="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+            <span>{content.header.carsMenu.quickLinksLabel}</span>
+            <div class="flex items-center gap-4">
+              <a href={resolveHeaderHref('/blog')} class="hover:text-primary transition-colors">
+                {content.header.carsMenu.blogLinkLabel}
+              </a>
+              <a href={resolveHeaderHref('/tools')} class="font-medium text-primary hover:underline">
+                {content.header.carsMenu.viewAllBrandsLabel} →
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      {content.header.nav.slice(1).map((item) => (
-        <a
-          href={resolveHeaderHref(item.href)}
-          class="nav-link-hover text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+      {/* Tools Dropdown */}
+      <div class="relative group/menu" data-menu-key="tools">
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 font-medium text-muted-foreground transition-all hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          aria-label={content.header.toolsMenu.trigger}
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="desktop-menu-tools"
+          data-menu-trigger="tools"
         >
-          {item.name}
-        </a>
-      ))}
+          <span>{content.header.toolsMenu.trigger}</span>
+          <span class="rounded-full bg-primary/15 px-1.5 py-0.2 text-[10px] font-bold text-primary border border-primary/25">
+            {content.header.toolsMenu.badge}
+          </span>
+          <svg
+            class="size-4 text-muted-foreground/70 transition-transform duration-200 group-hover/menu:text-primary"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.75"
+            aria-hidden="true"
+            data-menu-chevron="tools"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <div
+          id="desktop-menu-tools"
+          data-menu-panel="tools"
+          class="pointer-events-none invisible absolute start-0 lg:start-auto lg:ltr:-start-20 lg:rtl:-end-20 top-full z-50 mt-2 w-[min(94vw,46rem)] rounded-2xl border border-border/80 bg-card/98 p-6 opacity-0 shadow-2xl backdrop-blur-2xl transition-all duration-200 transform translate-y-1"
+        >
+          <div class="flex items-center justify-between pb-3 border-b border-border/60">
+            <div>
+              <h3 class="text-sm font-semibold text-foreground font-display">
+                {content.header.toolsMenu.title}
+              </h3>
+              <p class="text-xs text-muted-foreground mt-0.5">
+                {content.header.toolsMenu.description}
+              </p>
+            </div>
+            <a
+              href={resolveHeaderHref('/tools')}
+              class="text-xs font-semibold text-primary hover:underline shrink-0 ms-3"
+            >
+              {content.header.toolsMenu.viewAllToolsLabel} →
+            </a>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {content.header.toolsMenu.items.map((tool) => (
+              <a
+                href={resolveHeaderHref(tool.href)}
+                class="group flex flex-col p-3 rounded-xl border border-border/60 bg-background/50 hover:border-primary/40 hover:bg-secondary/40 transition-all"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                    {tool.name}
+                  </span>
+                  <span class="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary border border-primary/20">
+                    {tool.badge}
+                  </span>
+                </div>
+                <p class="mt-1 text-[11px] text-muted-foreground leading-relaxed">
+                  {tool.desc}
+                </p>
+              </a>
+            ))}
+          </div>
+
+          <div class="mt-4 rounded-xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-3 border border-primary/20 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="size-8 rounded-lg bg-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                </svg>
+              </span>
+              <div>
+                <p class="text-xs font-semibold text-foreground">
+                  {content.header.toolsMenu.toolsHubLinkLabel}
+                </p>
+                <p class="text-[11px] text-muted-foreground">
+                  {lang === 'ar' ? 'فحص، تشخيص، وحساب تكاليف بدون أي رسوم' : 'Inspect, diagnose, and calculate costs 100% free'}
+                </p>
+              </div>
+            </div>
+            <a
+              href={resolveHeaderHref('/tools')}
+              class="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              <span>{lang === 'ar' ? 'فتح المركز' : 'Open Hub'}</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Direct Nav Links: Pricing, Blog, About */}
+      {content.header.nav.map((item) => {
+        const isActive = isCurrentRoute(item.href);
+        return (
+          <a
+            href={resolveHeaderHref(item.href)}
+            class:list={[
+              "nav-link-hover px-3 py-2 font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+              isActive ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+            ]}
+          >
+            {item.name}
+          </a>
+        );
+      })}
     </nav>
 
-    {/* Actions */}
-    <div class="flex items-center gap-3">
-
-      {/* Language toggle */}
+    {/* Right Action Buttons */}
+    <div class="flex items-center gap-2.5 sm:gap-3">
+      {/* Language toggle pill */}
       <a
         href={toggleHref}
-        class="text-sm font-semibold text-primary hover:text-primary/80 transition-colors px-3.5 py-1.5 rounded-full border border-primary/30 hover:bg-primary/5"
+        class="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground/85 hover:text-primary transition-all px-3 py-1.5 rounded-full border border-border/90 hover:border-primary/40 bg-card/60 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        aria-label={lang === 'ar' ? 'Switch to English' : 'التحويل إلى اللغة العربية'}
       >
-        {toggleLabel}
+        <svg class="size-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+        </svg>
+        <span>{toggleLabel}</span>
       </a>
 
-      {/* CTA Button */}
+      {/* Primary Conversion CTA */}
       <ComingSoonLink
         href={getLocalizedPath('/contact', lang)}
         lang={lang}
-        class="hidden sm:inline-flex items-center justify-center rounded-lg gold-gradient gold-shimmer px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:shadow-lg hover:shadow-primary/20"
+        class="hidden sm:inline-flex items-center justify-center gap-1.5 rounded-xl gold-gradient gold-shimmer px-4 py-2 text-sm font-semibold text-white shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all active:scale-[0.98]"
       >
-        {content.header.quoteButton}
+        <span>{content.header.quoteButton}</span>
       </ComingSoonLink>
 
-      {/* Mobile menu button */}
+      {/* Mobile Menu Hamburger */}
       <button
         type="button"
-        class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:text-foreground hover:bg-secondary"
+        class="lg:hidden inline-flex items-center justify-center rounded-xl p-2.5 text-muted-foreground hover:text-foreground hover:bg-secondary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-colors"
         aria-label={content.header.menuToggle}
+        aria-expanded="false"
         id="mobile-menu-btn"
       >
-        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <svg class="size-6 mobile-icon-open" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+        <svg class="size-6 mobile-icon-close hidden" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
   </div>
 
-  {/* Mobile Navigation */}
-  <div id="mobile-menu" class="mobile-menu-enter md:hidden">
-    <div>
-      <nav class="container mx-auto flex max-h-[calc(100dvh-4.5rem)] flex-col gap-1 overflow-y-auto overscroll-y-contain border-t-2 border-primary/10 bg-background px-4 py-5">
-        {content.header.nav.map((item) => (
+  {/* Mobile Navigation Drawer */}
+  <div id="mobile-menu" class="mobile-menu-enter lg:hidden">
+    <div class="border-t border-border/80 bg-background/98 backdrop-blur-2xl">
+      <nav class="container mx-auto flex max-h-[calc(100dvh-5rem)] flex-col gap-1.5 overflow-y-auto overscroll-y-contain px-4 py-5">
+        {/* Services Accordion */}
+        <details class="group rounded-xl border border-border/80 bg-secondary/25 p-3" data-mobile-submenu>
+          <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-lg px-1 text-sm font-semibold text-foreground">
+            <span class="flex items-center gap-2">
+              <svg class="size-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.32l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.32 4.486c.047.58.024 1.193-.14 1.743" />
+              </svg>
+              <span>{content.header.servicesMenu.trigger}</span>
+            </span>
+            <svg
+              class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </summary>
+
+          <div class="mobile-submenu-panel">
+            <div class="mobile-submenu-panel-inner mt-2 border-t border-border/60 pt-3 space-y-2">
+              <div class="grid gap-1.5">
+                {featuredServices.map((service) => (
+                  <a
+                    href={getLocalizedPath(`/services/${service.slug}`, lang)}
+                    class="flex items-center justify-between rounded-lg p-2.5 text-xs font-medium text-foreground hover:bg-card hover:text-primary transition-colors"
+                  >
+                    <span>{lang === 'ar' ? service.nameAr : service.nameEn}</span>
+                    <span class="text-muted-foreground/60 text-[10px]">→</span>
+                  </a>
+                ))}
+              </div>
+
+              <div class="pt-2 border-t border-border/40 flex items-center justify-between text-xs">
+                <a
+                  href={getLocalizedPath('/services/riyadh', lang)}
+                  class="font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {content.header.servicesMenu.riyadhLinkLabel}
+                </a>
+                <a
+                  href={resolveHeaderHref('/pricing')}
+                  class="font-semibold text-primary hover:underline"
+                >
+                  {content.header.servicesMenu.pricingLinkLabel} →
+                </a>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        {/* Cars Accordion */}
+        <details class="group rounded-xl border border-border/80 bg-secondary/25 p-3" data-mobile-submenu>
+          <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-lg px-1 text-sm font-semibold text-foreground">
+            <span class="flex items-center gap-2">
+              <svg class="size-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.25V3.75m0 3.75h-7.5" />
+              </svg>
+              <span>{content.header.carsMenu.trigger}</span>
+            </span>
+            <svg
+              class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </summary>
+
+          <div class="mobile-submenu-panel">
+            <div class="mobile-submenu-panel-inner mt-2 border-t border-border/60 pt-3 space-y-2">
+              <div class="grid grid-cols-2 gap-1.5">
+                {featuredBrands.map((brand) => (
+                  <a
+                    href={getLocalizedPath(`/car-ac/${brand.slug}`, lang)}
+                    class="rounded-lg border border-border/60 bg-card/60 p-2 text-xs font-medium text-foreground hover:border-primary/40 hover:text-primary transition-colors text-center"
+                  >
+                    {lang === 'ar' ? brand.nameAr : brand.nameEn}
+                  </a>
+                ))}
+              </div>
+
+              <div class="pt-2 border-t border-border/40 text-center">
+                <a
+                  href={resolveHeaderHref('/tools/freon-capacity')}
+                  class="text-xs font-semibold text-primary hover:underline"
+                >
+                  {content.header.carsMenu.viewAllBrandsLabel} →
+                </a>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        {/* Tools Accordion */}
+        <details class="group rounded-xl border border-border/80 bg-secondary/25 p-3" data-mobile-submenu>
+          <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-lg px-1 text-sm font-semibold text-foreground">
+            <span class="flex items-center gap-2">
+              <svg class="size-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+              </svg>
+              <span>{content.header.toolsMenu.trigger}</span>
+              <span class="rounded-full bg-primary/15 px-1.5 py-0.2 text-[9px] font-bold text-primary">
+                {content.header.toolsMenu.badge}
+              </span>
+            </span>
+            <svg
+              class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </summary>
+
+          <div class="mobile-submenu-panel">
+            <div class="mobile-submenu-panel-inner mt-2 border-t border-border/60 pt-3 space-y-1.5">
+              {content.header.toolsMenu.items.map((tool) => (
+                <a
+                  href={resolveHeaderHref(tool.href)}
+                  class="flex items-center justify-between rounded-lg p-2 text-xs font-medium text-foreground hover:bg-card hover:text-primary transition-colors"
+                >
+                  <span>{tool.name}</span>
+                  <span class="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-semibold text-primary">
+                    {tool.badge}
+                  </span>
+                </a>
+              ))}
+              <div class="pt-2 border-t border-border/40 text-center">
+                <a
+                  href={resolveHeaderHref('/tools')}
+                  class="text-xs font-semibold text-primary hover:underline"
+                >
+                  {content.header.toolsMenu.viewAllToolsLabel} →
+                </a>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        {/* Direct Links */}
+        <div class="mt-2 space-y-1">
+          {content.header.nav.map((item) => (
+            <a
+              href={resolveHeaderHref(item.href)}
+              class="flex min-h-11 items-center rounded-xl px-4 text-sm font-medium text-muted-foreground hover:bg-secondary/60 hover:text-foreground transition-colors"
+            >
+              {item.name}
+            </a>
+          ))}
           <a
-            href={resolveHeaderHref(item.href)}
-            class="text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/60 py-2.5 px-3 rounded-lg transition-colors"
+            href={resolveHeaderHref('/contact')}
+            class="flex min-h-11 items-center rounded-xl px-4 text-sm font-medium text-muted-foreground hover:bg-secondary/60 hover:text-foreground transition-colors"
           >
-            {item.name}
+            {lang === 'ar' ? 'تواصل معنا' : 'Contact Us'}
           </a>
-        ))}
+        </div>
 
-        <details class="group mt-2 rounded-xl border border-border bg-secondary/25 p-3" data-mobile-submenu>
-          <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-lg px-1 text-sm font-semibold text-foreground">
-            <span>{content.header.servicesMenu.trigger}</span>
-            <svg
-              class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="1.5"
-              aria-hidden="true"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        {/* Mobile Drawer Actions */}
+        <div class="mt-4 pt-4 border-t border-border/80 flex flex-col gap-2.5">
+          <ComingSoonLink
+            href={getLocalizedPath('/contact', lang)}
+            lang={lang}
+            class="inline-flex items-center justify-center rounded-xl gold-gradient gold-shimmer px-4 py-3 text-sm font-semibold text-white shadow-md"
+          >
+            {content.header.quoteButton}
+          </ComingSoonLink>
+
+          <a
+            href={toggleHref}
+            class="inline-flex items-center justify-center gap-2 rounded-xl border border-border/80 bg-card py-2.5 text-xs font-semibold text-foreground/80 hover:bg-secondary transition-colors"
+          >
+            <svg class="size-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
             </svg>
-          </summary>
-
-          <div class="mobile-submenu-panel">
-            <div class="mobile-submenu-panel-inner mt-2 border-t border-border pt-3">
-              <h2 class="font-display text-base font-semibold text-foreground">{content.header.servicesMenu.title}</h2>
-              <p class="mt-1 text-xs text-muted-foreground">{content.header.servicesMenu.description}</p>
-
-              <div class="mt-3 max-h-72 space-y-2 overflow-y-auto overscroll-y-contain pe-1">
-                {services.map((service) => (
-                  <details class="rounded-lg border border-border bg-card p-2.5">
-                    <summary class="cursor-pointer list-none text-sm font-semibold text-foreground">
-                      {localizedServiceName(service.nameAr, service.nameEn)}
-                    </summary>
-                    <div class="mt-2 space-y-2 border-t border-border pt-2">
-                      <a
-                        href={getLocalizedPath(`/services/${service.slug}`, lang)}
-                        class="inline-flex rounded-md border border-primary/30 px-2.5 py-1.5 text-xs font-medium text-primary"
-                      >
-                        {content.header.servicesMenu.viewServiceLabel}
-                      </a>
-
-                      {riyadhNeighborhoods.length > 0 && (
-                        <div class="flex flex-wrap gap-1.5">
-                          {riyadhNeighborhoods.slice(0, 6).map((neighborhood) => (
-                            <a
-                              href={getLocalizedPath(`/services/riyadh/${neighborhood.slug}`, lang)}
-                              class="rounded-md border border-border px-2 py-1 text-xs text-foreground"
-                            >
-                              {lang === 'ar' ? neighborhood.nameAr : neighborhood.nameEn}
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </details>
-                ))}
-              </div>
-
-              <div class="mt-3 grid gap-2">
-                {servicesQuickLinks.map((link) => (
-                  <a
-                    href={resolveHeaderHref(link.href)}
-                    class="rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </details>
-
-        <details class="group mt-2 rounded-xl border border-border bg-secondary/25 p-3" data-mobile-submenu>
-          <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-lg px-1 text-sm font-semibold text-foreground">
-            <span>{content.header.carsMenu.trigger}</span>
-            <svg
-              class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="1.5"
-              aria-hidden="true"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </summary>
-
-          <div class="mobile-submenu-panel">
-            <div class="mobile-submenu-panel-inner mt-2 border-t border-border pt-3">
-              <h2 class="font-display text-base font-semibold text-foreground">{content.header.carsMenu.title}</h2>
-              <p class="mt-1 text-xs text-muted-foreground">{content.header.carsMenu.description}</p>
-
-              <div class="mt-3 max-h-72 space-y-2 overflow-y-auto overscroll-y-contain pe-1">
-                {carBrands.map((brand) => (
-                  <details class="rounded-lg border border-border bg-card p-2.5">
-                    <summary class="cursor-pointer list-none text-sm font-semibold text-foreground">
-                      {localizedBrandName(brand.nameAr, brand.nameEn)}
-                    </summary>
-                    <div class="mt-2 space-y-2 border-t border-border pt-2">
-                      <a
-                        href={getLocalizedPath(`/car-ac/${brand.slug}`, lang)}
-                        class="inline-flex rounded-md border border-primary/30 px-2.5 py-1.5 text-xs font-medium text-primary"
-                      >
-                        {content.header.carsMenu.viewBrandLabel}
-                      </a>
-
-                      {brandsWithModelPages.has(brand.slug) ? (
-                        <div class="flex flex-wrap gap-1.5">
-                          {brand.models.map((model) => (
-                            <a
-                              href={getLocalizedPath(`/car-ac/${brand.slug}/${model.slug}`, lang)}
-                              class="rounded-md border border-border px-2 py-1 text-xs text-foreground"
-                            >
-                              {localizedBrandName(model.nameAr, model.nameEn)}
-                            </a>
-                          ))}
-                        </div>
-                      ) : (
-                        <div>
-                          <div class="flex flex-wrap gap-1.5">
-                            {brand.models.map((model) => (
-                              <span class="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground">
-                                {localizedBrandName(model.nameAr, model.nameEn)}
-                              </span>
-                            ))}
-                          </div>
-                          <p class="mt-2 text-xs text-muted-foreground">{content.header.carsMenu.noModelPagesLabel}</p>
-                        </div>
-                      )}
-                    </div>
-                  </details>
-                ))}
-              </div>
-
-              <div class="mt-3 grid gap-2">
-                {carsQuickLinks.map((link) => (
-                  <a
-                    href={resolveHeaderHref(link.href)}
-                    class="rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </details>
-
-        <ComingSoonLink
-          href={getLocalizedPath('/contact', lang)}
-          lang={lang}
-          class="inline-flex items-center justify-center rounded-lg gold-gradient gold-shimmer px-4 py-2.5 text-sm font-semibold text-white shadow-md mt-3"
-        >
-          {content.header.quoteButton}
-        </ComingSoonLink>
-
+            <span>{toggleLabel}</span>
+          </a>
+        </div>
       </nav>
     </div>
   </div>
@@ -478,13 +715,29 @@ const carsQuickLinks = [
 
       const mobileBtn = header.querySelector('#mobile-menu-btn');
       const mobileMenu = header.querySelector('#mobile-menu');
+      const mobileIconOpen = header.querySelector('.mobile-icon-open');
+      const mobileIconClose = header.querySelector('.mobile-icon-close');
       const mobileLinks = header.querySelectorAll('#mobile-menu a');
-      const mobileDetails = Array.from(header.querySelectorAll('#mobile-menu details'));
       const mobileSubmenus = Array.from(header.querySelectorAll('#mobile-menu details[data-mobile-submenu]'));
 
+      // Scroll detection for sticky shadow
+      const handleScroll = () => {
+        if (window.scrollY > 12) {
+          header.classList.add('shadow-md', 'shadow-black/5', 'border-primary/25', 'bg-background/95');
+        } else {
+          header.classList.remove('shadow-md', 'shadow-black/5', 'border-primary/25', 'bg-background/95');
+        }
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+
+      // Mobile Menu Toggle
       const closeMobileMenu = () => {
         mobileMenu?.classList.remove('is-open');
-        mobileDetails.forEach((detail) => detail.removeAttribute('open'));
+        mobileBtn?.setAttribute('aria-expanded', 'false');
+        mobileIconOpen?.classList.remove('hidden');
+        mobileIconClose?.classList.add('hidden');
+        mobileSubmenus.forEach((detail) => detail.removeAttribute('open'));
       };
 
       mobileBtn?.addEventListener('click', () => {
@@ -494,6 +747,9 @@ const carsQuickLinks = [
           return;
         }
         mobileMenu?.classList.add('is-open');
+        mobileBtn?.setAttribute('aria-expanded', 'true');
+        mobileIconOpen?.classList.add('hidden');
+        mobileIconClose?.classList.remove('hidden');
       });
 
       mobileLinks.forEach((link) => {
@@ -502,12 +758,12 @@ const carsQuickLinks = [
         });
       });
 
+      // Mobile Submenus Accordion behavior
       mobileSubmenus.forEach((submenu) => {
         submenu.addEventListener('toggle', () => {
           if (!(submenu instanceof HTMLDetailsElement) || !submenu.open) {
             return;
           }
-
           mobileSubmenus.forEach((otherSubmenu) => {
             if (otherSubmenu !== submenu && otherSubmenu instanceof HTMLDetailsElement) {
               otherSubmenu.removeAttribute('open');
@@ -516,9 +772,13 @@ const carsQuickLinks = [
         });
       });
 
+      // Desktop Mega-menus
+      const menuContainers = Array.from(header.querySelectorAll('.group\\/menu'));
       const triggers = Array.from(header.querySelectorAll('[data-menu-trigger]'));
       const panels = Array.from(header.querySelectorAll('[data-menu-panel]'));
       const chevrons = Array.from(header.querySelectorAll('[data-menu-chevron]'));
+
+      let leaveTimeout = null;
 
       const setPanelState = (key, isOpen) => {
         const panel = panels.find((item) => item.getAttribute('data-menu-panel') === key);
@@ -532,9 +792,13 @@ const carsQuickLinks = [
         panel.classList.toggle('pointer-events-none', !isOpen);
         panel.classList.toggle('invisible', !isOpen);
         panel.classList.toggle('opacity-0', !isOpen);
+        panel.classList.toggle('translate-y-1', !isOpen);
+
         panel.classList.toggle('pointer-events-auto', isOpen);
         panel.classList.toggle('visible', isOpen);
         panel.classList.toggle('opacity-100', isOpen);
+        panel.classList.toggle('translate-y-0', isOpen);
+
         trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         chevron?.classList.toggle('rotate-180', isOpen);
       };
@@ -549,13 +813,32 @@ const carsQuickLinks = [
         });
       };
 
+      // Hover and Click events with graceful intent timeout
+      menuContainers.forEach((container) => {
+        const key = container.getAttribute('data-menu-key');
+        if (!key) return;
+
+        container.addEventListener('mouseenter', () => {
+          if (window.innerWidth < 1024) return;
+          if (leaveTimeout) clearTimeout(leaveTimeout);
+          closeAllPanels(key);
+          setPanelState(key, true);
+        });
+
+        container.addEventListener('mouseleave', () => {
+          if (window.innerWidth < 1024) return;
+          if (leaveTimeout) clearTimeout(leaveTimeout);
+          leaveTimeout = setTimeout(() => {
+            setPanelState(key, false);
+          }, 150);
+        });
+      });
+
       triggers.forEach((trigger) => {
         trigger.addEventListener('click', (event) => {
           event.stopPropagation();
           const key = trigger.getAttribute('data-menu-trigger');
-          if (!key) {
-            return;
-          }
+          if (!key) return;
 
           const isOpen = trigger.getAttribute('aria-expanded') === 'true';
           closeAllPanels();
@@ -563,6 +846,7 @@ const carsQuickLinks = [
         });
       });
 
+      // Close on outside click
       document.addEventListener('click', (event) => {
         const target = event.target;
         if (target instanceof Node && !header.contains(target)) {
@@ -571,6 +855,7 @@ const carsQuickLinks = [
         }
       });
 
+      // Close on Escape key
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
           closeMobileMenu();
