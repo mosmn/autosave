@@ -54,6 +54,8 @@ export default defineConfig({
     '/en/authorized-maintenance-center': '/en/workshop',
     '/authorized-installment-center': '/workshop',
     '/en/authorized-installment-center': '/en/workshop',
+    '/blog/best-erp-accounting-software-saudi-arabia-2026': '/blog',
+    '/en/blog/best-erp-accounting-software-saudi-arabia-2026': '/en/blog',
     ...cityFallbackRedirects,
   },
   i18n: {

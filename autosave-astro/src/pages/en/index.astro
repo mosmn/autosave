@@ -16,16 +16,6 @@ import FAQSchema from '../../components/FAQSchema.astro';
 const lang = 'en' as const;
 const content = getContentByLanguage(lang);
 const blogPosts = getBlogPosts(lang).slice(0, 3);
-const homePageUrl = 'https://autosaveks.com/en/';
-const productImageUrl = 'https://autosaveks.com/images/blog/ac-compressor-guide.jpeg';
-const priceValidUntil = `${new Date().getFullYear() + 1}-12-31`;
-const aggregateRating = {
-  ratingValue: '4.8',
-  reviewCount: '320',
-  ratingCount: '320',
-  bestRating: '5',
-  worstRating: '1',
-};
 ---
 
 <PageLayout
@@ -50,13 +40,6 @@ const aggregateRating = {
   ]}
 >
   <HeroSection content={content.home.hero} lang={lang} />
-  <section class="py-8" data-animate="fade-in-up">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm text-muted-foreground">
-        Customer rating {aggregateRating.ratingValue}/{aggregateRating.bestRating} based on {aggregateRating.reviewCount} reviews.
-      </p>
-    </div>
-  </section>
   <TrustBadges items={content.home.trustBadges} />
   <BenefitsSection content={content.home.benefits} />
   <HowItWorks content={content.home.howItWorks} />
@@ -66,67 +49,4 @@ const aggregateRating = {
   <CtaSection content={content.home.cta} lang={lang} />
   <WebsiteSchema lang={lang} />
   <FAQSchema items={content.home.faq.items} />
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "@id": `${homePageUrl}#service-product`,
-    "mainEntityOfPage": homePageUrl,
-    "name": "Car AC Repair and Maintenance Services",
-    "description": "Professional car AC repair, compressor replacement, freon refill, and maintenance services.",
-    "image": [productImageUrl],
-    "url": homePageUrl,
-    "brand": {
-      "@type": "Brand",
-      "name": "AUTO SAVE",
-      "url": "https://autosaveks.com"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": aggregateRating.ratingValue,
-      "reviewCount": aggregateRating.reviewCount,
-      "ratingCount": aggregateRating.ratingCount,
-      "bestRating": aggregateRating.bestRating,
-      "worstRating": aggregateRating.worstRating
-    },
-    "offers": {
-      "@type": "Offer",
-      "url": homePageUrl,
-      "price": "150",
-      "priceCurrency": "SAR",
-      "priceValidUntil": priceValidUntil,
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "0",
-          "currency": "SAR"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "SA"
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          }
-        }
-      },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "SA",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
-      },
-      "availability": "https://schema.org/InStock"
-    }
-  })} />
 </PageLayout>

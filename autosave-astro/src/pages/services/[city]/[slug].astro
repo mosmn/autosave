@@ -72,8 +72,6 @@ export function getStaticPaths() {
 const props = Astro.props as Props;
 const lang = 'ar';
 const siteOrigin = Astro.site?.origin ?? 'https://autosaveks.com';
-const productImageUrl = `${siteOrigin}/images/blog/ac-compressor-guide.jpeg`;
-const priceValidUntil = `${new Date().getFullYear() + 1}-12-31`;
 
 // ─── Neighborhood page data ─────────────────────────────────────────────────
 function getNeighborhoodData(city: City, neighborhood: CityNeighborhood) {
@@ -125,74 +123,21 @@ const pageKeywords = isNeighborhood
       'فحص ليزر لمكيف السيارة',
     ];
 
-const aggregateRating = {
-  ratingValue: '4.8',
-  reviewCount: '320',
-  ratingCount: '320',
-  bestRating: '5',
-  worstRating: '1',
-};
-
-const cityServiceReviewSchema = !isNeighborhood && props.service
+const cityServiceSchema = !isNeighborhood && props.service
   ? {
       '@context': 'https://schema.org',
-      '@type': 'Product',
+      '@type': 'Service',
       name: `${props.service.nameAr} في ${props.city.nameAr}`,
       description: props.service.descriptionAr,
-      image: [productImageUrl],
       url: Astro.url.href,
-      brand: {
-        '@type': 'Brand',
+      provider: {
+        '@type': 'AutoRepair',
         name: 'اوتو سيف',
         url: siteOrigin,
       },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: aggregateRating.ratingValue,
-        reviewCount: aggregateRating.reviewCount,
-        ratingCount: aggregateRating.ratingCount,
-        bestRating: aggregateRating.bestRating,
-        worstRating: aggregateRating.worstRating,
-      },
-      offers: {
-        '@type': 'Offer',
-        url: Astro.url.href,
-        price: String(props.service.priceRangeMin),
-        priceCurrency: 'SAR',
-        priceValidUntil,
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: {
-            '@type': 'MonetaryAmount',
-            value: '0',
-            currency: 'SAR',
-          },
-          shippingDestination: {
-            '@type': 'DefinedRegion',
-            addressCountry: 'SA',
-          },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 0,
-              maxValue: 1,
-              unitCode: 'DAY',
-            },
-            transitTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 0,
-              maxValue: 1,
-              unitCode: 'DAY',
-            },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'SA',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-        },
-        availability: 'https://schema.org/InStock',
+      areaServed: {
+        '@type': 'City',
+        name: props.city.nameAr,
       },
     }
   : null;
@@ -257,14 +202,6 @@ const cityServiceReviewSchema = !isNeighborhood && props.service
         lang={lang}
         breadcrumbs={pageData.breadcrumbs}
       />
-
-      <section class="py-8" data-animate="fade-in-up">
-        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-muted-foreground">
-            تقييم العملاء {aggregateRating.ratingValue} من {aggregateRating.bestRating} بناءً على {aggregateRating.reviewCount} مراجعة.
-          </p>
-        </div>
-      </section>
 
       <!-- Service Process Steps -->
       <section class="py-20 lg:py-28" data-animate="fade-in-up">
@@ -344,8 +281,8 @@ const cityServiceReviewSchema = !isNeighborhood && props.service
         message={`أحتاج ${props.service.nameAr} في ${props.city.nameAr}`}
       />
 
-      {cityServiceReviewSchema && (
-        <script type="application/ld+json" set:html={JSON.stringify(cityServiceReviewSchema)} />
+      {cityServiceSchema && (
+        <script type="application/ld+json" set:html={JSON.stringify(cityServiceSchema)} />
       )}
     </>
   )}

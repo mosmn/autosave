@@ -40,8 +40,6 @@ const serviceSeo = getServiceSeoByFamily(service.slug, serviceName, service.dura
 const pageTitle = serviceSeo.title;
 const metaDescription = serviceSeo.description;
 const siteOrigin = Astro.site?.origin ?? 'https://autosaveks.com';
-const productImageUrl = `${siteOrigin}/images/blog/ac-compressor-guide.jpeg`;
-const priceValidUntil = `${new Date().getFullYear() + 1}-12-31`;
 
 const breadcrumbs = [
   { label: isAr ? 'الرئيسية' : 'Home', href: isAr ? '/' : '/en' },
@@ -265,76 +263,6 @@ const noindexThinService = shouldNoindexThinContent({
   linkHubCount: serviceLinkHubCount,
 });
 
-const aggregateRating = {
-  ratingValue: '4.8',
-  reviewCount: '320',
-  ratingCount: '320',
-  bestRating: '5',
-  worstRating: '1',
-};
-
-const serviceReviewSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Product',
-  name: serviceName,
-  description: pageSummary,
-  image: [productImageUrl],
-  url: Astro.url.href,
-  brand: {
-    '@type': 'Brand',
-    name: isAr ? 'اوتو سيف' : 'Auto Save',
-    url: siteOrigin,
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: aggregateRating.ratingValue,
-    reviewCount: aggregateRating.reviewCount,
-    ratingCount: aggregateRating.ratingCount,
-    bestRating: aggregateRating.bestRating,
-    worstRating: aggregateRating.worstRating,
-  },
-  offers: {
-    '@type': 'Offer',
-    url: Astro.url.href,
-    price: String(service.priceRangeMin),
-    priceCurrency: 'SAR',
-    priceValidUntil,
-    shippingDetails: {
-      '@type': 'OfferShippingDetails',
-      shippingRate: {
-        '@type': 'MonetaryAmount',
-        value: '0',
-        currency: 'SAR',
-      },
-      shippingDestination: {
-        '@type': 'DefinedRegion',
-        addressCountry: 'SA',
-      },
-      deliveryTime: {
-        '@type': 'ShippingDeliveryTime',
-        handlingTime: {
-          '@type': 'QuantitativeValue',
-          minValue: 0,
-          maxValue: 1,
-          unitCode: 'DAY',
-        },
-        transitTime: {
-          '@type': 'QuantitativeValue',
-          minValue: 0,
-          maxValue: 1,
-          unitCode: 'DAY',
-        },
-      },
-    },
-    hasMerchantReturnPolicy: {
-      '@type': 'MerchantReturnPolicy',
-      applicableCountry: 'SA',
-      returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-    },
-    availability: 'https://schema.org/InStock',
-  },
-};
-
 // Service JSON-LD schema
 const serviceSchema = {
   '@context': 'https://schema.org',
@@ -386,16 +314,6 @@ const serviceSchema = {
     lang={lang}
     breadcrumbs={breadcrumbs}
   />
-
-  <section class="py-8" data-animate="fade-in-up">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm text-muted-foreground">
-        {isAr
-          ? `تقييم العملاء ${aggregateRating.ratingValue} من ${aggregateRating.bestRating} بناءً على ${aggregateRating.reviewCount} مراجعة.`
-          : `Customer rating ${aggregateRating.ratingValue}/${aggregateRating.bestRating} based on ${aggregateRating.reviewCount} reviews.`}
-      </p>
-    </div>
-  </section>
 
   <section class="bg-secondary/40 py-20 lg:py-28" data-animate="fade-in-up">
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -519,9 +437,6 @@ const serviceSchema = {
 
   {/* CTA */}
   <CTAWhatsApp lang={lang} message={whatsappMessage} />
-
-  {/* Review snippet schema */}
-  <script type="application/ld+json" set:html={JSON.stringify(serviceReviewSchema)} />
 
   {/* Service schema */}
   <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />

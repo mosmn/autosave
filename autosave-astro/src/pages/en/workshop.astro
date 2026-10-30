@@ -5,16 +5,6 @@ import { getGeneralContactWhatsAppUrl } from '../../lib/whatsapp';
 
 const lang = 'en' as const;
 const contactWhatsAppUrl = getGeneralContactWhatsAppUrl(lang);
-const pageUrl = 'https://autosaveks.com/en/workshop/';
-const productImageUrl = 'https://autosaveks.com/images/blog/ac-compressor-guide.jpeg';
-const priceValidUntil = `${new Date().getFullYear() + 1}-12-31`;
-const aggregateRating = {
-  ratingValue: 4.8,
-  reviewCount: 320,
-  ratingCount: 320,
-  bestRating: 5,
-  worstRating: 1,
-};
 const featuredReview = {
   author: 'AUTO SAVE customer',
   body: 'Professional diagnostics, transparent communication, and reliable service quality.',
@@ -42,9 +32,6 @@ const carImages = Array.from({ length: 21 }, (_, index) => {
         <h1 class="hero-animate hero-animate-delay-1 mt-4 text-4xl font-bold tracking-tight font-display sm:text-5xl">Auto Save workshop for car service</h1>
         <p class="hero-animate hero-animate-delay-2 mt-6 text-base leading-relaxed text-[#f0ebe0]/65 sm:text-lg">
           We deliver trusted automotive support with workshop service options, skilled technicians, and professional service quality from inspection to final delivery.
-        </p>
-        <p class="hero-animate hero-animate-delay-3 mt-5 text-sm text-[#f0ebe0]/80">
-          Customer rating {aggregateRating.ratingValue}/{aggregateRating.bestRating} based on {aggregateRating.reviewCount} reviews.
         </p>
       </header>
     </div>
@@ -178,80 +165,4 @@ const carImages = Array.from({ length: 21 }, (_, index) => {
       }, 10000);
     });
   </script>
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Auto Save workshop for car service",
-    "description": "Auto Save workshop for car service with skilled technicians and high-quality execution.",
-    "image": [productImageUrl],
-    "url": pageUrl,
-    "brand": {
-      "@type": "Brand",
-      "name": "AUTO SAVE",
-      "url": "https://autosaveks.com"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": aggregateRating.ratingValue,
-      "reviewCount": aggregateRating.reviewCount,
-      "ratingCount": aggregateRating.ratingCount,
-      "bestRating": aggregateRating.bestRating,
-      "worstRating": aggregateRating.worstRating
-    },
-    "review": [{
-      "@type": "Review",
-      "reviewBody": featuredReview.body,
-      "datePublished": featuredReview.datePublished,
-      "author": {
-        "@type": "Person",
-        "name": featuredReview.author
-      },
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": aggregateRating.ratingValue,
-        "bestRating": aggregateRating.bestRating,
-        "worstRating": aggregateRating.worstRating
-      }
-    }],
-    "offers": {
-      "@type": "Offer",
-      "url": pageUrl,
-      "price": "150",
-      "priceCurrency": "SAR",
-      "priceValidUntil": priceValidUntil,
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "0",
-          "currency": "SAR"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "SA"
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          }
-        }
-      },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "SA",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
-      },
-      "availability": "https://schema.org/InStock"
-    }
-  })} />
 </PageLayout>

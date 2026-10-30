@@ -16,16 +16,6 @@ import FAQSchema from '../components/FAQSchema.astro';
 const lang = 'ar' as const;
 const content = getContentByLanguage(lang);
 const blogPosts = getBlogPosts(lang).slice(0, 3);
-const homePageUrl = 'https://autosaveks.com/';
-const productImageUrl = 'https://autosaveks.com/images/blog/ac-compressor-guide.jpeg';
-const priceValidUntil = `${new Date().getFullYear() + 1}-12-31`;
-const aggregateRating = {
-  ratingValue: '4.8',
-  reviewCount: '320',
-  ratingCount: '320',
-  bestRating: '5',
-  worstRating: '1',
-};
 ---
 
 <PageLayout
@@ -35,13 +25,6 @@ const aggregateRating = {
   keywords={['ورشة سيارات', 'مكيفات سيارات', 'تكييف سيارات', 'تصليح مكيفات', 'صيانة مكيفات', 'فحص ليزر', 'تعبئة فريون السيارة', 'فريون سيارة', 'فريون مكيف', 'إصلاح مكيف السيارة']}
 >
   <HeroSection content={content.home.hero} lang={lang} />
-  <section class="py-8" data-animate="fade-in-up">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm text-muted-foreground">
-        تقييم العملاء {aggregateRating.ratingValue} من {aggregateRating.bestRating} بناءً على {aggregateRating.reviewCount} مراجعة.
-      </p>
-    </div>
-  </section>
   <TrustBadges items={content.home.trustBadges} />
   <section class="bg-secondary/40 py-12 lg:py-16" data-animate="fade-in-up">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -91,67 +74,4 @@ const aggregateRating = {
   <CtaSection content={content.home.cta} lang={lang} />
   <WebsiteSchema lang={lang} />
   <FAQSchema items={content.home.faq.items} />
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "@id": `${homePageUrl}#service-product`,
-    "mainEntityOfPage": homePageUrl,
-    "name": "خدمات صيانة مكيف السيارة",
-    "description": "خدمات احترافية لإصلاح مكيف السيارة وتغيير الكمبروسر وتعبئة الفريون والصيانة الدورية.",
-    "image": [productImageUrl],
-    "url": homePageUrl,
-    "brand": {
-      "@type": "Brand",
-      "name": "اوتو سيف",
-      "url": "https://autosaveks.com"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": aggregateRating.ratingValue,
-      "reviewCount": aggregateRating.reviewCount,
-      "ratingCount": aggregateRating.ratingCount,
-      "bestRating": aggregateRating.bestRating,
-      "worstRating": aggregateRating.worstRating
-    },
-    "offers": {
-      "@type": "Offer",
-      "url": homePageUrl,
-      "price": "150",
-      "priceCurrency": "SAR",
-      "priceValidUntil": priceValidUntil,
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "0",
-          "currency": "SAR"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "SA"
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          }
-        }
-      },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "SA",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
-      },
-      "availability": "https://schema.org/InStock"
-    }
-  })} />
 </PageLayout>
