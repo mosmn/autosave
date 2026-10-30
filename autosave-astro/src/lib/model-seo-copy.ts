@@ -33,19 +33,19 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
     const keyword = pickBySeed(
       [
         `أعطال مكيف ${brand.nameAr} ${model.nameAr} في صيف الرياض`,
-        `صيانة مكيف ${brand.nameAr} ${model.nameAr} في زحام الرياض`,
-        `ضعف تبريد ${brand.nameAr} ${model.nameAr} وقت الظهيرة`,
-        `تشخيص مكيف ${brand.nameAr} ${model.nameAr} قبل تلف الكمبروسر`,
+        `صيانة وإصلاح مكيف ${brand.nameAr} ${model.nameAr} بالرياض`,
+        `ضعف تبريد مكيف ${brand.nameAr} ${model.nameAr} وقت الظهيرة`,
+        `تشخيص دورة تكييف ${brand.nameAr} ${model.nameAr}`,
       ],
       seed
     );
 
     const metaTitle = pickBySeed(
       [
-        `${brand.nameAr} ${model.nameAr}: إصلاح مكيف السيارة في الرياض | اوتو سيف`,
-        `صيانة مكيف ${brand.nameAr} ${model.nameAr} في الرياض | اوتو سيف`,
-        `${brand.nameAr} ${model.nameAr} لا يبرد؟ تشخيص دقيق في الرياض | اوتو سيف`,
-        `أعطال تكييف ${brand.nameAr} ${model.nameAr} الشائعة في الرياض | اوتو سيف`,
+        `${brand.nameAr} ${model.nameAr}: صيانة وإصلاح مكيف السيارة بالرياض | اوتو سيف`,
+        `فحص وتصليح مكيف ${brand.nameAr} ${model.nameAr} في الرياض | اوتو سيف`,
+        `${brand.nameAr} ${model.nameAr} لا يبرد؟ تشخيص تكييف دقيق بالرياض | اوتو سيف`,
+        `صيانة أعطال تكييف ${brand.nameAr} ${model.nameAr} في الرياض | اوتو سيف`,
       ],
       seed,
       1
@@ -56,36 +56,36 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
     const issueThree = getIssue(model.commonAcIssuesAr, 2, 'ارتفاع ضغط دورة التكييف في الحر الشديد');
 
     const contextCue = pickBySeed(
-      ['بعد الوقوف تحت الشمس', 'أثناء الزحام الطويل', 'وقت الظهيرة', 'في المشاوير المتتابعة داخل المدينة'],
+      ['بعد الوقوف تحت أشعة الشمس', 'أثناء القيادة في الزحام', 'خلال ذروة حرارة الظهيرة', 'في المشاوير المتتابعة داخل المدينة'],
       seed,
       2
     );
 
     const inspectionCue = pickBySeed(
       [
-        'قياس ضغط الدائرة واختبار حرارة الفتحات',
-        'كشف التسريب الإلكتروني وصبغة UV',
-        'فحص كلتش الكمبروسر ومروحة المكثف',
-        'مقارنة أداء التبريد بين الوقوف والقيادة',
+        'قياس ضغط الدورة واختبار حرارة فتحات التكييف',
+        'كشف التسريب الإلكتروني وفحص صبغة UV',
+        'فحص كلتش الكمبروسر وكفاءة مروحة المكثف',
+        'مقارنة كفاءة التبريد بين التوقف وحركة السير',
       ],
       seed,
       3
     );
 
     const outcomeCue = pickBySeed(
-      ['استقرار التبريد داخل المقصورة', 'تقليل الحمل على الكمبروسر', 'خفض احتمالات تكرار التسريب', 'استعادة كفاءة التكييف في الحر العالي'],
+      ['استقرار التبريد داخل المقصورة', 'تقليل الحمل الحراري على الكمبروسر', 'منع تكرار تسريب غاز التبريد', 'استعادة كفاءة التكييف القصوى في الصيف'],
       seed,
       4
     );
 
-    const heroDescription = `فحص متخصص لمكيف ${brand.nameAr} ${model.nameAr} موديلات ${model.years} ${contextCue}، مع تشخيص السبب الجذري قبل أي تبديل قطع.`;
-    const metaDescription = `${keyword}. نبدأ بـ ${inspectionCue} لمعالجة ${issueOne} و${issueTwo} بدقة، ثم نحدد الإصلاح الأنسب لتثبيت ${outcomeCue}.`;
+    const heroDescription = `فحص وتشخيص متخصص لمكيف ${brand.nameAr} ${model.nameAr} موديلات ${model.years} ${contextCue}، مع تحديد السبب الجذري قبل أي استبدال للقطع.`;
+    const metaDescription = `خدمة متخصصة لفحص وإصلاح مكيف ${brand.nameAr} ${model.nameAr} في الرياض. نبدأ بـ ${inspectionCue} لمعالجة ${issueOne} و${issueTwo} بدقة لضمان ${outcomeCue}.`;
     const sectionTitle = pickBySeed(
       [
-        `خطة تشخيص ${brand.nameAr} ${model.nameAr} في حرارة الرياض`,
-        `كيف نعالج ${keyword} بخطوات فنية واضحة؟`,
-        `متى يتحول ${keyword} إلى عطل مكلف؟`,
-        `دليل ورشة اوتو سيف لـ ${brand.nameAr} ${model.nameAr}`,
+        `خطة تشخيص مكيف ${brand.nameAr} ${model.nameAr} في حرارة الرياض`,
+        `خطوات فحص وإصلاح تكييف ${brand.nameAr} ${model.nameAr}`,
+        `حماية كمبروسر ${brand.nameAr} ${model.nameAr} من التلف في الصيف`,
+        `معايير ورشة اوتو سيف لصيانة ${brand.nameAr} ${model.nameAr}`,
       ],
       seed,
       5
@@ -97,7 +97,7 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
       finalMetaTitle = `${brand.nameAr} ${model.nameAr}: تصليح مكيف بي ام دبليو في الرياض | اوتو سيف`;
     }
     if (brand.slug === 'hyundai' && model.slug === 'sonata') {
-      finalMetaTitle = `${brand.nameAr} ${model.nameAr}: رقم فريون السوناتا وتعبئة الفريون | اوتو سيف`;
+      finalMetaTitle = `${brand.nameAr} ${model.nameAr}: فحص وتعبئة فريون السوناتا في الرياض | اوتو سيف`;
     }
 
     return {
@@ -107,32 +107,29 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
       heroDescription,
       sectionTitle,
       paragraphs: [
-        `${keyword} يظهر عادةً ${contextCue}، خصوصاً عندما يتكرر ${issueOne} أو يبدأ ${issueTwo} بالظهور بشكل متقطع. هذا النمط لا يعني دائماً تلف قطعة واحدة، لكنه إشارة مبكرة على خلل في كفاءة الدورة أو توازن الضغط داخل النظام.`,
-        `في أوتو سيف نبدأ أولاً بـ ${inspectionCue} ثم نطابق النتائج مع مواصفات ${brand.nameAr} ${model.nameAr} لموديلات ${model.years}. بهذه الطريقة نعرف هل المشكلة مرتبطة بـ ${issueThree}، أم تحتاج معالجة أبسط قبل أن تتفاقم التكلفة.`,
-        `الهدف من هذا المسار ليس تغيير قطع أكثر، بل تثبيت ${outcomeCue} وتقديم قرار واضح: إصلاح موضعي، صيانة وقائية، أو تبديل محدد عند الحاجة فقط. إذا لاحظت تراجع الأداء نهاراً، فالحجز المبكر يقلل احتمالات الأعطال المفاجئة.` ,
+        `مشاكل وأعطال تكييف ${brand.nameAr} ${model.nameAr} تظهر بوضوح ${contextCue}، خصوصاً عندما يتكرر ${issueOne} أو يبدأ ${issueTwo} بالظهور بشكل متقطع. هذه الإشارات تدل عادةً على خلل في توازن ضغوط الدورة أو ضعف تبادل الحرارة في المكثف.`,
+        `في أوتو سيف نبدأ أولاً بـ ${inspectionCue} ثم نطابق القراءات مع مواصفات المصنع المعتمدة لسيارات ${brand.nameAr} ${model.nameAr} لموديلات ${model.years}. يساعد هذا التشخيص الدقيق في معرفة ما إذا كان الخلل مرتبطاً بـ ${issueThree} أم يحتاج معالجة بسيطة دون تكاليف إضافية.`,
+        `هدفنا دائماً هو تحقيق ${outcomeCue} عبر خطة إصلاح محددة ومدروسة، وتجنب تبديل القطع غير التالفة. إذا لاحظت تراجع برودة المكيف نهاراً، فالفحص المبكر يحمي الكمبروسر ويضمن أداءً مستقراً طوال أشهر الصيف.`,
       ],
     };
   }
 
   const keyword = pickBySeed(
     [
-      `${brand.nameEn} ${model.nameEn} AC issues in Riyadh heat`,
-      `${brand.nameEn} ${model.nameEn} AC repair for stop-and-go traffic`,
-      `${brand.nameEn} ${model.nameEn} weak AC at midday in Riyadh`,
-      `${brand.nameEn} ${model.nameEn} AC diagnosis before compressor damage`,
       `${brand.nameEn} ${model.nameEn} AC repair in Riyadh`,
-      'car ac repair near me',
-      'how to find a freon leak',
+      `${brand.nameEn} ${model.nameEn} AC maintenance in extreme heat`,
+      `${brand.nameEn} ${model.nameEn} weak AC cooling at midday`,
+      `${brand.nameEn} ${model.nameEn} AC compressor and freon diagnosis`,
     ],
     seed
   );
 
   const metaTitle = pickBySeed(
     [
-      `${brand.nameEn} ${model.nameEn} AC Repair in Riyadh | Auto Save`,
-      `${brand.nameEn} ${model.nameEn} AC Not Cooling? Riyadh Fixes | Auto Save`,
-      `${brand.nameEn} ${model.nameEn} AC Diagnosis & Repair | Auto Save`,
-      `${brand.nameEn} ${model.nameEn} Summer AC Service in Riyadh | Auto Save`,
+      `${brand.nameEn} ${model.nameEn} AC Repair & Service in Riyadh | Auto Save`,
+      `${brand.nameEn} ${model.nameEn} AC Not Cooling? Riyadh Diagnostics | Auto Save`,
+      `${brand.nameEn} ${model.nameEn} AC Compressor & Freon Service | Auto Save`,
+      `${brand.nameEn} ${model.nameEn} Summer AC Maintenance Riyadh | Auto Save`,
     ],
     seed,
     1
@@ -143,7 +140,7 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
   const issueThree = getIssue(model.commonAcIssuesEn, 2, 'pressure instability under heavy thermal load');
 
   const contextCue = pickBySeed(
-    ['after long sun exposure', 'in stop-and-go traffic', 'during midday heat peaks', 'on repeated city trips'],
+    ['after extended sun exposure', 'in stop-and-go traffic', 'during peak midday heat', 'on repeated city commutes'],
     seed,
     2
   );
@@ -151,28 +148,28 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
   const inspectionCue = pickBySeed(
     [
       'pressure readings plus vent-temperature validation',
-      'electronic leak tracing and UV confirmation',
-      'compressor clutch and condenser-fan performance checks',
-      'cooling comparison between idle and driving conditions',
+      'electronic leak detection and UV dye verification',
+      'compressor clutch engagement and condenser fan checks',
+      'cooling efficiency comparisons between idle and cruising',
     ],
     seed,
     3
   );
 
   const outcomeCue = pickBySeed(
-    ['stable cabin cooling', 'lower compressor stress', 'reduced leak recurrence risk', 'consistent AC performance in extreme heat'],
+    ['consistent cabin cooling', 'reduced thermal stress on the compressor', 'prevention of recurring refrigerant loss', 'dependable AC performance in Riyadh summer heat'],
     seed,
     4
   );
 
-  const heroDescription = `Specialized diagnostics for ${brand.nameEn} ${model.nameEn} (${model.years}) ${contextCue}, with root-cause confirmation before any parts replacement.`;
-  const metaDescription = `${keyword}. We start with ${inspectionCue} to resolve ${issueOne} and ${issueTwo}, then map the right fix to restore ${outcomeCue}.`;
+  const heroDescription = `Specialized AC diagnostics and repair for ${brand.nameEn} ${model.nameEn} (${model.years}) ${contextCue}, identifying root causes before replacing components.`;
+  const metaDescription = `Professional ${brand.nameEn} ${model.nameEn} AC repair in Riyadh. We use ${inspectionCue} to address ${issueOne} and ${issueTwo}, restoring ${outcomeCue}.`;
   const sectionTitle = pickBySeed(
     [
-      `${brand.nameEn} ${model.nameEn} AC Diagnostic Plan for Riyadh Heat`,
-      `How We Resolve ${keyword} Step by Step`,
-      `When ${keyword} Turns Into a Costly Failure`,
-      `Auto Save Workshop Guide for ${brand.nameEn} ${model.nameEn}`,
+      `${brand.nameEn} ${model.nameEn} AC Diagnostic & Service Plan`,
+      `How We Diagnose & Repair ${brand.nameEn} ${model.nameEn} AC Systems`,
+      `Preventing Compressor Failure in ${brand.nameEn} ${model.nameEn}`,
+      `Auto Save Workshop Guidelines for ${brand.nameEn} ${model.nameEn}`,
     ],
     seed,
     5
@@ -181,13 +178,13 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
   // Brand/model-specific meta title overrides for high-impression queries (English)
   let finalMetaTitle = metaTitle;
   if (brand.slug === 'lincoln') {
-    finalMetaTitle = `${brand.nameEn} ${model.nameEn} AC Repair in Riyadh | Auto Save`;
+    finalMetaTitle = `${brand.nameEn} ${model.nameEn} AC Repair & Diagnostics in Riyadh | Auto Save`;
   }
   if (brand.slug === 'bmw') {
-    finalMetaTitle = `${brand.nameEn} ${model.nameEn} air conditioner repair | Auto Save`;
+    finalMetaTitle = `${brand.nameEn} ${model.nameEn} AC Repair & Cooling Service | Auto Save`;
   }
   if (brand.slug === 'hyundai' && model.slug === 'sonata') {
-    finalMetaTitle = `${brand.nameEn} ${model.nameEn} freon number & recharge info | Auto Save`;
+    finalMetaTitle = `${brand.nameEn} ${model.nameEn} AC Freon Recharge & Repair in Riyadh | Auto Save`;
   }
 
   return {
@@ -197,9 +194,9 @@ export function getModelSeoCopy(brand: CarBrand, model: CarModel, lang: Language
     heroDescription,
     sectionTitle,
     paragraphs: [
-      `${keyword} tends to surface ${contextCue}, especially when ${issueOne} appears together with ${issueTwo}. In many cases this is an early warning of cycle imbalance rather than a single failed part.`,
-      `Our workflow begins with ${inspectionCue}, then compares findings against ${brand.nameEn} ${model.nameEn} specs for ${model.years}. This helps separate real root causes from symptoms and avoids random replacement decisions, including cases linked to ${issueThree}.`,
-      `The objective is clear: restore ${outcomeCue} with the smallest effective repair scope. If your AC drops performance in daytime traffic, early workshop diagnosis is the safest way to prevent expensive summer breakdowns.`,
+      `AC cooling issues in the ${brand.nameEn} ${model.nameEn} commonly become noticeable ${contextCue}, especially when ${issueOne} coincides with ${issueTwo}. This pattern typically points to thermal cycle stress or pressure imbalance rather than immediate component failure.`,
+      `Our certified technicians start with ${inspectionCue}, cross-referencing factory specifications for ${brand.nameEn} ${model.nameEn} (${model.years}). This systematic process pinpoints whether the underlying cause involves ${issueThree} or a simpler service requirement before costs escalate.`,
+      `Our priority is to restore ${outcomeCue} through precise, targeted repairs without unnecessary parts replacements. Scheduling an inspection at the first sign of weak cooling protects your compressor and guarantees dependable performance throughout Riyadh's extreme temperatures.`,
     ],
   };
 }
